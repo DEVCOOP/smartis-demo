@@ -2028,8 +2028,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-//const REMOTE_COUCH_DB_ADDRESS = 'http://admin:password@35.205.176.5:5984/ellyx';
-var REMOTE_COUCH_DB_ADDRESS = 'http://admin:password@localhost:5984/ellyx';
+var REMOTE_COUCH_DB_ADDRESS = 'http://admin:password@35.205.176.5:5984/ellyx';
+//const REMOTE_COUCH_DB_ADDRESS = 'http://admin:password@localhost:5984/ellyx';
 var PouchdbService = /** @class */ (function () {
     // initiate adapter class and hook up the observables
     function PouchdbService(http) {
