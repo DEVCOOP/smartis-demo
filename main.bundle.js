@@ -653,7 +653,7 @@ var HomeComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section class=\"login p-fixed d-flex text-center\">\r\n  <!-- Container-fluid starts -->\r\n  <div class=\"container\">\r\n    <div class=\"row\">\r\n      <div class=\"col-sm-12\">\r\n        <!-- Authentication card start -->\r\n        <div class=\"login-card mr-auto ml-auto\">\r\n          <form class=\"md-float-material\"  [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\r\n            <div class=\"text-center\">\r\n              <img src=\"assets/images/logo.jpg\" alt=\"Ellyx\">\r\n            </div>\r\n            <div class=\"auth-box\">\r\n              <div class=\"row m-b-20\">\r\n                <div class=\"col-md-12\">\r\n                  <h3 class=\"text-left txt-primary\">Connexion</h3>\r\n                </div>\r\n              </div>\r\n              <hr/>\r\n              <div class=\"input-group\">\r\n                <input type=\"email\" class=\"form-control\" [ngClass]=\"{'is-invalid': isFieldInvalid('email')}\" placeholder=\"Email\"  formControlName=\"email\" required/>\r\n                       <span class=\"md-line\"></span>\r\n              </div>\r\n              <div class=\"input-group\">\r\n                <input type=\"password\" class=\"form-control\" [ngClass]=\"{'is-invalid': isFieldInvalid('password')}\" placeholder=\"Password\"  formControlName=\"password\" required/>\r\n                       <span class=\"md-line\"></span>\r\n              </div>\r\n              <div class=\"alert alert-danger\" *ngIf=\"errorMessage\" role=\"alert\">\r\n                {{errorMessage}}\r\n              </div>\r\n              <div class=\"row m-t-25 text-left\">\r\n                <div class=\"col-12\">\r\n                  <div class=\"checkbox-fade fade-in-primary d-\">\r\n                    <label>\r\n                      <input type=\"checkbox\" value=\"\">\r\n                      <!--<span class=\"cr\"><i class=\"cr-icon fa fa-check txt-primary\"></i></span>-->\r\n                      <span class=\"text-inverse\">Se souvenir de moi</span>\r\n                    </label>\r\n                  </div>\r\n                  <div class=\"text-right\">\r\n                    <a [routerLink]=\"['/auth/forgot']\" class=\"text-right f-w-600 text-inverse\"> Mot de passe oublié?</a>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n              <div class=\"row m-t-30\">\r\n                <div class=\"col-md-12\">\r\n                  <button type=\"submit\" class=\"btn btn-primary btn-md btn-block waves-effect text-center m-b-20\">Login</button>\r\n                </div>\r\n              </div>\r\n\r\n            </div>\r\n          </form>\r\n          <!-- end of form -->\r\n        </div>\r\n        <!-- Authentication card end -->\r\n      </div>\r\n      <!-- end of col-sm-12 -->\r\n    </div>\r\n    <!-- end of row -->\r\n  </div>\r\n  <!-- end of container-fluid -->\r\n</section>\r\n"
+module.exports = "<section class=\"login p-fixed d-flex text-center\">\r\n  <!-- Container-fluid starts -->\r\n  <div class=\"container\">\r\n    <div class=\"row\">\r\n      <div class=\"col-sm-12\">\r\n        <!-- Authentication card start -->\r\n        <div class=\"login-card mr-auto ml-auto\">\r\n          <form class=\"md-float-material\"  [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\r\n            <div class=\"text-center\">\r\n              <img src=\"assets/images/logo.jpg\" alt=\"Ellyx\">\r\n            </div>\r\n            <div class=\"auth-box\">\r\n              <div class=\"row m-b-20\">\r\n                <div class=\"col-md-12\">\r\n                  <h3 class=\"text-left txt-primary\">Connexion</h3>\r\n                </div>\r\n              </div>\r\n              <hr/>\r\n              <div class=\"input-group\">\r\n                <input type=\"email\" class=\"form-control\" [ngClass]=\"{'is-invalid': isFieldInvalid('login')}\" placeholder=\"Email\"  formControlName=\"login\"/>\r\n                       <span class=\"md-line\"></span>\r\n              </div>\r\n              <div class=\"input-group\">\r\n                <input type=\"password\" class=\"form-control\" [ngClass]=\"{'is-invalid': isFieldInvalid('password')}\" placeholder=\"Password\"  formControlName=\"password\"/>\r\n                       <span class=\"md-line\"></span>\r\n              </div>\r\n              <div class=\"alert alert-danger\" *ngIf=\"errorMessage\" role=\"alert\">\r\n                {{errorMessage}}\r\n              </div>\r\n              <div class=\"row m-t-25 text-left\">\r\n                <div class=\"col-12\">\r\n                  <div class=\"checkbox-fade fade-in-primary d-\">\r\n                    <label>\r\n                      <input type=\"checkbox\" value=\"\">\r\n                      <!--<span class=\"cr\"><i class=\"cr-icon fa fa-check txt-primary\"></i></span>-->\r\n                      <span class=\"text-inverse\">Se souvenir de moi</span>\r\n                    </label>\r\n                  </div>\r\n                  <div class=\"text-right\">\r\n                    <a [routerLink]=\"['/auth/forgot']\" class=\"text-right f-w-600 text-inverse\"> Mot de passe oublié?</a>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n              <div class=\"row m-t-30\">\r\n                <div class=\"col-md-12\">\r\n                  <button type=\"submit\" class=\"btn btn-primary btn-md btn-block waves-effect text-center m-b-20\">Login</button>\r\n                </div>\r\n              </div>\r\n\r\n            </div>\r\n          </form>\r\n          <!-- end of form -->\r\n        </div>\r\n        <!-- Authentication card end -->\r\n      </div>\r\n      <!-- end of col-sm-12 -->\r\n    </div>\r\n    <!-- end of row -->\r\n  </div>\r\n  <!-- end of container-fluid -->\r\n</section>\r\n"
 
 /***/ }),
 
@@ -702,7 +702,7 @@ var LoginComponent = /** @class */ (function () {
     }
     LoginComponent.prototype.ngOnInit = function () {
         this.form = this.fb.group({
-            email: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required],
+            login: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required],
             password: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required]
         });
     };
@@ -803,12 +803,12 @@ var Parametres = /** @class */ (function () {
         this._id = Parametres.name;
         this.listesDeChoix = {
             cible: new Array(),
-            programme: new Array(),
             typeOrganisme: new Array(),
             thematique: new Array(),
             modaliteIS: new Array(),
-            modaliteObtention: new Array(),
-            offreService: new Array(),
+            natureRelation: new Array(),
+            typeFinanceurTiers: new Array(),
+            modaliteOffre: new Array(),
             secteurs: new Array(),
             missionFormat: new Array(),
             missionType: new Array(),
@@ -1598,6 +1598,7 @@ var AuthGuard = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__ = __webpack_require__("../../../../rxjs/_esm5/BehaviorSubject.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__user__ = __webpack_require__("../../../../../src/app/services/auth/user.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1610,12 +1611,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var AuthService = /** @class */ (function () {
     function AuthService(router) {
         this.router = router;
         this.loggedIn = new __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__["BehaviorSubject"](false);
-        if (!!localStorage.getItem('user')) {
+        var _login = localStorage.getItem('login');
+        var _password = localStorage.getItem('password');
+        if (!!_login && !!_password) {
             this.loggedIn.next(true);
+            this._user = new __WEBPACK_IMPORTED_MODULE_3__user__["a" /* User */](_login, _password);
         }
     }
     Object.defineProperty(AuthService.prototype, "isLoggedIn", {
@@ -1625,23 +1630,51 @@ var AuthService = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(AuthService.prototype, "user", {
+        get: function () {
+            return this._user;
+        },
+        enumerable: true,
+        configurable: true
+    });
     AuthService.prototype.login = function (user) {
-        if (user.email !== '' && user.password != '') {
+        if (user.login !== '' && user.password != '') {
+            localStorage.setItem('login', user.login);
+            localStorage.setItem('password', user.password);
+            this._user = user;
             this.loggedIn.next(true);
             this.router.navigate(['/']);
-            localStorage.setItem('user', user.email);
         }
     };
     AuthService.prototype.logout = function () {
+        localStorage.removeItem('login');
+        localStorage.removeItem('password');
+        this._user = null;
         this.loggedIn.next(false);
         this.router.navigate(['/login']);
-        localStorage.removeItem('user');
     };
     AuthService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]])
     ], AuthService);
     return AuthService;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/services/auth/user.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return User; });
+var User = /** @class */ (function () {
+    function User(login, password) {
+        this.login = login;
+        this.password = password;
+    }
+    return User;
 }());
 
 
@@ -1823,8 +1856,9 @@ PouchDB.plugin(__WEBPACK_IMPORTED_MODULE_1_pouchdb_find__["a" /* default */]);
 // import 'rxjs/add/observable/combineLatest';
 // import * as PouchDB from 'pouchdb';
 var PouchDbAdapter = /** @class */ (function () {
-    function PouchDbAdapter(remoteCouchDBAddress) {
+    function PouchDbAdapter(authService, remoteCouchDBAddress) {
         var _this = this;
+        this.authService = authService;
         // rxjs behaviour subjects to expose stats flags
         this.syncStatus = new __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__["BehaviorSubject"](false);
         this.couchDbUp = new __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__["BehaviorSubject"](false);
@@ -1848,7 +1882,15 @@ var PouchDbAdapter = /** @class */ (function () {
             retry: true,
         })
             .on('paused', function (err) { _this.syncStatusUpdate(); })
-            .on('change', function (info) { _this.syncStatusUpdate(); });
+            .on('change', function (info) { _this.syncStatusUpdate(); })
+            .on('error', function (err) {
+            console.log('PouchDB Error NFCs', err);
+            if (err.status === 401) {
+                authService.logout();
+            }
+        })
+            .on('active', function (err) { return console.log('PouchDB Active', err); })
+            .on('complete', function (err) { return console.log('PouchDB Complete', err); });
         // this._pouchDB.replicate.from(this._couchDB, {
         //     live: true,
         //     retry: true,
@@ -2007,10 +2049,11 @@ var PouchDbAdapter = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_from__ = __webpack_require__("../../../../rxjs/_esm5/add/observable/from.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pouchdb_adapter__ = __webpack_require__("../../../../../src/app/services/pouchdb-service/pouchdb-adapter.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__model__ = __webpack_require__("../../../../../src/app/model.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__ = __webpack_require__("../../../../../src/app/services/auth/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__model__ = __webpack_require__("../../../../../src/app/model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_lodash__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2028,33 +2071,49 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var REMOTE_COUCH_DB_ADDRESS = 'http://admin:password@35.205.176.5:5984/ellyx';
+
+var REMOTE_COUCH_DB_ADDRESS = 'https://login:password@104.155.22.221:6984/ellyx';
 //const REMOTE_COUCH_DB_ADDRESS = 'http://admin:password@localhost:5984/ellyx';
 var PouchdbService = /** @class */ (function () {
     // initiate adapter class and hook up the observables
-    function PouchdbService(http) {
+    function PouchdbService(http, authService) {
+        var _this = this;
         this.http = http;
+        this.authService = authService;
         // URL of CouchDB (hardwired above)
         this.remoteCouchDBAddress = REMOTE_COUCH_DB_ADDRESS;
-        this._pouchDbAdapter = new __WEBPACK_IMPORTED_MODULE_3__pouchdb_adapter__["a" /* PouchDbAdapter */](REMOTE_COUCH_DB_ADDRESS);
+        this.authService.isLoggedIn.subscribe(function (isLogged) {
+            if (isLogged) {
+                _this.initConnexion(authService.user.login, authService.user.password);
+            }
+            else {
+                _this.closeConnexion();
+            }
+        });
+    }
+    PouchdbService.prototype.initConnexion = function (login, password) {
+        this._pouchDbAdapter = new __WEBPACK_IMPORTED_MODULE_3__pouchdb_adapter__["a" /* PouchDbAdapter */](this.authService, REMOTE_COUCH_DB_ADDRESS.replace("login", login).replace("password", password));
         this.syncStatus = this._pouchDbAdapter.syncStatus.asObservable();
         this.couchdbUp = this._pouchDbAdapter.couchDbUp.asObservable();
-        this.initDB();
-    }
+        this.initDb();
+    };
+    PouchdbService.prototype.closeConnexion = function () {
+        this._pouchDbAdapter = null;
+    };
     PouchdbService.prototype.postDoc = function (doc) {
         return Promise.resolve(this._pouchDbAdapter.put(doc));
     };
     PouchdbService.prototype.getOrganismes = function () {
-        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["f" /* Organisme */].name);
+        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_5__model__["f" /* Organisme */].name);
     };
     PouchdbService.prototype.getContacts = function () {
-        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["c" /* Contact */].name);
+        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_5__model__["c" /* Contact */].name);
     };
     PouchdbService.prototype.get = function (docId) {
         return this._pouchDbAdapter.get(docId);
     };
     PouchdbService.prototype.save = function (doc) {
-        if (doc._id === __WEBPACK_IMPORTED_MODULE_4__model__["g" /* Parametres */].name) {
+        if (doc._id === __WEBPACK_IMPORTED_MODULE_5__model__["g" /* Parametres */].name) {
             this._parametres = null;
         }
         if (!!doc._id) {
@@ -2071,7 +2130,7 @@ var PouchdbService = /** @class */ (function () {
                 observer.next(_this._parametres);
             }
             else {
-                _this._pouchDbAdapter.get(__WEBPACK_IMPORTED_MODULE_4__model__["g" /* Parametres */].name).subscribe(function (data) {
+                _this._pouchDbAdapter.get(__WEBPACK_IMPORTED_MODULE_5__model__["g" /* Parametres */].name).subscribe(function (data) {
                     _this._parametres = data;
                     observer.next(_this._parametres);
                 }, function (err) { return observer.error(err); });
@@ -2084,18 +2143,18 @@ var PouchdbService = /** @class */ (function () {
     PouchdbService.prototype.addImage = function (docId, docRev, contentType, myBase64String) {
         return this._pouchDbAdapter.putAttachment(docId, docRev, 'image', myBase64String, contentType);
     };
-    PouchdbService.prototype.initDB = function () {
-        //        this._pouchDbAdapter.createIndex({
-        //            index: {
-        //                fields: ['name', 'type'],
-        //                name: 'typeIndex',
-        //                ddoc: 'typeDesigndoc',
-        //                type: 'json'
-        //            }
-        //        }).then(function (result) {
-        //            console.log("index created");
-        //        }).catch(function (err) {
-        //            console.log(err);
+    PouchdbService.prototype.initDb = function () {
+        //        this._pouchDbAdapter.create        Index({
+        //            i        ndex: {
+        //                fields: ['name', '        type'],
+        //                name: 'type        Index',
+        //                ddoc: 'typeDesi        gndoc',
+        //                type:         'json'
+        //                    }
+        //        }).then(function (re        sult) {
+        //            console.log("index cre        ated");
+        //        }).catch(function         (err) {
+        //            console.lo        g(err);
         //        });
         var _this = this;
         this.getOrganismes().subscribe(function (data) {
@@ -2105,7 +2164,7 @@ var PouchdbService = /** @class */ (function () {
                     var organismes = data;
                     for (var _i = 0, organismes_1 = organismes; _i < organismes_1.length; _i++) {
                         var organisme = organismes_1[_i];
-                        organisme.type = __WEBPACK_IMPORTED_MODULE_4__model__["f" /* Organisme */].name;
+                        organisme.type = __WEBPACK_IMPORTED_MODULE_5__model__["f" /* Organisme */].name;
                         _this.save(organisme);
                     }
                 });
@@ -2118,16 +2177,16 @@ var PouchdbService = /** @class */ (function () {
                     var contacts = data;
                     for (var _i = 0, contacts_1 = contacts; _i < contacts_1.length; _i++) {
                         var contact = contacts_1[_i];
-                        contact.type = __WEBPACK_IMPORTED_MODULE_4__model__["c" /* Contact */].name;
+                        contact.type = __WEBPACK_IMPORTED_MODULE_5__model__["c" /* Contact */].name;
                         _this.save(contact);
                     }
                 });
             }
         });
         this.getParametres().subscribe(function (data) {
-            var parametres = new __WEBPACK_IMPORTED_MODULE_4__model__["g" /* Parametres */]();
+            var parametres = new __WEBPACK_IMPORTED_MODULE_5__model__["g" /* Parametres */]();
             if (Object.keys(data.listesDeChoix).length != Object.keys(parametres.listesDeChoix).length) {
-                parametres = __WEBPACK_IMPORTED_MODULE_6_lodash__["merge"](parametres, data);
+                parametres = __WEBPACK_IMPORTED_MODULE_7_lodash__["merge"](parametres, data);
                 parametres.listesDeChoix = Object.assign(parametres.listesDeChoix, data.listesDeChoix);
                 _this.save(parametres);
                 console.log("parameters already exist but new variable in 'listeDeChoix'");
@@ -2138,8 +2197,8 @@ var PouchdbService = /** @class */ (function () {
             _this.http.get('./assets/data/parametres.json')
                 .subscribe(function (data) {
                 var _parametres = data;
-                var parametres = new __WEBPACK_IMPORTED_MODULE_4__model__["g" /* Parametres */]();
-                parametres = __WEBPACK_IMPORTED_MODULE_6_lodash__["merge"](parametres, _parametres);
+                var parametres = new __WEBPACK_IMPORTED_MODULE_5__model__["g" /* Parametres */]();
+                parametres = __WEBPACK_IMPORTED_MODULE_7_lodash__["merge"](parametres, _parametres);
                 parametres.listesDeChoix = Object.assign(parametres.listesDeChoix, _parametres.listesDeChoix);
                 _this.save(parametres);
             });
@@ -2147,7 +2206,7 @@ var PouchdbService = /** @class */ (function () {
     };
     PouchdbService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__angular_common_http__["a" /* HttpClient */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_6__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__["a" /* AuthService */]])
     ], PouchdbService);
     return PouchdbService;
 }());

@@ -1,7 +1,17 @@
 {
     "listesDeChoix": {
-        "cible": [],
-        "programme": [],
+        "cible": [
+            "Personnes en situation de handicap",
+            "Personnes âgées - seniors",
+            "Petite enfance-enfance",
+            "Jeunesse - étudiants",
+            "Familles",
+            "Familles monoparentales - célibataires",
+            "Personnes en situation de discrimination",
+            "Personnes en situation d'exclusion ou de fragilité",
+            "Institutions - pouvoirs publics",
+            "Toutes catégories"
+        ],
         "typeOrganisme": [
             "Associations",
             "Collectivités et organisations rattachées",
@@ -16,10 +26,54 @@
             "Structures de valorisation",
             "Universités et acteurs de la recherche"
         ],
-        "thematique": [],
-        "modaliteIS": [],
-        "modaliteObtention": [],
-        "offreService": [],
+        "thematique": [
+            "Activité et Economie",
+            "Habitat et Logement",
+            "Alimentation et Agriculture",
+            "Environnement et Energie",
+            "Tourisme et Loisirs",
+            "Culture et Patrimoine",
+            "Santé et Sports",
+            "Urbanisme et Territoires",
+            "Mobilité",
+            "Education et Connaissances",
+            "Intimité et Vie privée",
+            "Sécurité et Sûreté",
+            "Religion et Spirituailté"
+        ],
+        "modaliteIS": [
+            "Création de produits / services",
+            "dispositifs_publics",
+            "evenements",
+            "financement",
+            "politiques_publiques",
+            "lois_reglements",
+            "publications",
+            "discours_autorité",
+            "grilles_IS",
+            "Création de lien social et de ressources non financières",
+            "Services aux entreprises (conseil, expertise…)"
+        ],
+        "natureRelation": [
+            "Client",
+            "Acteur de la recherche",
+            "Partenaire financier",
+            "Prospect",
+            "Prescripteur",
+            "Contact simple"
+        ],
+        "typeFinanceurTiers": [
+            "DLA",
+            "PTR / PTI",
+            "Autre dispositif de financement de l'innovation",
+            "OPCA",
+            "Programme ASSISES",
+            "FRIO",
+            "PIN'S",
+            "Autre programme à ajouter",
+            "Incubateurs et pépinières",
+            "Structures de valorisation"
+        ],
         "secteurs": [
             "Agriculture",
             "Agriculture biologique",
@@ -83,6 +137,16 @@
             "Prestataire CIR",
             "JEI",
             "PTCE",
-            "NSP"]
+            "NSP"],
+        "modaliteOffre": [
+            "Prospection active sans mise en concurrence",
+            "Prospection active avec mise en concurrence restreinte",
+            "Prospection active avec mise en concurrence large",
+            "Sollicitation directe sans mise en concurrence",
+            "Sollicitation directe avec mise en concurrence restreinte",
+            "Sollicitation directe avec mise en concurrence large",
+            "AO",
+            "Reconduction"            
+        ]
     }
 }
