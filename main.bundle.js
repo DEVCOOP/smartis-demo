@@ -2157,32 +2157,31 @@ var PouchdbService = /** @class */ (function () {
         //            console.lo        g(err);
         //        });
         var _this = this;
-        this.getOrganismes().subscribe(function (data) {
-            if (data.length < 4) {
-                _this.http.get('./assets/data/organisme.json')
-                    .subscribe(function (data) {
-                    var organismes = data;
-                    for (var _i = 0, organismes_1 = organismes; _i < organismes_1.length; _i++) {
-                        var organisme = organismes_1[_i];
-                        organisme.type = __WEBPACK_IMPORTED_MODULE_5__model__["f" /* Organisme */].name;
-                        _this.save(organisme);
-                    }
-                });
-            }
-        });
-        this.getContacts().subscribe(function (data) {
-            if (data.length < 4) {
-                _this.http.get('./assets/data/contact.json')
-                    .subscribe(function (data) {
-                    var contacts = data;
-                    for (var _i = 0, contacts_1 = contacts; _i < contacts_1.length; _i++) {
-                        var contact = contacts_1[_i];
-                        contact.type = __WEBPACK_IMPORTED_MODULE_5__model__["c" /* Contact */].name;
-                        _this.save(contact);
-                    }
-                });
-            }
-        });
+        //        this.getOrganismes().subscribe((data) => {
+        //            if (data.length < 4) {
+        //                this.http.get('./assets/data/organisme.json')
+        //                    .subscribe(data => {
+        //                        var organismes: Array<Organisme> = data as Array<Organisme>;
+        //                        for (let organisme of organismes) {
+        //                            organisme.type = Organisme.name;
+        //                            this.save(organisme);
+        //                        }
+        //                    });
+        //            }
+        //        });
+        //
+        //        this.getContacts().subscribe((data) => {
+        //            if (data.length < 4) {
+        //                this.http.get('./assets/data/contact.json')
+        //                    .subscribe(data => {
+        //                        var contacts: Array<Contact> = data as Array<Contact>;
+        //                        for (let contact of contacts) {
+        //                            contact.type = Contact.name;
+        //                            this.save(contact);
+        //                        }
+        //                    });
+        //            }
+        //        });
         this.getParametres().subscribe(function (data) {
             var parametres = new __WEBPACK_IMPORTED_MODULE_5__model__["g" /* Parametres */]();
             if (Object.keys(data.listesDeChoix).length != Object.keys(parametres.listesDeChoix).length) {
