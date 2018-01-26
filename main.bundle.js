@@ -837,7 +837,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".card-organisme {\n  width: 25rem;\n  min-width: 15rem; }\n  .card-organisme .card-image {\n    height: 115px; }\n  .card-organisme ul li {\n    padding-left: 35px; }\n  .card-organisme ul li svg {\n    position: absolute;\n    left: 0px;\n    top: 0.75rem; }\n", ""]);
+exports.push([module.i, ".card-organisme {\n  width: 25rem;\n  min-width: 15rem; }\n  .card-organisme .card-image {\n    height: 115px; }\n  .card-organisme .card-image img {\n      max-width: 100%;\n      max-height: 100%; }\n  .card-organisme ul li {\n    padding-left: 35px; }\n  .card-organisme ul li svg {\n    position: absolute;\n    left: 0px;\n    top: 0.75rem; }\n", ""]);
 
 // exports
 
@@ -2073,6 +2073,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var REMOTE_COUCH_DB_ADDRESS = 'https://login:password@104.155.22.221/ellyx';
+//const REMOTE_COUCH_DB_ADDRESS = 'http://login:password@104.155.22.221:5984/ellyx';
 //const REMOTE_COUCH_DB_ADDRESS = 'http://admin:password@localhost:5984/ellyx';
 var PouchdbService = /** @class */ (function () {
     // initiate adapter class and hook up the observables
