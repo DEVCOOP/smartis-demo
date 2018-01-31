@@ -128,6 +128,12 @@
             "Structuration R&IS",
             "Expérimentation, R&D"
         ],
+        "missionRole": [
+            "Directeur de contrat",
+            "Chef de mission",
+            "Rédacteur",
+            "Chargé de mission"            
+        ],
         "agrement": [
             "SIAE",
             "ARS",
@@ -138,7 +144,7 @@
             "JEI",
             "PTCE",
             "NSP"],
-        "modaliteOffre": [
+        "modaliteObtention": [
             "Prospection active sans mise en concurrence",
             "Prospection active avec mise en concurrence restreinte",
             "Prospection active avec mise en concurrence large",
@@ -148,5 +154,6 @@
             "AO",
             "Reconduction"            
         ]
+        
     }
 }
