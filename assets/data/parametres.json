@@ -43,14 +43,14 @@
         ],
         "modaliteIS": [
             "Création de produits / services",
-            "dispositifs_publics",
-            "evenements",
-            "financement",
-            "politiques_publiques",
-            "lois_reglements",
-            "publications",
-            "discours_autorité",
-            "grilles_IS",
+            "Dispositifs publics",
+            "Evenements",
+            "Financement",
+            "Politiques publiques",
+            "Lois reglements",
+            "Publications",
+            "Discours autorité",
+            "Grilles IS",
             "Création de lien social et de ressources non financières",
             "Services aux entreprises (conseil, expertise…)"
         ],
@@ -153,7 +153,33 @@
             "Sollicitation directe avec mise en concurrence large",
             "AO",
             "Reconduction"            
+        ],
+        "civilite": [
+            "M.",
+            "Mme"
+        ],
+        "modaliteOffre": [
+            "Prospection active sans mise en concurrence",
+            "Prospection active avec mise en concurrence restreinte",
+            "Prospection active avec mise en concurrence large",
+            "Sollicitation directe sans mise en concurrence",
+            "Sollicitation directe avec mise en concurrence restreinte",
+            "Sollicitation directe avec mise en concurrence large",
+            "AO",
+            "Reconduction"
+        ],
+        "prospectionStatut": [
+            "Contact", 
+            "Avis", 
+            "En rédaction", 
+            "Envoyé", 
+            "Validée", 
+            "Invalidée", 
+            "Sans suite"
+        ],
+        "action": [
+            "Rappeler le contact",
+            "Relancer par mail"
         ]
-        
     }
 }
