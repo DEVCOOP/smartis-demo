@@ -353,7 +353,7 @@ var CollaborateurCardComponent = /** @class */ (function () {
                     _this.image = _this.sanitizer.bypassSecurityTrustResourceUrl(response);
                 }
             }, function (err) {
-                _this.image = "/assets/images/noavatar.png";
+                _this.image = "assets/images/noavatar.png";
                 console.log(err);
             });
         }
