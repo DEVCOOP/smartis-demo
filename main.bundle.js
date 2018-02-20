@@ -3952,7 +3952,7 @@ var environment = {
     production: true,
     couchdb_url: 'https://login:password@104.155.22.221/ellyx',
     backend_url: 'https://smartis-backend.herokuapp.com/',
-    registration_service: 'registration'
+    registration_service: 'registration/'
 };
 
 
