@@ -3950,7 +3950,7 @@ var WidgetsModule = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return environment; });
 var environment = {
     production: true,
-    couchdb_url: 'http://login:password@104.155.22.221:5984/ellyx',
+    couchdb_url: 'https://login:password@104.155.22.221/ellyx',
     backend_url: 'https://smartis-backend.herokuapp.com/registration/',
     registration_service: 'registration'
 };
