@@ -1,0 +1,185 @@
+{
+    "listesDeChoix": {
+        "cible": [
+            "Personnes en situation de handicap",
+            "Personnes âgées - seniors",
+            "Petite enfance-enfance",
+            "Jeunesse - étudiants",
+            "Familles",
+            "Familles monoparentales - célibataires",
+            "Personnes en situation de discrimination",
+            "Personnes en situation d'exclusion ou de fragilité",
+            "Institutions - pouvoirs publics",
+            "Toutes catégories"
+        ],
+        "typeOrganisme": [
+            "Associations",
+            "Collectivités et organisations rattachées",
+            "Entreprises de l'ESS",
+            "Entreprises privées hors ESS",
+            "Entreprises sociales hors ESS",
+            "Etat et organismes d'Etat",
+            "Fédérations et réseaux",
+            "Groupements et collectifs",
+            "Incubateurs et pépinières",
+            "Structures d'accompagnement",
+            "Structures de valorisation",
+            "Universités et acteurs de la recherche"
+        ],
+        "thematique": [
+            "Activité et Economie",
+            "Habitat et Logement",
+            "Alimentation et Agriculture",
+            "Environnement et Energie",
+            "Tourisme et Loisirs",
+            "Culture et Patrimoine",
+            "Santé et Sports",
+            "Urbanisme et Territoires",
+            "Mobilité",
+            "Education et Connaissances",
+            "Intimité et Vie privée",
+            "Sécurité et Sûreté",
+            "Religion et Spirituailté"
+        ],
+        "modaliteIS": [
+            "Création de produits / services",
+            "Dispositifs publics",
+            "Evenements",
+            "Financement",
+            "Politiques publiques",
+            "Lois reglements",
+            "Publications",
+            "Discours autorité",
+            "Grilles IS",
+            "Création de lien social et de ressources non financières",
+            "Services aux entreprises (conseil, expertise…)"
+        ],
+        "natureRelation": [
+            "Client",
+            "Acteur de la recherche",
+            "Partenaire financier",
+            "Prospect",
+            "Prescripteur",
+            "Contact simple"
+        ],
+        "typeFinanceurTiers": [
+            "DLA",
+            "PTR / PTI",
+            "Autre dispositif de financement de l'innovation",
+            "OPCA",
+            "Programme ASSISES",
+            "FRIO",
+            "PIN'S",
+            "Autre programme à ajouter",
+            "Incubateurs et pépinières",
+            "Structures de valorisation"
+        ],
+        "secteurs": [
+            "Agriculture",
+            "Agriculture biologique",
+            "Agro alimentaire", 
+            "Artisanat / petites productions",
+            "Commerce",
+            "Construction", 
+            "Culture",
+            "Energie",
+            "Environnement",
+            "Formation",
+            "High Tech",
+            "Industrie / grandes productions",
+            "Logement_habitat",
+            "Loisirs",
+            "Médico social",
+            "Numérique",
+            "Patrimoine",
+            "Recherche, enseignement supérieur, laboratoires",
+            "Recyclage_économie circulaire",
+            "SAP (service à la personne)",
+            "Service à l'enfance / jeunesse",
+            "Services aux entreprises / projets / porteurs",
+            "Social, emploi",
+            "Soins aux patients / handicap",
+            "Sports",
+            "Toutes activités",
+            "Transport",
+            "Urbanisme"
+        ],
+        "missionFormat": [
+            "Etude",
+            "Formation",
+            "Accompagnement collectif",
+            "Accompagnement individuel",
+            "Evenement / Sensibilisation",
+            "Prestation RD",
+            "Veille"
+        ],
+        "missionType": [
+            "Stratégie d'innovation",
+            "Expérimentation de la RD sociale",
+            "Formation",
+            "Veille",
+            "Evaluation et optimisation",
+            "MIS",
+            "Fusion / absorption / rapprochement",
+            "Modèle éco et développement",
+            "structuration / organisation",
+            "etude et expertise",
+            "Valorisation SHS",
+            "Structuration R&IS",
+            "Expérimentation, R&D"
+        ],
+        "missionRole": [
+            "Directeur de contrat",
+            "Chef de mission",
+            "Rédacteur",
+            "Chargé de mission"            
+        ],
+        "agrement": [
+            "SIAE",
+            "ARS",
+            "SAP",
+            "EA",
+            "ESUS",
+            "Prestataire CIR",
+            "JEI",
+            "PTCE",
+            "NSP"],
+        "modaliteObtention": [
+            "Prospection active sans mise en concurrence",
+            "Prospection active avec mise en concurrence restreinte",
+            "Prospection active avec mise en concurrence large",
+            "Sollicitation directe sans mise en concurrence",
+            "Sollicitation directe avec mise en concurrence restreinte",
+            "Sollicitation directe avec mise en concurrence large",
+            "AO",
+            "Reconduction"            
+        ],
+        "civilite": [
+            "M.",
+            "Mme"
+        ],
+        "modaliteOffre": [
+            "Prospection active sans mise en concurrence",
+            "Prospection active avec mise en concurrence restreinte",
+            "Prospection active avec mise en concurrence large",
+            "Sollicitation directe sans mise en concurrence",
+            "Sollicitation directe avec mise en concurrence restreinte",
+            "Sollicitation directe avec mise en concurrence large",
+            "AO",
+            "Reconduction"
+        ],
+        "prospectionStatut": [
+            "Contact", 
+            "Avis", 
+            "En rédaction", 
+            "Envoyé", 
+            "Validée", 
+            "Invalidée", 
+            "Sans suite"
+        ],
+        "action": [
+            "Rappeler le contact",
+            "Relancer par mail"
+        ]
+    }
+}
