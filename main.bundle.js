@@ -4204,7 +4204,7 @@ var PouchDbAdapter = /** @class */ (function () {
         };
         // do one way, one-off sync from the server until completion
         var self = this;
-        this._pouchDB.replicate.from(remoteCouchDBAddress).on('complete', function (info) {
+        this._pouchDB.replicate.from(remoteCouchDBAddress, options).on('complete', function (info) {
             console.log('complete');
             self.syncStatus.next(true);
             self.couchDbUp.next(true);
