@@ -2217,7 +2217,8 @@ var Parametres = /** @class */ (function () {
             agrement: new Array(),
             civilite: new Array(),
             prospectionStatut: new Array(),
-            action: new Array()
+            action: new Array(),
+            activite: new Array()
         };
     }
     return Parametres;
