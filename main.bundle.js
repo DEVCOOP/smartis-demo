@@ -20,7 +20,7 @@ webpackEmptyAsyncContext.id = "../../../../../src/$$_lazy_route_resource lazy re
 /***/ "../../../../../src/app/activite/activite.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  cra works!\n</p>\n"
+module.exports = "<div class=\"card\">\n    <div class=\"card-header\">\n        <h3>Compte rendu d'activité</h3>\n    </div>\n    <div class=\"card-body\">\n        <div class=\"d-flex justify-content-between pb-2 form-inline\">\n            <div class=\"d-inline-flex\">\n                <label>Année : {{currentYear}}</label>\n            </div>\n            <div class=\"d-inline-flex\">\n                <button class=\"btn btn-link\" (click)=\"previous()\">\n                    <span class=\"fa fa-chevron-left\"></span>\n                </button>\n                <label>{{currentStartDateOfWeek}} - {{currentEndDateOfWeek}}</label>\n                <button class=\"btn btn-link\" (click)=\"next()\">\n                    <span class=\"fa fa-chevron-right\"></span>\n                </button>\n            </div>\n            <div class=\"d-inline-flex\">\n                <label>Semaine : {{currentWeek}}</label>\n            </div>\n        </div>\n        <table class=\"table table-striped table-sm\">\n            <thead>\n            <th>Activité</th>\n            <th>Mission</th>\n            <th>Charge</th>\n            <th *ngFor=\"let day of dateToDisplay\" class=\"text-center\">{{day.numero}}<br/>{{day.label}}</th>\n            </thead>\n        </table>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -48,6 +48,13 @@ module.exports = module.exports.toString();
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActiviteComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__ = __webpack_require__("../../../../../src/app/services/pouchdb-service/pouchdb.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__model__ = __webpack_require__("../../../../../src/app/model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_auth_auth_service__ = __webpack_require__("../../../../../src/app/services/auth/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_moment__ = __webpack_require__("../../../../moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_moment__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -58,10 +65,65 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
+
+
+
+
 var ActiviteComponent = /** @class */ (function () {
-    function ActiviteComponent() {
+    function ActiviteComponent(eventService, pouchdbservice, authService, router) {
+        this.eventService = eventService;
+        this.pouchdbservice = pouchdbservice;
+        this.authService = authService;
+        this.router = router;
+        this.activites = new Array();
+        this.parametres = new __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Parametres */]();
+        this.dateToDisplay = new Array();
+        this.currentDate = __WEBPACK_IMPORTED_MODULE_6_moment__();
     }
     ActiviteComponent.prototype.ngOnInit = function () {
+        this.loadData();
+        this.renderTimesheet(this.currentDate);
+    };
+    ActiviteComponent.prototype.loadData = function () {
+        var _this = this;
+        this.authService.collaborateurObs.subscribe(function (collaborateur) {
+            _this.collaborateur = collaborateur;
+            if (_this.collaborateur) {
+                _this.pouchdbservice.getActiviteForCollaborateurAndSemaine(_this.collaborateur._id, _this.currentDate.isoWeek()).subscribe(function (data) {
+                    _this.activites = data;
+                }, function (err) {
+                    _this.errorMessage = err;
+                });
+            }
+        });
+        this.pouchdbservice.getParametres().subscribe(function (data) {
+            _this.parametres = data;
+        }, function (err) {
+            _this.errorMessage = err;
+        });
+    };
+    ActiviteComponent.prototype.previous = function () {
+        this.currentDate = this.currentDate.add(-1, 'weeks');
+        this.renderTimesheet(this.currentDate);
+    };
+    ActiviteComponent.prototype.next = function () {
+        this.currentDate = this.currentDate.add(1, 'weeks');
+        this.renderTimesheet(this.currentDate);
+    };
+    ActiviteComponent.prototype.renderTimesheet = function (date) {
+        var weekDate = __WEBPACK_IMPORTED_MODULE_6_moment__(date);
+        weekDate = weekDate.startOf('isoWeek');
+        this.currentYear = weekDate.year();
+        this.currentWeek = weekDate.isoWeeks();
+        this.currentStartDateOfWeek = weekDate.format("L");
+        this.dateToDisplay.length = 0;
+        for (var i = 0; i < 7; i++) {
+            this.dateToDisplay.push({ numero: weekDate.date(), label: weekDate.format("dd") });
+            weekDate.add(1, 'd');
+        }
+        this.currentEndDateOfWeek = weekDate.format("L");
     };
     ActiviteComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -69,7 +131,7 @@ var ActiviteComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/activite/activite.component.html"),
             styles: [__webpack_require__("../../../../../src/app/activite/activite.component.scss")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__services_event_service_event_service__["a" /* EventService */], __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_5__services_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* Router */]])
     ], ActiviteComponent);
     return ActiviteComponent;
 }());
@@ -184,6 +246,8 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_alertifyjs_build_alertify_js__ = __webpack_require__("../../../../alertifyjs/build/alertify.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_alertifyjs_build_alertify_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_alertifyjs_build_alertify_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment__ = __webpack_require__("../../../../moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_moment__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -195,6 +259,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var AppComponent = /** @class */ (function () {
     function AppComponent() {
         __WEBPACK_IMPORTED_MODULE_1_alertifyjs_build_alertify_js__["defaults"].glossary.title = '';
@@ -204,6 +269,7 @@ var AppComponent = /** @class */ (function () {
         __WEBPACK_IMPORTED_MODULE_1_alertifyjs_build_alertify_js__["defaults"].theme.ok = "btn btn-primary";
         __WEBPACK_IMPORTED_MODULE_1_alertifyjs_build_alertify_js__["defaults"].theme.cancel = "btn btn-danger";
         __WEBPACK_IMPORTED_MODULE_1_alertifyjs_build_alertify_js__["defaults"].theme.input = "form-control";
+        __WEBPACK_IMPORTED_MODULE_2_moment__["locale"]('fr');
     }
     AppComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -247,30 +313,34 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__widgets_widgets_module__ = __webpack_require__("../../../../../src/app/widgets/widgets.module.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__angular_platform_browser_animations__ = __webpack_require__("../../../platform-browser/esm5/animations.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__agm_core__ = __webpack_require__("../../../../@agm/core/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_pdf_generator_pdf_generator_service__ = __webpack_require__("../../../../../src/app/services/pdf-generator/pdf-generator.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_google_place_service_google_place_service__ = __webpack_require__("../../../../../src/app/services/google-place-service/google-place.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__directives_google_place_directive__ = __webpack_require__("../../../../../src/app/directives/google-place.directive.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__organisme_card_organisme_card_component__ = __webpack_require__("../../../../../src/app/organisme/card/organisme-card.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__parametres_list_parametres_component__ = __webpack_require__("../../../../../src/app/parametres/list/parametres.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__pipes_capitalize_camel_pipe__ = __webpack_require__("../../../../../src/app/pipes/capitalize-camel.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__parametres_edit_parametre_component__ = __webpack_require__("../../../../../src/app/parametres/edit/parametre.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__pipes_liens_organisme_pipe__ = __webpack_require__("../../../../../src/app/pipes/liens-organisme.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pipes_liens_organisme_ville_pipe__ = __webpack_require__("../../../../../src/app/pipes/liens-organisme-ville.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__mission_list_missions_component__ = __webpack_require__("../../../../../src/app/mission/list/missions.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__mission_edit_mission_component__ = __webpack_require__("../../../../../src/app/mission/edit/mission.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__collaborateur_edit_collaborateur_component__ = __webpack_require__("../../../../../src/app/collaborateur/edit/collaborateur.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__collaborateur_list_collaborateurs_component__ = __webpack_require__("../../../../../src/app/collaborateur/list/collaborateurs.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__collaborateur_card_collaborateur_card_component__ = __webpack_require__("../../../../../src/app/collaborateur/card/collaborateur-card.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__prospection_list_prospections_component__ = __webpack_require__("../../../../../src/app/prospection/list/prospections.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__prospection_edit_prospection_component__ = __webpack_require__("../../../../../src/app/prospection/edit/prospection.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__auth_forgot_password_forgot_password_component__ = __webpack_require__("../../../../../src/app/auth/forgot-password/forgot-password.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__activite_activite_component__ = __webpack_require__("../../../../../src/app/activite/activite.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_pdf_generator_pdf_generator_service__ = __webpack_require__("../../../../../src/app/services/pdf-generator/pdf-generator.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_google_place_service_google_place_service__ = __webpack_require__("../../../../../src/app/services/google-place-service/google-place.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__directives_google_place_directive__ = __webpack_require__("../../../../../src/app/directives/google-place.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__organisme_card_organisme_card_component__ = __webpack_require__("../../../../../src/app/organisme/card/organisme-card.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__parametres_list_parametres_component__ = __webpack_require__("../../../../../src/app/parametres/list/parametres.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__pipes_capitalize_camel_pipe__ = __webpack_require__("../../../../../src/app/pipes/capitalize-camel.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__parametres_edit_parametre_component__ = __webpack_require__("../../../../../src/app/parametres/edit/parametre.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pipes_liens_organisme_pipe__ = __webpack_require__("../../../../../src/app/pipes/liens-organisme.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pipes_liens_organisme_ville_pipe__ = __webpack_require__("../../../../../src/app/pipes/liens-organisme-ville.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__mission_list_missions_component__ = __webpack_require__("../../../../../src/app/mission/list/missions.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__mission_edit_mission_component__ = __webpack_require__("../../../../../src/app/mission/edit/mission.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__collaborateur_edit_collaborateur_component__ = __webpack_require__("../../../../../src/app/collaborateur/edit/collaborateur.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__collaborateur_list_collaborateurs_component__ = __webpack_require__("../../../../../src/app/collaborateur/list/collaborateurs.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__collaborateur_card_collaborateur_card_component__ = __webpack_require__("../../../../../src/app/collaborateur/card/collaborateur-card.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__prospection_list_prospections_component__ = __webpack_require__("../../../../../src/app/prospection/list/prospections.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__prospection_edit_prospection_component__ = __webpack_require__("../../../../../src/app/prospection/edit/prospection.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__auth_forgot_password_forgot_password_component__ = __webpack_require__("../../../../../src/app/auth/forgot-password/forgot-password.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__activite_activite_component__ = __webpack_require__("../../../../../src/app/activite/activite.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__ngx_loading_bar_core__ = __webpack_require__("../../../../@ngx-loading-bar/core/esm5/ngx-loading-bar-core.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -324,22 +394,22 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_14__organisme_edit_organisme_component__["a" /* OrganismeComponent */],
                 __WEBPACK_IMPORTED_MODULE_16__contact_edit_contact_component__["a" /* ContactComponent */],
                 __WEBPACK_IMPORTED_MODULE_15__contact_list_contacts_component__["a" /* ContactsComponent */],
-                __WEBPACK_IMPORTED_MODULE_23__directives_google_place_directive__["a" /* GooglePlaceDirective */],
-                __WEBPACK_IMPORTED_MODULE_24__organisme_card_organisme_card_component__["a" /* OrganismeCardComponent */],
-                __WEBPACK_IMPORTED_MODULE_25__parametres_list_parametres_component__["a" /* ParametresComponent */],
-                __WEBPACK_IMPORTED_MODULE_26__pipes_capitalize_camel_pipe__["a" /* CapitalizeCamelPipe */],
-                __WEBPACK_IMPORTED_MODULE_27__parametres_edit_parametre_component__["a" /* ParametreComponent */],
-                __WEBPACK_IMPORTED_MODULE_28__pipes_liens_organisme_pipe__["a" /* LiensOrganismePipe */],
-                __WEBPACK_IMPORTED_MODULE_29__pipes_liens_organisme_ville_pipe__["a" /* LiensOrganismeVillePipe */],
-                __WEBPACK_IMPORTED_MODULE_30__mission_list_missions_component__["a" /* MissionsComponent */],
-                __WEBPACK_IMPORTED_MODULE_31__mission_edit_mission_component__["a" /* MissionComponent */],
-                __WEBPACK_IMPORTED_MODULE_32__collaborateur_edit_collaborateur_component__["a" /* CollaborateurComponent */],
-                __WEBPACK_IMPORTED_MODULE_33__collaborateur_list_collaborateurs_component__["a" /* CollaborateursComponent */],
-                __WEBPACK_IMPORTED_MODULE_34__collaborateur_card_collaborateur_card_component__["a" /* CollaborateurCardComponent */],
-                __WEBPACK_IMPORTED_MODULE_35__prospection_list_prospections_component__["a" /* ProspectionsComponent */],
-                __WEBPACK_IMPORTED_MODULE_36__prospection_edit_prospection_component__["a" /* ProspectionComponent */],
-                __WEBPACK_IMPORTED_MODULE_37__auth_forgot_password_forgot_password_component__["a" /* ForgotPasswordComponent */],
-                __WEBPACK_IMPORTED_MODULE_38__activite_activite_component__["a" /* ActiviteComponent */],
+                __WEBPACK_IMPORTED_MODULE_24__directives_google_place_directive__["a" /* GooglePlaceDirective */],
+                __WEBPACK_IMPORTED_MODULE_25__organisme_card_organisme_card_component__["a" /* OrganismeCardComponent */],
+                __WEBPACK_IMPORTED_MODULE_26__parametres_list_parametres_component__["a" /* ParametresComponent */],
+                __WEBPACK_IMPORTED_MODULE_27__pipes_capitalize_camel_pipe__["a" /* CapitalizeCamelPipe */],
+                __WEBPACK_IMPORTED_MODULE_28__parametres_edit_parametre_component__["a" /* ParametreComponent */],
+                __WEBPACK_IMPORTED_MODULE_29__pipes_liens_organisme_pipe__["a" /* LiensOrganismePipe */],
+                __WEBPACK_IMPORTED_MODULE_30__pipes_liens_organisme_ville_pipe__["a" /* LiensOrganismeVillePipe */],
+                __WEBPACK_IMPORTED_MODULE_31__mission_list_missions_component__["a" /* MissionsComponent */],
+                __WEBPACK_IMPORTED_MODULE_32__mission_edit_mission_component__["a" /* MissionComponent */],
+                __WEBPACK_IMPORTED_MODULE_33__collaborateur_edit_collaborateur_component__["a" /* CollaborateurComponent */],
+                __WEBPACK_IMPORTED_MODULE_34__collaborateur_list_collaborateurs_component__["a" /* CollaborateursComponent */],
+                __WEBPACK_IMPORTED_MODULE_35__collaborateur_card_collaborateur_card_component__["a" /* CollaborateurCardComponent */],
+                __WEBPACK_IMPORTED_MODULE_36__prospection_list_prospections_component__["a" /* ProspectionsComponent */],
+                __WEBPACK_IMPORTED_MODULE_37__prospection_edit_prospection_component__["a" /* ProspectionComponent */],
+                __WEBPACK_IMPORTED_MODULE_38__auth_forgot_password_forgot_password_component__["a" /* ForgotPasswordComponent */],
+                __WEBPACK_IMPORTED_MODULE_39__activite_activite_component__["a" /* ActiviteComponent */],
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
@@ -354,15 +424,17 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_20__agm_core__["a" /* AgmCoreModule */].forRoot({
                     apiKey: 'AIzaSyByAVVURZudjBg5ncvzbjlDOqNz02ZwIw0',
                     libraries: ["places"]
-                })
+                }),
+                __WEBPACK_IMPORTED_MODULE_40__ngx_loading_bar_core__["a" /* LoadingBarModule */].forRoot()
             ],
             providers: [
                 __WEBPACK_IMPORTED_MODULE_6__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */],
                 __WEBPACK_IMPORTED_MODULE_7__services_auth_auth_service__["a" /* AuthService */],
                 __WEBPACK_IMPORTED_MODULE_8__services_auth_auth_guard__["a" /* AuthGuard */],
-                __WEBPACK_IMPORTED_MODULE_22__services_google_place_service_google_place_service__["a" /* GooglePlaceService */],
+                __WEBPACK_IMPORTED_MODULE_23__services_google_place_service_google_place_service__["a" /* GooglePlaceService */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_common__["DatePipe"],
-                __WEBPACK_IMPORTED_MODULE_21__services_pdf_generator_pdf_generator_service__["a" /* PdfGeneratorService */]
+                __WEBPACK_IMPORTED_MODULE_22__services_pdf_generator_pdf_generator_service__["a" /* PdfGeneratorService */],
+                __WEBPACK_IMPORTED_MODULE_21__services_event_service_event_service__["a" /* EventService */]
             ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
         })
@@ -467,7 +539,7 @@ var ForgotPasswordComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/auth/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section class=\"login p-fixed d-flex text-center\">\r\n  <!-- Container-fluid starts -->\r\n  <div class=\"container\">\r\n    <div class=\"row\">\r\n      <div class=\"col-sm-12\">\r\n        <!-- Authentication card start -->\r\n        <div class=\"login-card mr-auto ml-auto\">\r\n          <form class=\"md-float-material\"  [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\r\n            <div class=\"text-center\">\r\n              <img src=\"assets/images/logo.jpg\" alt=\"Ellyx\">\r\n            </div>\r\n            <div class=\"auth-box\">\r\n              <div class=\"row m-b-20\">\r\n                <div class=\"col-md-12\">\r\n                  <h3 class=\"text-left txt-primary\">Connexion</h3>\r\n                </div>\r\n              </div>\r\n              <hr/>\r\n              <div class=\"input-group\">\r\n                <input type=\"email\" class=\"form-control\" [ngClass]=\"{'is-invalid': isFieldInvalid('login')}\" placeholder=\"Email\"  formControlName=\"login\"/>\r\n                       <span class=\"md-line\"></span>\r\n              </div>\r\n              <div class=\"input-group\">\r\n                <input type=\"password\" class=\"form-control\" [ngClass]=\"{'is-invalid': isFieldInvalid('password')}\" placeholder=\"Password\"  formControlName=\"password\"/>\r\n                       <span class=\"md-line\"></span>\r\n              </div>\r\n              <div class=\"alert alert-danger\" *ngIf=\"errorMessage\" role=\"alert\">\r\n                {{errorMessage}}\r\n              </div>\r\n              <div class=\"row m-t-25 text-left\">\r\n                <div class=\"col-12\">\r\n                  <div class=\"checkbox-fade fade-in-primary d-\">\r\n                    <label>\r\n                      <input type=\"checkbox\" value=\"\">\r\n                      <!--<span class=\"cr\"><i class=\"cr-icon fa fa-check txt-primary\"></i></span>-->\r\n                      <span class=\"text-inverse\">Se souvenir de moi</span>\r\n                    </label>\r\n                  </div>\r\n                  <div class=\"text-right\">\r\n                    <a [routerLink]=\"['/mdpOublie']\" class=\"text-right f-w-600 text-inverse\"> Mot de passe oublié?</a>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n              <div class=\"row m-t-30\">\r\n                <div class=\"col-md-12\">\r\n                  <button type=\"submit\" class=\"btn btn-primary btn-md btn-block waves-effect text-center m-b-20\">Login</button>\r\n                </div>\r\n              </div>\r\n\r\n            </div>\r\n          </form>\r\n          <!-- end of form -->\r\n        </div>\r\n        <!-- Authentication card end -->\r\n      </div>\r\n      <!-- end of col-sm-12 -->\r\n    </div>\r\n    <!-- end of row -->\r\n  </div>\r\n  <!-- end of container-fluid -->\r\n</section>\r\n"
+module.exports = "<section class=\"login p-fixed d-flex text-center\">\r\n  <!-- Container-fluid starts -->\r\n  <div class=\"container\">\r\n    <div class=\"row\">\r\n      <div class=\"col-sm-12\">\r\n        <!-- Authentication card start -->\r\n        <div class=\"login-card mr-auto ml-auto\">\r\n          <form class=\"md-float-material\"  [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\r\n            <div class=\"text-center\">\r\n              <img src=\"assets/images/logo.jpg\" alt=\"Ellyx\">\r\n            </div>\r\n            <div class=\"auth-box\">\r\n              <div class=\"row m-b-20\">\r\n                <div class=\"col-md-12\">\r\n                  <h3 class=\"text-left txt-primary\">Connexion</h3>\r\n                </div>\r\n              </div>\r\n              <hr/>\r\n              <div class=\"input-group\">\r\n                <input type=\"email\" class=\"form-control\" [ngClass]=\"{'is-invalid': isFieldInvalid('login')}\" placeholder=\"Email\"  formControlName=\"login\"/>\r\n                       <span class=\"md-line\"></span>\r\n              </div>\r\n              <div class=\"input-group\">\r\n                <input type=\"password\" class=\"form-control\" [ngClass]=\"{'is-invalid': isFieldInvalid('password')}\" placeholder=\"Password\"  formControlName=\"password\"/>\r\n                       <span class=\"md-line\"></span>\r\n              </div>\r\n              <div class=\"alert alert-danger\" *ngIf=\"errorMessage\" role=\"alert\">\r\n                {{errorMessage}}\r\n              </div>\r\n              <div class=\"row m-t-25 text-left\">\r\n                <div class=\"col-12\">\r\n                  <div class=\"checkbox-fade fade-in-primary d-\">\r\n                    <label>\r\n                      <input type=\"checkbox\" value=\"\">\r\n                      <!--<span class=\"cr\"><i class=\"cr-icon fa fa-check txt-primary\"></i></span>-->\r\n                      <span class=\"text-inverse\">Se souvenir de moi</span>\r\n                    </label>\r\n                  </div>\r\n                  <div class=\"text-right\">\r\n                    <a [routerLink]=\"['/mdpOublie']\" class=\"text-right f-w-600 text-inverse\"> Mot de passe oublié?</a>\r\n                  </div>\r\n                </div>\r\n              </div>\r\n              <div class=\"row m-t-30\">\r\n                <div class=\"col-md-12\">\r\n                  <button type=\"submit\" class=\"btn btn-primary btn-md btn-block waves-effect text-center m-b-20\">Login</button>\r\n                </div>\r\n                  <ngx-loading-bar></ngx-loading-bar>\r\n              </div>\r\n\r\n            </div>\r\n          </form>\r\n          <!-- end of form -->\r\n        </div>\r\n        <!-- Authentication card end -->\r\n      </div>\r\n      <!-- end of col-sm-12 -->\r\n    </div>\r\n    <!-- end of row -->\r\n  </div>\r\n  <!-- end of container-fluid -->\r\n</section>\r\n"
 
 /***/ }),
 
@@ -497,6 +569,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/esm5/forms.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_auth_auth_service__ = __webpack_require__("../../../../../src/app/services/auth/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ngx_loading_bar_core__ = __webpack_require__("../../../../@ngx-loading-bar/core/esm5/ngx-loading-bar-core.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -509,10 +582,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var LoginComponent = /** @class */ (function () {
-    function LoginComponent(fb, authService) {
+    function LoginComponent(fb, authService, loadingBar) {
         this.fb = fb;
         this.authService = authService;
+        this.loadingBar = loadingBar;
     }
     LoginComponent.prototype.ngOnInit = function () {
         this.form = this.fb.group({
@@ -520,12 +595,16 @@ var LoginComponent = /** @class */ (function () {
             password: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required]
         });
     };
+    LoginComponent.prototype.ngOnDestroy = function () {
+        this.loadingBar.complete();
+    };
     LoginComponent.prototype.isFieldInvalid = function (field) {
         return ((!this.form.get(field).valid && this.form.get(field).touched) ||
             (this.form.get(field).untouched && this.formSubmitAttempt));
     };
     LoginComponent.prototype.onSubmit = function () {
         if (this.form.valid) {
+            this.loadingBar.start();
             this.authService.login(this.form.value);
         }
         this.formSubmitAttempt = true;
@@ -537,7 +616,8 @@ var LoginComponent = /** @class */ (function () {
             styles: [__webpack_require__("../../../../../src/app/auth/login/login.component.scss")]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormBuilder */],
-            __WEBPACK_IMPORTED_MODULE_2__services_auth_auth_service__["a" /* AuthService */]])
+            __WEBPACK_IMPORTED_MODULE_2__services_auth_auth_service__["a" /* AuthService */],
+            __WEBPACK_IMPORTED_MODULE_3__ngx_loading_bar_core__["b" /* LoadingBarService */]])
     ], LoginComponent);
     return LoginComponent;
 }());
@@ -549,7 +629,7 @@ var LoginComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/collaborateur/card/collaborateur-card.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\r\n<div class=\"card collaborateur-card\" (click)=\"displayCollaborateur()\">\r\n    <div class=\"card-header-img\">\r\n        <img class=\"img-fluid img-radius\" [src]=\"image\" *ngIf=\"image\"/>\r\n        <h4>{{_collaborateur.civilite}} {{_collaborateur.nom}} {{_collaborateur.prenom}}</h4>\r\n        <h5>{{_collaborateur.mail}}</h5>\r\n        <h6>{{_collaborateur.fonction}}</h6>\r\n    </div>\r\n    <!--        <div class=\"row justify-content-center\">\r\n              <div class=\"col-auto\">\r\n                <div class=\"label-icon\">\r\n                  <i class=\"icofont icofont-bell-alt\"></i>\r\n                  <label class=\"badge badge-primary badge-top-right\">9</label>\r\n                </div>\r\n              </div>\r\n              <div class=\"col-auto\">\r\n                <div class=\"label-icon\">\r\n                  <i class=\"icofont icofont-heart\"></i>\r\n                  <label class=\"badge badge-success badge-top-right\">9</label>\r\n                </div>\r\n              </div>\r\n              <div class=\"col-auto\">\r\n                <div class=\"label-icon\">\r\n                  <i class=\"icofont icofont-bag-alt\"></i>\r\n                  <label class=\"badge badge-danger badge-top-right\">9</label>\r\n                </div>\r\n              </div>\r\n              <div class=\"col-auto\">\r\n                <div class=\"label-icon\">\r\n                  <i class=\"icofont icofont-ui-message\"></i>\r\n                  <label class=\"badge badge-info badge-top-right\">9</label>\r\n                </div>\r\n              </div>\r\n            </div>-->\r\n    <!--<p>Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.</p>-->\r\n</div>"
+module.exports = "\n<div class=\"card collaborateur-card\" (click)=\"displayCollaborateur()\">\n    <div class=\"card-header-img\">\n        <img class=\"img-fluid img-radius\" [src]=\"image\" *ngIf=\"image\"/>\n        <h4>{{_collaborateur.civilite}} {{_collaborateur.nom}} {{_collaborateur.prenom}}</h4>\n        <h5>{{_collaborateur.mail}}</h5>\n        <h6>{{_collaborateur.fonction}}</h6>\n        <h6>Rôle : {{_collaborateur.role}}</h6>\n    </div>\n    <!--        <div class=\"row justify-content-center\">\n              <div class=\"col-auto\">\n                <div class=\"label-icon\">\n                  <i class=\"icofont icofont-bell-alt\"></i>\n                  <label class=\"badge badge-primary badge-top-right\">9</label>\n                </div>\n              </div>\n              <div class=\"col-auto\">\n                <div class=\"label-icon\">\n                  <i class=\"icofont icofont-heart\"></i>\n                  <label class=\"badge badge-success badge-top-right\">9</label>\n                </div>\n              </div>\n              <div class=\"col-auto\">\n                <div class=\"label-icon\">\n                  <i class=\"icofont icofont-bag-alt\"></i>\n                  <label class=\"badge badge-danger badge-top-right\">9</label>\n                </div>\n              </div>\n              <div class=\"col-auto\">\n                <div class=\"label-icon\">\n                  <i class=\"icofont icofont-ui-message\"></i>\n                  <label class=\"badge badge-info badge-top-right\">9</label>\n                </div>\n              </div>\n            </div>-->\n    <!--<p>Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.</p>-->\n</div>"
 
 /***/ }),
 
@@ -600,7 +680,7 @@ var CollaborateurCardComponent = /** @class */ (function () {
         this.pouchdbservice = pouchdbservice;
         this.sanitizer = sanitizer;
         this.router = router;
-        this._collaborateur = new __WEBPACK_IMPORTED_MODULE_1__model__["d" /* Collaborateur */]();
+        this._collaborateur = new __WEBPACK_IMPORTED_MODULE_1__model__["e" /* Collaborateur */]();
     }
     Object.defineProperty(CollaborateurCardComponent.prototype, "collaborateur", {
         set: function (value) {
@@ -628,8 +708,8 @@ var CollaborateurCardComponent = /** @class */ (function () {
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__model__["d" /* Collaborateur */]),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__model__["d" /* Collaborateur */]])
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__model__["e" /* Collaborateur */]),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__model__["e" /* Collaborateur */]])
     ], CollaborateurCardComponent.prototype, "collaborateur", null);
     CollaborateurCardComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -649,7 +729,7 @@ var CollaborateurCardComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/collaborateur/edit/collaborateur.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\r\n<div class=\"card-body\">\r\n    <div class=\"card\">\r\n        <div class=\"card-header flex\">\r\n            <h3 class=\"float-left\" *ngIf=\"createForm\">Nouvel Collaborateur</h3>\r\n            <h3 class=\"float-left\" *ngIf=\"!createForm\">Collaborateur</h3>\r\n            <div class=\"float-right\">\r\n                <button id=\"edit-btn\" type=\"button\" class=\"btn btn-sm btn-primary\" *ngIf=\"!editForm && !createForm\" (click)=\"toggleEdit()\">\r\n                    <i class=\"fas fa-pencil-alt\"></i>\r\n                </button>\r\n                <button id=\"edit-btn\" type=\"button\" class=\"btn btn-sm btn-primary\" *ngIf=\"editForm && !createForm\" (click)=\"toggleEdit()\">\r\n                    <i class=\"fas fa-times fa-lg\"></i>\r\n                </button>\r\n                <button id=\"create-btn\" type=\"button\" class=\"btn btn-sm btn-primary\" *ngIf=\"createForm\" routerLink=\"/collaborateurs\">\r\n                    <i class=\"fas fa-times fa-lg\"></i>\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"card-body\">\r\n            <!-- ************ EDITION ************* -->\r\n            <div class=\"view-info\" *ngIf=\"editForm || createForm\">\r\n                 <form class=\"md-float-material col-sm-10\"  [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\r\n                    <div class=\"form-group\">\r\n                        <label for=\"logo\">Photo (png ou jpg)</label>\r\n                        <input type=\"file\" #fileInput placeholder=\"Import fichier...\" accept=\".png, .jpg, .jpeg\"/>\r\n                    </div>\r\n                    <div class=\"row\">\r\n                        <div class=\"col-md-2 form-group\" >\r\n                            <label for=\"genre\">Civilité*</label>\r\n                            <select class=\"form-control\" formControlName=\"civilite\" id=\"civilite\">\r\n                                <option *ngFor=\"let civilite of civilites\" [value]=\"civilite\" [label]=\"civilite\"></option>\r\n                            </select>\r\n                        </div>\r\n                        <div class=\"col-md-5 form-group\" >\r\n                            <label for=\"nom\">Nom*</label>\r\n                            <input type=\"text\" class=\"form-control\" formControlName=\"nom\" id=\"nom\" [ngClass]=\"{'is-invalid': isFieldInvalid('nom')}\"/>\r\n                        </div>\r\n                        <div class=\"col-md-5 form-group\" >\r\n                            <label for=\"nom\">Prénom*</label>\r\n                            <input type=\"text\" class=\"form-control\" formControlName=\"prenom\" id=\"nom\" [ngClass]=\"{'is-invalid': isFieldInvalid('prenom')}\"/>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"row\">\r\n                        <div class=\"col-md-7 form-group\" >\r\n                            <label class=\"center-block\">Email</label>\r\n                            <input class=\"form-control\" formControlName=\"mail\" [ngClass]=\"{'is-invalid': isFieldInvalid('mail')}\"/>\r\n                        </div>\r\n                        <div class=\"col-md-5 form-group\" >\r\n                            <label class=\"center-block\">Téléphone</label>\r\n                            <input class=\"form-control\" formControlName=\"telephone\"/>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"row\">\r\n                        <div class=\"col-md-7 form-group\" >\r\n                            <label class=\"center-block\">Fonction :</label>\r\n                            <input class=\"form-control\" formControlName=\"fonction\"/>\r\n                        </div>\r\n                    </div>\r\n                    <div formGroupName=\"adresse\"   (keydown.enter)=\"$event.preventDefault()\">\r\n\r\n                        <div class=\"card\">\r\n                            <div class=\"card-header\">\r\n                                <h4>Adresse</h4>\r\n                                <div class=\"input-group col-sm-offset-2 col-sm-10\">\r\n\r\n                                    <input class=\"form-control\" formControlName=\"adresseComplete\" placeholder=\"Saisissez une adresse...\"\r\n                                           autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" autocomplete=\"off\" aria-autocomplete=\"list\"\r\n                                           appGooglePlace (setAddress)=\"setAddressOnChange($event,LocationCtrl)\"/>\r\n                                           <div class=\"input-group-append\">\r\n                                        <div class=\"input-group-text\" id=\"btnGroupAddon\"><i class=\"fas fa-map-marker-alt\"></i></div>\r\n                                    </div>\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"card-body\">\r\n                                <div>\r\n                                    <div>\r\n                                        <label class=\"col-form-label col-form-label-sm\">Bâtiment / Résidence</label>\r\n                                        <input class=\"form-control form-control-sm\" formControlName=\"residence\"/>\r\n                                    </div>\r\n                                    <div class=\"row\">\r\n                                        <div class=\"col-md-4\" >\r\n                                            <label class=\"col-form-label col-form-label-sm\">Numéro</label>\r\n                                            <input class=\"form-control form-control-sm\" formControlName=\"numero\"/>\r\n                                        </div>\r\n                                        <div class=\"col-md-8\">\r\n                                            <label class=\"col-form-label col-form-label-sm\">Rue</label>\r\n                                            <input class=\"form-control form-control-sm\" formControlName=\"rue\"/>\r\n                                        </div>\r\n                                    </div>\r\n                                    <div>\r\n                                        <label class=\"col-form-label col-form-label-sm\">Complément</label>\r\n                                        <input class=\"form-control form-control-sm\" formControlName=\"complement\"/>\r\n                                    </div>\r\n                                    <div class=\"row\">\r\n                                        <div class=\"col-md-6\" >\r\n                                            <label class=\"col-form-label col-form-label-sm\">Code postal</label>\r\n                                            <input class=\"form-control form-control-sm\" formControlName=\"codePostal\"/>\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"col-form-label col-form-label-sm\">Ville</label>\r\n                                            <input class=\"form-control form-control-sm\" formControlName=\"ville\"/>\r\n                                        </div>\r\n                                    </div>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"row pt-3\">\r\n                        <div class=\"col-md-7 form-group\" >\r\n                            <label class=\"center-block\">En cas d'urgence :</label>\r\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"enCasUrgence\"></textarea>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"alert alert-danger\" *ngIf=\"errorMessage\" role=\"alert\">\r\n                        {{errorMessage}}\r\n                    </div>\r\n\r\n                    <div class=\"row mt-3\">\r\n                        <div class=\"col-md-12\">\r\n                            <button type=\"submit\" class=\"btn btn-primary btn-md btn-block text-center\">Enregistrer</button>\r\n                        </div>\r\n                    </div>\r\n\r\n                </form>\r\n            </div>\r\n\r\n            <!-- ************ DISPLAY ************* -->\r\n            <div class=\"view-info\" *ngIf=\"!editForm && !createForm\">\r\n                <app-collaborateur-card [collaborateur]=\"collaborateur\"></app-collaborateur-card>\r\n                <div class=\"\">\r\n                    <div class=\"card-collaborateur\">\r\n                        <ul class=\"list-group list-group-flush\">\r\n                            <li class=\"list-group-item\" *ngIf=\"collaborateur.telephone\"><i class=\"fas fa-phone fa-lg\"></i><span>{{collaborateur.telephone}}</span></li>\r\n                            <li class=\"list-group-item\" *ngIf=\"collaborateur.adresse && collaborateur.adresse.ville\">\r\n                                <i class=\"fas fa-home fa-lg\"></i>\r\n                                <span>\r\n                                    {{collaborateur.adresse.residence}}<br *ngIf=\"collaborateur.adresse.residence\"/>\r\n                                    {{collaborateur.adresse.numero}} {{collaborateur.adresse.rue}}<br/>\r\n                                    {{collaborateur.adresse.complement}}<br *ngIf=\"collaborateur.adresse.complement\"/>\r\n                                    {{collaborateur.adresse.codePostal}} {{collaborateur.adresse.ville}}\r\n                                </span>\r\n                            </li>\r\n                            <li class=\"list-group-item line-breaker\" *ngIf=\"collaborateur.enCasUrgence\"><i class=\"fas fa-ambulance fa-lg\"></i><span>{{collaborateur.enCasUrgence}}</span></li>\r\n                        </ul>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n\r\n\r\n</div>\r\n"
+module.exports = "\r\n<div class=\"card-body\">\r\n    <div class=\"card\">\r\n        <div class=\"card-header flex\">\r\n            <h3 class=\"float-left\" *ngIf=\"createForm\">Nouvel Collaborateur</h3>\r\n            <h3 class=\"float-left\" *ngIf=\"!createForm\">Collaborateur</h3>\r\n            <div class=\"float-right\">\r\n                <button id=\"edit-btn\" type=\"button\" class=\"btn btn-sm btn-primary\" *ngIf=\"!editForm && !createForm && isAdmin$ | async\" (click)=\"toggleEdit()\">\r\n                    <i class=\"fas fa-pencil-alt\"></i>\r\n                </button>\r\n                <button id=\"edit-btn\" type=\"button\" class=\"btn btn-sm btn-primary\" *ngIf=\"editForm && !createForm\" (click)=\"toggleEdit()\">\r\n                    <i class=\"fas fa-times fa-lg\"></i>\r\n                </button>\r\n                <button id=\"create-btn\" type=\"button\" class=\"btn btn-sm btn-primary\" *ngIf=\"createForm\" routerLink=\"/collaborateurs\">\r\n                    <i class=\"fas fa-times fa-lg\"></i>\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"card-body\">\r\n            <!-- ************ EDITION ************* -->\r\n            <div class=\"view-info\" *ngIf=\"editForm || createForm\">\r\n                 <form class=\"md-float-material col-sm-10\"  [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\r\n                    <div class=\"form-group\">\r\n                        <label for=\"logo\">Photo (png ou jpg)</label>\r\n                        <input type=\"file\" #fileInput placeholder=\"Import fichier...\" accept=\".png, .jpg, .jpeg\"/>\r\n                    </div>\r\n                    <div class=\"row\">\r\n                        <div class=\"col-md-2 form-group\" >\r\n                            <label for=\"genre\">Civilité*</label>\r\n                            <select class=\"form-control\" formControlName=\"civilite\" id=\"civilite\">\r\n                                <option *ngFor=\"let civilite of civilites\" [value]=\"civilite\" [label]=\"civilite\"></option>\r\n                            </select>\r\n                        </div>\r\n                        <div class=\"col-md-5 form-group\" >\r\n                            <label for=\"nom\">Nom*</label>\r\n                            <input type=\"text\" class=\"form-control\" formControlName=\"nom\" id=\"nom\" [ngClass]=\"{'is-invalid': isFieldInvalid('nom')}\"/>\r\n                        </div>\r\n                        <div class=\"col-md-5 form-group\" >\r\n                            <label for=\"nom\">Prénom*</label>\r\n                            <input type=\"text\" class=\"form-control\" formControlName=\"prenom\" id=\"nom\" [ngClass]=\"{'is-invalid': isFieldInvalid('prenom')}\"/>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"row\">\r\n                        <div class=\"col-md-7 form-group\" >\r\n                            <label class=\"center-block\">Email</label>\r\n                            <input class=\"form-control\" formControlName=\"mail\" [ngClass]=\"{'is-invalid': isFieldInvalid('mail')}\"/>\r\n                        </div>\r\n                        <div class=\"col-md-5 form-group\" >\r\n                            <label class=\"center-block\">Téléphone</label>\r\n                            <input class=\"form-control\" formControlName=\"telephone\"/>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"row\">\r\n                        <div class=\"col-md-7 form-group\" >\r\n                            <label class=\"center-block\">Fonction :</label>\r\n                            <input class=\"form-control\" formControlName=\"fonction\"/>\r\n                        </div>\r\n                        <div class=\"col-md-5 form-group\" >\r\n                            <label class=\"center-block\">Rôle</label>\r\n                            <select class=\"form-control\" formControlName=\"role\" id=\"role\">\r\n                                <option *ngFor=\"let role of roles\" [value]=\"role\" [label]=\"role\"></option>\r\n                            </select>\r\n                    </div>\r\n                    </div>\r\n                    <div formGroupName=\"adresse\"   (keydown.enter)=\"$event.preventDefault()\">\r\n\r\n                        <div class=\"card\">\r\n                            <div class=\"card-header\">\r\n                                <h4>Adresse</h4>\r\n                                <div class=\"input-group col-sm-offset-2 col-sm-10\">\r\n\r\n                                    <input class=\"form-control\" formControlName=\"adresseComplete\" placeholder=\"Saisissez une adresse...\"\r\n                                           autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" autocomplete=\"off\" aria-autocomplete=\"list\"\r\n                                           appGooglePlace (setAddress)=\"setAddressOnChange($event,LocationCtrl)\"/>\r\n                                           <div class=\"input-group-append\">\r\n                                        <div class=\"input-group-text\" id=\"btnGroupAddon\"><i class=\"fas fa-map-marker-alt\"></i></div>\r\n                                    </div>\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"card-body\">\r\n                                <div>\r\n                                    <div>\r\n                                        <label class=\"col-form-label col-form-label-sm\">Bâtiment / Résidence</label>\r\n                                        <input class=\"form-control form-control-sm\" formControlName=\"residence\"/>\r\n                                    </div>\r\n                                    <div class=\"row\">\r\n                                        <div class=\"col-md-4\" >\r\n                                            <label class=\"col-form-label col-form-label-sm\">Numéro</label>\r\n                                            <input class=\"form-control form-control-sm\" formControlName=\"numero\"/>\r\n                                        </div>\r\n                                        <div class=\"col-md-8\">\r\n                                            <label class=\"col-form-label col-form-label-sm\">Rue</label>\r\n                                            <input class=\"form-control form-control-sm\" formControlName=\"rue\"/>\r\n                                        </div>\r\n                                    </div>\r\n                                    <div>\r\n                                        <label class=\"col-form-label col-form-label-sm\">Complément</label>\r\n                                        <input class=\"form-control form-control-sm\" formControlName=\"complement\"/>\r\n                                    </div>\r\n                                    <div class=\"row\">\r\n                                        <div class=\"col-md-6\" >\r\n                                            <label class=\"col-form-label col-form-label-sm\">Code postal</label>\r\n                                            <input class=\"form-control form-control-sm\" formControlName=\"codePostal\"/>\r\n                                        </div>\r\n                                        <div class=\"col-md-6\">\r\n                                            <label class=\"col-form-label col-form-label-sm\">Ville</label>\r\n                                            <input class=\"form-control form-control-sm\" formControlName=\"ville\"/>\r\n                                        </div>\r\n                                    </div>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"row pt-3\">\r\n                        <div class=\"col-md-7 form-group\" >\r\n                            <label class=\"center-block\">En cas d'urgence :</label>\r\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"enCasUrgence\"></textarea>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"alert alert-danger\" *ngIf=\"errorMessage\" role=\"alert\">\r\n                        {{errorMessage}}\r\n                    </div>\r\n\r\n                    <div class=\"row mt-3\">\r\n                        <div class=\"col-md-12\">\r\n                            <button type=\"submit\" class=\"btn btn-primary btn-md btn-block text-center\">Enregistrer</button>\r\n                        </div>\r\n                    </div>\r\n\r\n                </form>\r\n            </div>\r\n\r\n            <!-- ************ DISPLAY ************* -->\r\n            <div class=\"view-info\" *ngIf=\"!editForm && !createForm\">\r\n                <app-collaborateur-card [collaborateur]=\"collaborateur\"></app-collaborateur-card>\r\n                <div class=\"\">\r\n                    <div class=\"card-collaborateur\">\r\n                        <ul class=\"list-group list-group-flush\">\r\n                            <li class=\"list-group-item\" *ngIf=\"collaborateur.telephone\"><i class=\"fas fa-phone fa-lg\"></i><span>{{collaborateur.telephone}}</span></li>\r\n                            <li class=\"list-group-item\" *ngIf=\"collaborateur.adresse && collaborateur.adresse.ville\">\r\n                                <i class=\"fas fa-home fa-lg\"></i>\r\n                                <span>\r\n                                    {{collaborateur.adresse.residence}}<br *ngIf=\"collaborateur.adresse.residence\"/>\r\n                                    {{collaborateur.adresse.numero}} {{collaborateur.adresse.rue}}<br/>\r\n                                    {{collaborateur.adresse.complement}}<br *ngIf=\"collaborateur.adresse.complement\"/>\r\n                                    {{collaborateur.adresse.codePostal}} {{collaborateur.adresse.ville}}\r\n                                </span>\r\n                            </li>\r\n                            <li class=\"list-group-item line-breaker\" *ngIf=\"collaborateur.enCasUrgence\"><i class=\"fas fa-ambulance fa-lg\"></i><span>{{collaborateur.enCasUrgence}}</span></li>\r\n                        </ul>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n\r\n\r\n</div>\r\n"
 
 /***/ }),
 
@@ -714,14 +794,17 @@ var CollaborateurComponent = /** @class */ (function () {
         this.formSubmitAttempt = false;
         this.editForm = false;
         this.createForm = false;
-        this.collaborateur = new __WEBPACK_IMPORTED_MODULE_2__model__["d" /* Collaborateur */]();
+        this.collaborateur = new __WEBPACK_IMPORTED_MODULE_2__model__["e" /* Collaborateur */]();
         this.civilites = [];
+        this.roles = Object.keys(__WEBPACK_IMPORTED_MODULE_2__model__["q" /* Role */]).filter(function (f) { return isNaN(Number(f)); });
+        this.isAdmin$ = this.authService.isAdmin;
         this.form = this.fb.group({
             nom: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required],
             prenom: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required],
             civilite: [''],
             telephone: [''],
             mail: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required],
+            role: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required],
             fonction: [''],
             enCasUrgence: [''],
             adresse: this.fb.group({
@@ -775,8 +858,8 @@ var CollaborateurComponent = /** @class */ (function () {
         this.place = place;
         if (this.place) {
             //set latitude, longitude and zoom
-            var adresse = new __WEBPACK_IMPORTED_MODULE_2__model__["c" /* Adresse */]();
-            adresse.location = new __WEBPACK_IMPORTED_MODULE_2__model__["i" /* Location */]();
+            var adresse = new __WEBPACK_IMPORTED_MODULE_2__model__["d" /* Adresse */]();
+            adresse.location = new __WEBPACK_IMPORTED_MODULE_2__model__["k" /* Location */]();
             adresse.location.latitude = this.googlePlaceService.latitude(this.place);
             adresse.location.longitude = this.googlePlaceService.longitude(this.place);
             adresse.numero = this.googlePlaceService.street_number(this.place);
@@ -790,7 +873,7 @@ var CollaborateurComponent = /** @class */ (function () {
             this.form.get('adresse').patchValue(adresse);
         }
         else {
-            this.form.get('adresse').get('location').setValue(new __WEBPACK_IMPORTED_MODULE_2__model__["i" /* Location */]());
+            this.form.get('adresse').get('location').setValue(new __WEBPACK_IMPORTED_MODULE_2__model__["k" /* Location */]());
         }
     };
     CollaborateurComponent.prototype.onSubmit = function () {
@@ -798,9 +881,9 @@ var CollaborateurComponent = /** @class */ (function () {
         if (this.form.valid) {
             var oldEmail = this.collaborateur.mail;
             this.collaborateur = __WEBPACK_IMPORTED_MODULE_6_lodash__["merge"](this.collaborateur, this.form.value);
-            if (!this.collaborateur._id || oldEmail !== this.collaborateur.mail) {
-                this.authService.registerUser(this.collaborateur.mail).subscribe(function (error) { return console.log(error); });
-            }
+            //            if (!this.collaborateur._id || oldEmail !== this.collaborateur.mail) {
+            //                this.authService.registerUser(this.collaborateur.mail).subscribe(error => console.log(error));
+            //            }
             this.pouchdbservice.save(this.collaborateur).subscribe(function (response) {
                 console.log(response);
                 _this.addImage(response.id, response.rev);
@@ -873,7 +956,7 @@ var CollaborateurComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/collaborateur/list/collaborateurs.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"card\">\n    <div class=\"card-header\">\n        <h3>Equipe</h3>\n    </div>\n    <div class=\"card-body\">\n        <div class=\"d-flex justify-content-between pb-2\">\n            <div class=\"d-inline-flex\">\n                <div class=\"input-group\">\n                    <input type=\"text\" class=\"form-control\" aria-label=\"Rechercher\" placeholder='Rechercher ...' (keyup)='updateFilter($event)'>\n                    <div class=\"input-group-append\">\n                        <div class=\"input-group-text\"><span class=\"fas fa-search \"></span></div>\n                    </div>\n                </div>\n            </div>\n            <button class='btn btn-primary' routerLink=\"0\"> \n                <i class=\"fas fa-plus fa-lg\"></i> \n            </button>\n        </div>\n        <div class=\"d-flex flex-row flex-wrap align-items-stretch\">\n            <div class=\"col-sm-4  col-xl-3 mb-3\" *ngFor=\"let collaborateur of rows\">\n                 <app-collaborateur-card [collaborateur]=\"collaborateur\"></app-collaborateur-card>\n            </div>\n            <div class=\"col-sm-12 text-center\" *ngIf=\"!rows || rows.length==0\">\n                 Aucun collaborateur\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "<div class=\"card\">\n    <div class=\"card-header\">\n        <h3>Equipe</h3>\n    </div>\n    <div class=\"card-body\">\n        <div class=\"d-flex justify-content-between pb-2\">\n            <div class=\"d-inline-flex\">\n                <div class=\"input-group\">\n                    <input type=\"text\" class=\"form-control\" aria-label=\"Rechercher\" placeholder='Rechercher ...' (keyup)='updateFilter($event)'>\n                    <div class=\"input-group-append\">\n                        <div class=\"input-group-text\"><span class=\"fas fa-search \"></span></div>\n                    </div>\n                </div>\n            </div>\n            <button class='btn btn-primary' routerLink=\"0\" *ngIf=\"isAdmin$ | async\"> \n                <i class=\"fas fa-plus fa-lg\"></i> \n            </button>\n        </div>\n        <div class=\"d-flex flex-row flex-wrap align-items-stretch\">\n            <div class=\"col-sm-4  col-xl-3 mb-3\" *ngFor=\"let collaborateur of rows\">\n                 <app-collaborateur-card [collaborateur]=\"collaborateur\"></app-collaborateur-card>\n            </div>\n            <div class=\"col-sm-12 text-center\" *ngIf=\"!rows || rows.length==0\">\n                 Aucun collaborateur\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -902,8 +985,11 @@ module.exports = module.exports.toString();
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CollaborateursComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__ = __webpack_require__("../../../../../src/app/services/pouchdb-service/pouchdb.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__("../../../../../src/app/utils.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_auth_auth_service__ = __webpack_require__("../../../../../src/app/services/auth/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__model__ = __webpack_require__("../../../../../src/app/model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils__ = __webpack_require__("../../../../../src/app/utils.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -917,14 +1003,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
+
 var CollaborateursComponent = /** @class */ (function () {
-    function CollaborateursComponent(pouchdbservice, router) {
+    function CollaborateursComponent(eventService, pouchdbservice, authService, router) {
+        this.eventService = eventService;
         this.pouchdbservice = pouchdbservice;
+        this.authService = authService;
         this.router = router;
         this.rows = [];
         this.datas = [];
+        this.isAdmin$ = this.authService.isAdmin;
     }
     CollaborateursComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.loadData();
+        this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_3__model__["e" /* Collaborateur */].name) {
+                _this.loadData();
+            }
+        });
+    };
+    CollaborateursComponent.prototype.loadData = function () {
         var _this = this;
         this.pouchdbservice.getCollaborateurs().subscribe(function (data) {
             _this.datas = data.sort(function (x, y) { return (x.nom + " " + x.prenom).localeCompare(y.nom + " " + y.prenom); });
@@ -938,11 +1039,11 @@ var CollaborateursComponent = /** @class */ (function () {
             return;
         }
         ;
-        val = Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(val);
+        val = Object(__WEBPACK_IMPORTED_MODULE_5__utils__["b" /* sanitize */])(val);
         var temp = this.datas.filter(function (d) {
-            return Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(d.nom).indexOf(val) !== -1
-                || (d.adresse && Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(d.adresse.ville).indexOf(val) !== -1)
-                || Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(d.prenom).indexOf(val) !== -1;
+            return Object(__WEBPACK_IMPORTED_MODULE_5__utils__["b" /* sanitize */])(d.nom).indexOf(val) !== -1
+                || (d.adresse && Object(__WEBPACK_IMPORTED_MODULE_5__utils__["b" /* sanitize */])(d.adresse.ville).indexOf(val) !== -1)
+                || Object(__WEBPACK_IMPORTED_MODULE_5__utils__["b" /* sanitize */])(d.prenom).indexOf(val) !== -1;
         });
         this.rows = temp;
     };
@@ -955,7 +1056,7 @@ var CollaborateursComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/collaborateur/list/collaborateurs.component.html"),
             styles: [__webpack_require__("../../../../../src/app/collaborateur/list/collaborateurs.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_6__services_event_service_event_service__["a" /* EventService */], __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_2__services_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]])
     ], CollaborateursComponent);
     return CollaborateursComponent;
 }());
@@ -1026,7 +1127,7 @@ var ContactComponent = /** @class */ (function () {
         this.formSubmitAttempt = false;
         this.editForm = false;
         this.createForm = false;
-        this.contact = new __WEBPACK_IMPORTED_MODULE_2__model__["e" /* Contact */]();
+        this.contact = new __WEBPACK_IMPORTED_MODULE_2__model__["f" /* Contact */]();
         this.civilites = [];
         this.organismes = [];
         this.form = this.fb.group({
@@ -1154,7 +1255,7 @@ var ContactComponent = /** @class */ (function () {
         });
     };
     ContactComponent.prototype.addLien = function () {
-        this.liens.push(this.createLien(new __WEBPACK_IMPORTED_MODULE_2__model__["h" /* LienOrganisme */]()));
+        this.liens.push(this.createLien(new __WEBPACK_IMPORTED_MODULE_2__model__["j" /* LienOrganisme */]()));
     };
     ContactComponent.prototype.removeLien = function (index) {
         this.liens.removeAt(index);
@@ -1209,9 +1310,11 @@ module.exports = module.exports.toString();
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContactsComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__ = __webpack_require__("../../../../../src/app/services/pouchdb-service/pouchdb.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__("../../../../../src/app/utils.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pipes_liens_organisme_pipe__ = __webpack_require__("../../../../../src/app/pipes/liens-organisme.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__model__ = __webpack_require__("../../../../../src/app/model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__("../../../../../src/app/utils.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pipes_liens_organisme_pipe__ = __webpack_require__("../../../../../src/app/pipes/liens-organisme.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1226,8 +1329,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var ContactsComponent = /** @class */ (function () {
-    function ContactsComponent(pouchdbservice, router) {
+    function ContactsComponent(eventService, pouchdbservice, router) {
+        this.eventService = eventService;
         this.pouchdbservice = pouchdbservice;
         this.router = router;
         this.rows = [];
@@ -1237,10 +1343,19 @@ var ContactsComponent = /** @class */ (function () {
         this.columns = [
             { prop: 'nom', flexGrow: 1 },
             { prop: 'prenom', name: 'Prénom', flexGrow: 1 },
-            { prop: 'liensOrganisme', name: 'Organismes', flexGrow: 1, pipe: new __WEBPACK_IMPORTED_MODULE_4__pipes_liens_organisme_pipe__["a" /* LiensOrganismePipe */]() },
+            { prop: 'liensOrganisme', name: 'Organismes', flexGrow: 1, pipe: new __WEBPACK_IMPORTED_MODULE_5__pipes_liens_organisme_pipe__["a" /* LiensOrganismePipe */]() },
         ];
     }
     ContactsComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.loadData();
+        this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_2__model__["f" /* Contact */].name) {
+                _this.ngOnInit();
+            }
+        });
+    };
+    ContactsComponent.prototype.loadData = function () {
         var _this = this;
         this.pouchdbservice.getContacts().subscribe(function (data) {
             _this.rows = data;
@@ -1255,13 +1370,13 @@ var ContactsComponent = /** @class */ (function () {
             return;
         }
         ;
-        val = Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(val);
+        val = Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(val);
         var self = this;
         var temp = this.datas.filter(function (d) {
-            return Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(d.nom).indexOf(val) !== -1
-                || Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(d.prenom).indexOf(val) !== -1
+            return Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(d.nom).indexOf(val) !== -1
+                || Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(d.prenom).indexOf(val) !== -1
                 || self.checkInOrganisme(d.liensOrganisme, val)
-                || (d.liensOrganisme && d.liensOrganisme.filter(function (lien) { return Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(lien.organisme.nom).indexOf(val) !== -1; }).length > 0);
+                || (d.liensOrganisme && d.liensOrganisme.filter(function (lien) { return Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(lien.organisme.nom).indexOf(val) !== -1; }).length > 0);
         });
         this.rows = temp;
         // Whenever the filter changes, always go back to the first page
@@ -1271,7 +1386,7 @@ var ContactsComponent = /** @class */ (function () {
         if (liensOrganisme) {
             for (var _i = 0, liensOrganisme_1 = liensOrganisme; _i < liensOrganisme_1.length; _i++) {
                 var lien = liensOrganisme_1[_i];
-                if (lien.organisme && lien.organisme.adresse && (Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(lien.organisme.adresse.ville).indexOf(valueToCheck) !== -1 || Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(lien.organisme.adresse.codePostal).indexOf(valueToCheck) !== -1)) {
+                if (lien.organisme && lien.organisme.adresse && (Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(lien.organisme.adresse.ville).indexOf(valueToCheck) !== -1 || Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(lien.organisme.adresse.codePostal).indexOf(valueToCheck) !== -1)) {
                     return true;
                 }
             }
@@ -1294,7 +1409,7 @@ var ContactsComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/contact/list/contacts.component.html"),
             styles: [__webpack_require__("../../../../../src/app/contact/list/contacts.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* Router */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_6__services_event_service_event_service__["a" /* EventService */], __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]])
     ], ContactsComponent);
     return ContactsComponent;
 }());
@@ -1397,6 +1512,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__ = __webpack_require__("../../../../../src/app/services/pouchdb-service/pouchdb.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_auth_auth_service__ = __webpack_require__("../../../../../src/app/services/auth/auth.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__model__ = __webpack_require__("../../../../../src/app/model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1410,19 +1526,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var HomeComponent = /** @class */ (function () {
-    function HomeComponent(pouchdbservice, authService) {
+    function HomeComponent(eventService, pouchdbservice, authService) {
+        this.eventService = eventService;
         this.pouchdbservice = pouchdbservice;
         this.authService = authService;
         this.ActionStatut = __WEBPACK_IMPORTED_MODULE_3__model__["b" /* ActionStatut */];
     }
     HomeComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.pouchdbservice.getCollaborateurByLogin(this.authService.user.login).subscribe(function (data) {
-            _this.collaborateur = data;
+        this.loadData();
+        this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_3__model__["a" /* Action */].name) {
+                _this.loadActions();
+            }
+        });
+    };
+    HomeComponent.prototype.loadData = function () {
+        var _this = this;
+        this.authService.collaborateurObs.subscribe(function (collaborateur) {
+            _this.collaborateur = collaborateur;
             _this.loadActions();
-        }, function (err) {
-            _this.errorMessageAction = err;
         });
     };
     HomeComponent.prototype.loadActions = function () {
@@ -1459,7 +1584,7 @@ var HomeComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/home/home.component.html"),
             styles: [__webpack_require__("../../../../../src/app/home/home.component.scss"), __webpack_require__("../../../../../src/assets/fonts/icofont/css/icofont.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_2__services_auth_auth_service__["a" /* AuthService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__services_event_service_event_service__["a" /* EventService */], __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_2__services_auth_auth_service__["a" /* AuthService */]])
     ], HomeComponent);
     return HomeComponent;
 }());
@@ -1471,7 +1596,7 @@ var HomeComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/mission/edit/mission.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"card-body\">\n    <div class=\"card\">\n        <div class=\"card-header flex\">\n            <h3 class=\"float-left\" *ngIf=\"createForm\">Nouvelle mission</h3>\n            <h3 class=\"float-left\" *ngIf=\"!createForm\">{{mission.nom}}</h3>\n            <div class=\"float-right\">\n                <button type=\"button\" class=\"btn btn-sm btn-primary\" title=\"Clôture mission\" *ngIf=\"!editForm && !mission.isClosed\" (click)=\"closeMission()\">\n                    <i class=\"fas fa-flag-checkered fa-lg\"></i>\n                </button>\n                <button type=\"button\" class=\"btn btn-sm btn-primary\" title=\"Export pdf\" *ngIf=\"!editForm && !createForm\" (click)=\"openPdf()\">\n                    <i class=\"fas fa-file-pdf fa-lg\"></i>\n                </button>\n                <button id=\"edit-btn\" type=\"button\" class=\"btn btn-sm btn-primary\" title=\"Edition\" *ngIf=\"!editForm && !createForm\" (click)=\"toggleEdit()\">\n                    <i class=\"fas fa-pencil-alt\"></i>\n                </button>\n                <button id=\"edit-btn\" type=\"button\" class=\"btn btn-sm btn-primary\" title=\"Annuler\" *ngIf=\"editForm && !createForm\" (click)=\"toggleEdit()\">\n                    <i class=\"fas fa-times fa-lg\"></i>\n                </button>\n                <button id=\"create-btn\" type=\"button\" class=\"btn btn-sm btn-primary\" title=\"Annuler\" *ngIf=\"createForm\" routerLink=\"/missions\">\n                    <i class=\"fas fa-times fa-lg\"></i>\n                </button>\n            </div>\n        </div>\n        <div class=\"card-body\">\n            <!-- ************ EDITION MISSION************* -->\n            <div class=\"view-info\" *ngIf=\"(editForm && !mission.isClosed && !editSyntheseForm) || createForm\">\n                 <form class=\"md-float-material\"  [formGroup]=\"form\" (ngSubmit)=\"onMissionSubmit()\">\n\n                    <div class=\"row\">\n                        <div class=\"col-sm-8 form-group\" >\n                            <label for=\"nom\">Nom*</label>\n                            <input type=\"text\" class=\"form-control\" formControlName=\"nom\" id=\"nom\" [ngClass]=\"{'is-invalid': isFieldInvalid('nom')}\"/>\n                        </div>\n                        <!--                        <div class=\"col-sm-6 form-group\" >\n                                                    <label for=\"numFacture\">Numéro de facturation</label>\n                                                    <input type=\"text\" class=\"form-control\" formControlName=\"numFacture\" id=\"numFacture\"/>\n                                                </div>-->\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-4 form-group\">\n                            <label for=\"dateDebut\">Date début*</label>\n                            <input type=\"date\" class=\"form-control\" formControlName=\"dateDebut\" id=\"nom\" [ngClass]=\"{'is-invalid': isFieldInvalid('dateDebut')}\"/>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label for=\"dateFin\">Date fin*</label>\n                            <input type=\"date\" class=\"form-control\" formControlName=\"dateFin\" id=\"nom\" [ngClass]=\"{'is-invalid': isFieldInvalid('dateFin')}\"/>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label for=\"nbJours\">Nb de jours</label>\n                            <input type=\"text\" class=\"form-control\" formControlName=\"nbJours\" id=\"nbJours\"/>\n                        </div>\n                    </div>\n                    <hr/>\n                    <div class=\"row\">\n                        <div class=\"col-sm-4 form-group\" formGroupName=\"contact\">\n                            <label for=\"contact\">Contact*</label>\n                            <select class=\"form-control\" id=\"contactId\" formControlName=\"_id\" [ngClass]=\"{'is-invalid': isFieldInvalid('contact._id')}\">\n                                    <option *ngFor=\"let contact of contacts\" [ngValue]=\"contact._id\">{{contact.nom}} {{contact.prenom}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" formGroupName=\"client\">\n                            <label for=\"contact\">Client</label>\n                            <select class=\"form-control\" formControlName=\"_id\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let organisme of organismes\" [ngValue]=\"organisme._id\">{{organisme.nom}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" formGroupName=\"financeur\">\n                            <label for=\"financeur\">Financeur</label>\n                            <select class=\"form-control\" formControlName=\"_id\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let organisme of organismes\" [ngValue]=\"organisme._id\">{{organisme.nom}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-4 form-group\" >\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Programmes</label>\n                            <select class=\"form-control\" formControlName=\"programme\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of []\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4\">\n                            <div class=\"form-group d-none d-sm-block\">&nbsp;</div>\n                            <div class=\"form-group custom-control custom-checkbox\">\n                                <input type=\"checkbox\" class=\"custom-control-input\" id=\"cdt\" formControlName=\"cdt\"/>\n                                <label class=\"custom-control-label\" for=\"cdt\">CDT</label>\n                            </div>\n                        </div>\n                    </div>\n                    <hr/>\n                    <div class=\"row\">\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Modalité d'obtention</label>\n                            <select class=\"form-control\" formControlName=\"modaliteObtention\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of parametres.listesDeChoix.modaliteObtention\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Cible</label>\n                            <select class=\"form-control\" formControlName=\"cible\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of parametres.listesDeChoix.cible\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Thématique</label>\n                            <select class=\"form-control\" formControlName=\"thematique\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of parametres.listesDeChoix.thematique\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Type de mission</label>\n                            <select class=\"form-control\" formControlName=\"missionType\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of parametres.listesDeChoix.missionType\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Format de mission</label>\n                            <select class=\"form-control\" formControlName=\"format\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of parametres.listesDeChoix.missionFormat\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Modalité d'IS</label>\n                            <select class=\"form-control\" formControlName=\"modaliteIS\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of parametres.listesDeChoix.modaliteIS\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-6 form-group\" >\n                            <label class=\"center-block\">Commentaire</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"commentaire\"></textarea>\n                        </div>\n                        <div class=\"col-sm-6 form-group\" >\n                            <label>Restriction d'accès <small>(public si rien sélectionné)</small></label>\n                            <select class=\"form-control\" formControlName=\"restrictionAcces\" multiple [compareWith]=\"compare\" >\n                                    <option *ngFor=\"let collaborateur of collaborateurs\" [ngValue]=\"collaborateur\">{{collaborateur.nom}} {{collaborateur.prenom}}</option>\n                            </select>\n                        </div>\n                        <!--                        <div class=\"col-sm-4 form-group\" >\n                                                    <label class=\"center-block\">Répertoire Dropbox</label>\n                                                    <input type=\"text\" class=\"form-control\" formControlName=\"dropboxRepertoire\"/>\n                                                </div>-->\n                    </div>\n                    <div class=\"card mb-3\">\n                        <div class=\"card-header\">\n                            <h4>Collaborateurs</h4>\n                        </div>\n                        <div class=\"card-body\">\n                            <div formArrayName=\"liensCollaborateur\">\n                                <div class=\"form-row\" *ngFor=\"let lien of form.get('liensCollaborateur').controls; let i = index;\" >\n                                     <div [formGroupName]=\"i\" class=\"col-11 form-row\">\n                                        <div class=\"col-sm-6\">\n                                            <select class=\"form-control\" formControlName=\"role\" [ngClass]=\"{'is-invalid': isFieldInvalidInLienCollaborateur(i,'role')}\">\n                                                    <option value=\"\">Rôles</option>\n                                                <option *ngFor=\"let role of parametres.listesDeChoix.missionRole\" [ngValue]=\"role\">{{role}}</option>\n                                            </select>\n                                        </div>\n                                        <div formGroupName=\"collaborateur\" class=\"col-sm-6\">\n                                            <select class=\"form-control\" formControlName=\"_id\" [ngClass]=\"{'is-invalid': isFieldInvalidInLienCollaborateur(i,'collaborateur._id')}\">\n                                                    <option value=\"\">Collaborateur</option>\n                                                <option *ngFor=\"let collaborateur of collaborateurs\" [ngValue]=\"collaborateur._id\">{{collaborateur.nom}} {{collaborateur.prenom}}</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div class=\"col-1\">\n                                        <button type=\"button\" class=\"btn btn-primary btn-md\" (click)=\"removeLienCollaborateur(i)\">\n                                            <i class=\"fas fa-trash\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"d-flex flex-row-reverse\">\n                                <button type=\"button\" class=\"btn btn-primary btn-md\" (click)=\"addLienCollaborateur()\">\n                                    <i class=\"fas fa-plus\"></i>\n                                </button>\n                            </div>\n\n                        </div>\n                    </div>\n                    <div class=\"card\">\n                        <div class=\"card-header\">\n                            <h4>Missions associées</h4>\n                        </div>\n                        <div class=\"card-body\">\n                            <div formArrayName=\"liensMission\">\n                                <div class=\"form-row\" *ngFor=\"let lien of form.get('liensMission').controls; let i = index;\" >\n                                     <div [formGroupName]=\"i\" class=\"col-11 form-row\">\n                                        <div class=\"col-sm-6\">\n                                            <select class=\"form-control\" formControlName=\"typeLien\">\n                                                <option value=\"null\">Type de lien</option>\n                                                <option *ngFor=\"let lien of []\" [ngValue]=\"lien\">{{lien}}</option>\n                                            </select>\n                                        </div>\n                                        <div formGroupName=\"mission\" class=\"col-sm-6\">\n                                            <select class=\"form-control\" formControlName=\"_id\">\n                                                <option value=\"null\">Missions</option>\n                                                <option *ngFor=\"let mission of missions\" [ngValue]=\"mission._id\">{{mission.nom}}</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div class=\"col-1\">\n                                        <button type=\"button\" class=\"btn btn-primary btn-md\" (click)=\"removeLienMission(i)\">\n                                            <i class=\"fas fa-trash\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"d-flex flex-row-reverse\">\n                                <button type=\"button\" class=\"btn btn-primary btn-md\" (click)=\"addLienMission()\">\n                                    <i class=\"fas fa-plus\"></i>\n                                </button>\n                            </div>\n\n                        </div>\n                    </div>\n\n\n                    <div class=\"alert alert-danger\" *ngIf=\"errorMessage\" role=\"alert\">\n                        {{errorMessage}}\n                    </div>\n\n                    <div class=\"row mt-3\">\n                        <div class=\"col-md-12\">\n                            <button type=\"submit\" class=\"btn btn-primary btn-md btn-block waves-effect text-center m-b-20\">Enregistrer</button>\n                        </div>\n                    </div>\n\n                </form>\n            </div>\n\n            <!-- ************ EDITION SYNTHESE************* -->\n            <div class=\"view-info\" *ngIf=\"(editForm && (mission.isClosed || editSyntheseForm))\">\n                 <form class=\"md-float-material\"  [formGroup]=\"formSynthese\" (ngSubmit)=\"onSyntheseSubmit()\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Résumé de la mission*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"resume\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('resume')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Besoins identifiés*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"besoinsIdentifies\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('besoinsIdentifies')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Objectifs / résultats attendus*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"objectifs\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('objectifs')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Enjeu sociétal*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"enjeu\"[ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('enjeu')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Méthode / démarche adoptée*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"methode\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('methode')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Contraintes / leviers identifiés*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"contraintes\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('contraintes')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Pistes de valorisation*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"pistesValorisation\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('pistesValorisation')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Mise en relation*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"miseEnRelation\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('miseEnRelation')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Evolution*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"evolution\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('evolution')}\"></textarea>\n                        </div>\n                    </div>\n\n\n                    <div class=\"alert alert-danger\" *ngIf=\"errorMessage\" role=\"alert\">\n                        {{errorMessage}}\n                    </div>\n\n                    <div class=\"row mt-3\">\n                        <div class=\"col-md-12\">\n                            <button type=\"submit\" class=\"btn btn-primary btn-md btn-block waves-effect text-center m-b-20\">Enregistrer</button>\n                        </div>\n                    </div>\n\n                </form>\n            </div>\n\n            <!-- ************ DISPLAY ************* -->\n            <div id=\"exportToPdf\" class=\"view-info d-md-flex flex-wrap justify-content-between align-items-start\" *ngIf=\"!editForm && !createForm\">\n                <div class=\"card-mission mb-3 p-3 mr-auto ml-auto\" style=\"max-width: 75rem;\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-6\">\n                            <ul class=\"list-group list-group-flush\">\n                                <li class=\"list-group-item\"><i class=\"far fa-credit-card fa-lg\"></i>{{mission.numFacture || \"Numéro en cours d'attribution\"}} <span *ngIf=\"!mission.numFacture\"><i class=\"fa fa-spinner fa-spin\"></i></span></li>\n                            </ul>\n                        </div>\n                        <div class=\"col-sm-6\">\n                            <ul class=\"list-group list-group-flush\">\n                                <li class=\"list-group-item\"><i class=\"far fab fa-dropbox fa-lg\"></i>\n                                    <a *ngIf=\"mission.dropboxRepertoire\" href=\"{{dropbox_url}}{{mission.dropboxRepertoire}}\" target=\"_blank\">{{mission.dropboxRepertoire}} <i class=\"fas fa-external-link-alt\"></i></a>\n                                    <span *ngIf=\"!mission.dropboxRepertoire\">Répertoire en cours de création <i class=\"fa fa-spinner fa-spin\"></i></span>\n                                </li>\n                            </ul>\n                        </div>\n                    </div>\n                    <hr/>\n                    <div *ngIf=\"mission.isClosed\">\n                        <div class=\"row\" >\n                            <div class=\"col-sm-12\"><h4>Synthèse</h4></div>\n                        </div>\n                        <div class=\"row\" >\n                            <div class=\"col-sm-4\"><b>Résumé de la mission</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.resume}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Besoins identifiés</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.besoinsIdentifies}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Objectifs / résultats attendus</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.objectifs}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Enjeu sociétal</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.enjeu}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Méthode / démarche adoptée</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.methode}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Contraintes / leviers identifiés</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.contraintes}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Pistes de valorisation</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.pistesValorisation}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Mise en relation</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.miseEnRelation}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Evolution</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.evolution}}</div>\n                        </div>\n\n\n                        <hr/>\n                        <div class=\"row\">\n                            <div class=\"col-sm-12\"><h4>Détail de la mission</h4></div>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-6\">\n                            <ul class=\"list-group list-group-flush\">\n                                <li class=\"list-group-item\" *ngIf=\"mission.dateDebut\"><i class=\"fas fa-calendar-alt fa-lg\"></i><span>{{mission.dateDebut | date: 'dd/MM/yyyy'}} - {{mission.dateFin | date: 'dd/MM/yyyy'}} </span><span *ngIf=\"mission.nbJours\">pour une durée de {{mission.nbJours}} jour(s)</span></li>\n                                <li class=\"list-group-item\" *ngIf=\"mission.contact\" ><i class=\"fas fa-address-book fa-lg\"></i><span>{{mission.contact.nom}} {{mission.contact.prenom}}</span></li>\n                                <li class=\"list-group-item\" *ngIf=\"mission.client && mission.client.nom\" ><i class=\"fas fa-building fa-lg\"></i><span>{{mission.client.nom}}</span></li>\n                                <li class=\"list-group-item\" *ngIf=\"mission.financeur && mission.financeur.nom\" ><i class=\"far fa-money-bill-alt fa-lg\"></i><span>{{mission.financeur.nom}}</span></li>\n                                <li class=\"list-group-item line-breaker\" *ngIf=\"mission.commentaire\" ><i class=\"fas fa-comment fa-lg\"></i><span>{{mission.commentaire}}</span></li>\n                                <!--<li class=\"list-group-item\" *ngIf=\"mission.dropboxRepertoire\" ><i class=\"fab fa-dropbox fa-lg\"></i><span>{{mission.dropboxRepertoire}}</span></li>-->\n                            </ul>\n\n                        </div>\n                        <div class=\"col-sm-6\">\n                            <ul class=\"list-group list-group-flush\">\n                                <li class=\"list-group-item\">\n                                    <i class=\"fas fa-euro-sign fa-lg\"></i>\n                                    <b>Programme : </b>{{mission.programme}}<br/>\n                                    <span *ngIf=\"mission.cdt\"><b>CDT</b></span>\n                                </li>\n                                <li class=\"list-group-item\">\n                                    <i class=\"fas fa-rocket fa-lg\"></i>\n                                    <span>\n                                        <b>Type : </b>{{mission.missionType}}<br/>\n                                        <b>Format : </b>{{mission.format}}<br/>\n                                        <b>Thématique : </b>{{mission.thematique}}<br/>\n                                        <b>Cible : </b>{{mission.cible}}<br/>\n                                        <b>Modalité d'obtention : </b>{{mission.modaliteObtention}}<br/>\n                                        <b>Modalité d'IS : </b>{{mission.modaliteIS}}\n                                    </span>\n                                </li>\n                                <li class=\"list-group-item\">\n                                    <i class=\"fas fa-share-alt fa-lg\"></i>\n                                    <span *ngIf=\"!mission.restrictionAcces || mission.restrictionAcces.length==0\">\n                                        Aucune restriction d'accès\n                                    </span>\n                                    <p *ngIf=\"mission.restrictionAcces\">\n                                        <span *ngFor=\"let collaborateur of mission.restrictionAcces\">\n                                            {{collaborateur.nom}} {{collaborateur.prenom}}<br/>\n                                        </span><br/>\n                                    </p>\n                                </li>\n                            </ul>\n                        </div>\n                    </div>\n                    <hr/>\n                    <div class=\"row\">\n                        <div class=\"col-sm-6\">\n                            <h4>Collaborateurs</h4>\n                            <span *ngFor=\"let lien of mission.liensCollaborateur\">\n                                <b>{{lien.role}}</b> : {{lien.collaborateur.nom}} {{lien.collaborateur.prenom}}<br/>\n                            </span>\n                            <span *ngIf=\"!mission.liensCollaborateur || mission.liensCollaborateur.length==0\">\n                                Aucun collaborateur associé\n                            </span>\n                        </div>\n                        <div class=\"col-sm-6\">\n                            <h4>Lien entre mission</h4>\n                            <span *ngFor=\"let lien of mission.liensMission\">\n                                <b>{{lien.type}}</b> : {{lien.mission.nom}}\n                            </span>\n                            <span *ngIf=\"!mission.liensMission || mission.liensMission.length==0\">\n                                Aucun lien avec une autre mission\n                            </span>\n                        </div>\n                    </div>\n                    <hr  *ngIf=\"prospection\"/>\n                    <br/><br/>\n                    <div class=\"row\" *ngIf=\"prospection\">\n                        <div class=\"col-sm-12\">\n                            <h4>Prospection préalable : {{prospection.nom}}</h4>\n                            <ul class=\"list-group list-group-flush\">\n                                <li class=\"list-group-item\">\n                                    <i class=\"fas fa-calendar-alt fa-lg\"></i>\n                                    <span>\n                                        <b>Date contact : </b>{{prospection.dateContact | date: 'dd/MM/yyyy'}}<br/>\n                                        <b>Date cloture : </b>{{prospection.dateChangementStatut | date: 'dd/MM/yyyy'}}\n                                    </span>\n                                </li>\n                                <li class=\"list-group-item\">\n                                    <i class=\"fas fa-euro-sign fa-lg\"></i>\n                                    <span>\n                                        <b>Nombre de jours : </b>{{prospection.nbJours}}<br/>\n                                        <b>Montant proposition : </b>{{prospection.montantProposition}}\n                                    </span>\n                                </li>\n                            </ul>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+module.exports = "\n<div class=\"card-body\">\n    <div class=\"card\">\n        <div class=\"card-header flex\">\n            <h3 class=\"float-left\" *ngIf=\"createForm\">Nouvelle mission</h3>\n            <h3 class=\"float-left\" *ngIf=\"!createForm\">{{mission.nom}}</h3>\n            <div class=\"float-right\">\n                <button type=\"button\" class=\"btn btn-sm btn-primary\" title=\"Clôture mission\" *ngIf=\"!editForm && !mission.isClosed\" (click)=\"closeMission()\">\n                    <i class=\"fas fa-flag-checkered fa-lg\"></i>\n                </button>\n                <button type=\"button\" class=\"btn btn-sm btn-primary\" title=\"Export pdf\" *ngIf=\"!editForm && !createForm\" (click)=\"openPdf()\">\n                    <i class=\"fas fa-file-pdf fa-lg\"></i>\n                </button>\n                <button id=\"edit-btn\" type=\"button\" class=\"btn btn-sm btn-primary\" title=\"Edition\" *ngIf=\"!editForm && !createForm\" (click)=\"toggleEdit()\">\n                    <i class=\"fas fa-pencil-alt\"></i>\n                </button>\n                <button id=\"edit-btn\" type=\"button\" class=\"btn btn-sm btn-primary\" title=\"Annuler\" *ngIf=\"editForm && !createForm\" (click)=\"toggleEdit()\">\n                    <i class=\"fas fa-times fa-lg\"></i>\n                </button>\n                <button id=\"create-btn\" type=\"button\" class=\"btn btn-sm btn-primary\" title=\"Annuler\" *ngIf=\"createForm\" routerLink=\"/missions\">\n                    <i class=\"fas fa-times fa-lg\"></i>\n                </button>\n            </div>\n        </div>\n        <div class=\"card-body\">\n            <!-- ************ EDITION MISSION************* -->\n            <div class=\"view-info\" *ngIf=\"(editForm && !mission.isClosed && !editSyntheseForm) || createForm\">\n                 <form class=\"md-float-material\"  [formGroup]=\"form\" (ngSubmit)=\"onMissionSubmit()\">\n\n                    <div class=\"row\">\n                        <div class=\"col-sm-8 form-group\" >\n                            <label for=\"nom\">Nom*</label>\n                            <input type=\"text\" class=\"form-control\" formControlName=\"nom\" id=\"nom\" [ngClass]=\"{'is-invalid': isFieldInvalid('nom')}\"/>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label for=\"avancement\">Avancement</label>\n                            <select class=\"form-control\" id=\"avancement\" formControlName=\"avancement\" [ngClass]=\"{'is-invalid': isFieldInvalid('avancement')}\">\n                                    <option *ngFor=\"let value of ['0', '25', '50', '75', '100']\" [ngValue]=\"value\">{{value}}%</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-4 form-group\">\n                            <label for=\"dateDebut\">Date début*</label>\n                            <input type=\"date\" class=\"form-control\" formControlName=\"dateDebut\" id=\"nom\" [ngClass]=\"{'is-invalid': isFieldInvalid('dateDebut')}\"/>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label for=\"dateFin\">Date fin*</label>\n                            <input type=\"date\" class=\"form-control\" formControlName=\"dateFin\" id=\"nom\" [ngClass]=\"{'is-invalid': isFieldInvalid('dateFin')}\"/>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label for=\"nbJours\">Nb de jours</label>\n                            <input type=\"text\" class=\"form-control\" formControlName=\"nbJours\" id=\"nbJours\"/>\n                        </div>\n                    </div>\n                    <hr/>\n                    <div class=\"row\">\n                        <div class=\"col-sm-4 form-group\" formGroupName=\"contact\">\n                            <label for=\"contact\">Contact*</label>\n                            <select class=\"form-control\" id=\"contactId\" formControlName=\"_id\" [ngClass]=\"{'is-invalid': isFieldInvalid('contact._id')}\">\n                                    <option *ngFor=\"let contact of contacts\" [ngValue]=\"contact._id\">{{contact.nom}} {{contact.prenom}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" formGroupName=\"client\">\n                            <label for=\"contact\">Client</label>\n                            <select class=\"form-control\" formControlName=\"_id\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let organisme of organismes\" [ngValue]=\"organisme._id\">{{organisme.nom}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" formGroupName=\"financeur\">\n                            <label for=\"financeur\">Financeur</label>\n                            <select class=\"form-control\" formControlName=\"_id\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let organisme of organismes\" [ngValue]=\"organisme._id\">{{organisme.nom}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-4 form-group\" >\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Programmes</label>\n                            <select class=\"form-control\" formControlName=\"programme\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of []\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4\">\n                            <div class=\"form-group d-none d-sm-block\">&nbsp;</div>\n                            <div class=\"form-group custom-control custom-checkbox\">\n                                <input type=\"checkbox\" class=\"custom-control-input\" id=\"cdt\" formControlName=\"cdt\"/>\n                                <label class=\"custom-control-label\" for=\"cdt\">CDT</label>\n                            </div>\n                        </div>\n                    </div>\n                    <hr/>\n                    <div class=\"row\">\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Modalité d'obtention</label>\n                            <select class=\"form-control\" formControlName=\"modaliteObtention\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of parametres.listesDeChoix.modaliteObtention\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Cible</label>\n                            <select class=\"form-control\" formControlName=\"cible\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of parametres.listesDeChoix.cible\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Thématique</label>\n                            <select class=\"form-control\" formControlName=\"thematique\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of parametres.listesDeChoix.thematique\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Type de mission</label>\n                            <select class=\"form-control\" formControlName=\"missionType\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of parametres.listesDeChoix.missionType\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Format de mission</label>\n                            <select class=\"form-control\" formControlName=\"format\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of parametres.listesDeChoix.missionFormat\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                        <div class=\"col-sm-4 form-group\" >\n                            <label>Modalité d'IS</label>\n                            <select class=\"form-control\" formControlName=\"modaliteIS\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let item of parametres.listesDeChoix.modaliteIS\" [ngValue]=\"item\">{{item}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-6 form-group\" >\n                            <label class=\"center-block\">Commentaire</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"commentaire\"></textarea>\n                        </div>\n                        <div class=\"col-sm-6 form-group\" >\n                            <label>Restriction d'accès <small>(public si rien sélectionné)</small></label>\n                            <select class=\"form-control\" formControlName=\"restrictionAcces\" multiple [compareWith]=\"compare\" >\n                                    <option *ngFor=\"let collaborateur of collaborateurs\" [ngValue]=\"collaborateur\">{{collaborateur.nom}} {{collaborateur.prenom}}</option>\n                            </select>\n                        </div>\n                        <!--                        <div class=\"col-sm-4 form-group\" >\n                                                    <label class=\"center-block\">Répertoire Dropbox</label>\n                                                    <input type=\"text\" class=\"form-control\" formControlName=\"dropboxRepertoire\"/>\n                                                </div>-->\n                    </div>\n                    <div class=\"card mb-3\">\n                        <div class=\"card-header\">\n                            <h4>Collaborateurs</h4>\n                        </div>\n                        <div class=\"card-body\">\n                            <div formArrayName=\"liensCollaborateur\">\n                                <div class=\"form-row\" *ngFor=\"let lien of form.get('liensCollaborateur').controls; let i = index;\" >\n                                     <div [formGroupName]=\"i\" class=\"col-11 form-row\">\n                                        <div class=\"col-sm-6\">\n                                            <select class=\"form-control\" formControlName=\"role\" [ngClass]=\"{'is-invalid': isFieldInvalidInLienCollaborateur(i,'role')}\">\n                                                    <option value=\"\">Rôles</option>\n                                                <option *ngFor=\"let role of parametres.listesDeChoix.missionRole\" [ngValue]=\"role\">{{role}}</option>\n                                            </select>\n                                        </div>\n                                        <div formGroupName=\"collaborateur\" class=\"col-sm-6\">\n                                            <select class=\"form-control\" formControlName=\"_id\" [ngClass]=\"{'is-invalid': isFieldInvalidInLienCollaborateur(i,'collaborateur._id')}\">\n                                                    <option value=\"\">Collaborateur</option>\n                                                <option *ngFor=\"let collaborateur of collaborateurs\" [ngValue]=\"collaborateur._id\">{{collaborateur.nom}} {{collaborateur.prenom}}</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div class=\"col-1\">\n                                        <button type=\"button\" class=\"btn btn-primary btn-md\" (click)=\"removeLienCollaborateur(i)\">\n                                            <i class=\"fas fa-trash\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"d-flex flex-row-reverse\">\n                                <button type=\"button\" class=\"btn btn-primary btn-md\" (click)=\"addLienCollaborateur()\">\n                                    <i class=\"fas fa-plus\"></i>\n                                </button>\n                            </div>\n\n                        </div>\n                    </div>\n                    <div class=\"card\">\n                        <div class=\"card-header\">\n                            <h4>Missions associées</h4>\n                        </div>\n                        <div class=\"card-body\">\n                            <div formArrayName=\"liensMission\">\n                                <div class=\"form-row\" *ngFor=\"let lien of form.get('liensMission').controls; let i = index;\" >\n                                     <div [formGroupName]=\"i\" class=\"col-11 form-row\">\n                                        <div class=\"col-sm-6\">\n                                            <select class=\"form-control\" formControlName=\"typeLien\">\n                                                <option value=\"null\">Type de lien</option>\n                                                <option *ngFor=\"let lien of []\" [ngValue]=\"lien\">{{lien}}</option>\n                                            </select>\n                                        </div>\n                                        <div formGroupName=\"mission\" class=\"col-sm-6\">\n                                            <select class=\"form-control\" formControlName=\"_id\">\n                                                <option value=\"null\">Missions</option>\n                                                <option *ngFor=\"let mission of missions\" [ngValue]=\"mission._id\">{{mission.nom}}</option>\n                                            </select>\n                                        </div>\n                                    </div>\n                                    <div class=\"col-1\">\n                                        <button type=\"button\" class=\"btn btn-primary btn-md\" (click)=\"removeLienMission(i)\">\n                                            <i class=\"fas fa-trash\"></i>\n                                        </button>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class=\"d-flex flex-row-reverse\">\n                                <button type=\"button\" class=\"btn btn-primary btn-md\" (click)=\"addLienMission()\">\n                                    <i class=\"fas fa-plus\"></i>\n                                </button>\n                            </div>\n\n                        </div>\n                    </div>\n\n\n                    <div class=\"alert alert-danger\" *ngIf=\"errorMessage\" role=\"alert\">\n                        {{errorMessage}}\n                    </div>\n\n                    <div class=\"row mt-3\">\n                        <div class=\"col-md-12\">\n                            <button type=\"submit\" class=\"btn btn-primary btn-md btn-block waves-effect text-center m-b-20\">Enregistrer</button>\n                        </div>\n                    </div>\n\n                </form>\n            </div>\n\n            <!-- ************ EDITION SYNTHESE************* -->\n            <div class=\"view-info\" *ngIf=\"(editForm && (mission.isClosed || editSyntheseForm))\">\n                 <form class=\"md-float-material\"  [formGroup]=\"formSynthese\" (ngSubmit)=\"onSyntheseSubmit()\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Résumé de la mission*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"resume\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('resume')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Besoins identifiés*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"besoinsIdentifies\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('besoinsIdentifies')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Objectifs / résultats attendus*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"objectifs\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('objectifs')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Enjeu sociétal*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"enjeu\"[ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('enjeu')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Méthode / démarche adoptée*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"methode\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('methode')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Contraintes / leviers identifiés*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"contraintes\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('contraintes')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Pistes de valorisation*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"pistesValorisation\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('pistesValorisation')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Mise en relation*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"miseEnRelation\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('miseEnRelation')}\"></textarea>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-12 form-group\" >\n                            <label class=\"center-block\">Evolution*</label>\n                            <textarea class=\"form-control\" rows=\"5\" formControlName=\"evolution\" [ngClass]=\"{'is-invalid': isSyntheseFieldInvalid('evolution')}\"></textarea>\n                        </div>\n                    </div>\n\n\n                    <div class=\"alert alert-danger\" *ngIf=\"errorMessage\" role=\"alert\">\n                        {{errorMessage}}\n                    </div>\n\n                    <div class=\"row mt-3\">\n                        <div class=\"col-md-12\">\n                            <button type=\"submit\" class=\"btn btn-primary btn-md btn-block waves-effect text-center m-b-20\">Enregistrer</button>\n                        </div>\n                    </div>\n\n                </form>\n            </div>\n\n            <!-- ************ DISPLAY ************* -->\n            <div class=\"view-info d-md-flex flex-wrap justify-content-between align-items-start\" *ngIf=\"!editForm && !createForm\">\n                <div class=\"card-mission mb-3 p-3 mr-auto ml-auto\" style=\"max-width: 75rem;\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-6\">\n                            <ul class=\"list-group list-group-flush\">\n                                <li class=\"list-group-item\"><i class=\"far fa-credit-card fa-lg\"></i>{{mission.numFacture || \"Numéro en cours d'attribution\"}} <span *ngIf=\"!mission.numFacture\"><i class=\"fa fa-spinner fa-spin\"></i></span></li>\n                            </ul>\n                        </div>\n                        <div class=\"col-sm-6\">\n                            <ul class=\"list-group list-group-flush\">\n                                <li class=\"list-group-item\"><i class=\"far fab fa-dropbox fa-lg\"></i>\n                                    <a *ngIf=\"mission.dropboxRepertoire\" href=\"{{dropbox_url}}{{mission.dropboxRepertoire}}\" target=\"_blank\">{{mission.dropboxRepertoire}} <i class=\"fas fa-external-link-alt\"></i></a>\n                                    <span *ngIf=\"!mission.dropboxRepertoire\">Répertoire en cours de création <i class=\"fa fa-spinner fa-spin\"></i></span>\n                                </li>\n                            </ul>\n                        </div>\n                    </div>\n                    <div class=\"row\" *ngIf=\"!mission.isClosed\">\n                        <div class=\"col-sm-12\">\n                            Avancement :\n                            <div class=\"progress\">\n                                <div class=\"progress-bar progress-bar-striped progress-bar-animated\" role=\"progressbar\" [style.width.%]=\"mission.avancement || 0\"  [attr.aria-valuenow]=\"mission.avancement || 0\" aria-valuemin=\"0\" aria-valuemax=\"100\">{{mission.avancement || ''}}%</div>\n                            </div>\n                        </div>\n                    </div>\n                    <hr/>\n                    <div *ngIf=\"mission.isClosed\">\n                        <div class=\"row\" >\n                            <div class=\"col-sm-12\"><h4>Synthèse</h4></div>\n                        </div>\n                        <div class=\"row\" >\n                            <div class=\"col-sm-4\"><b>Résumé de la mission</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.resume}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Besoins identifiés</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.besoinsIdentifies}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Objectifs / résultats attendus</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.objectifs}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Enjeu sociétal</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.enjeu}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Méthode / démarche adoptée</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.methode}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Contraintes / leviers identifiés</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.contraintes}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Pistes de valorisation</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.pistesValorisation}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Mise en relation</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.miseEnRelation}}</div>\n                        </div>\n                        <div class=\"row mt-2\" >\n                            <div class=\"col-sm-4\"><b>Evolution</b></div>\n                            <div class=\"col-sm-8 line-breaker\">{{mission.synthese.evolution}}</div>\n                        </div>\n\n\n                        <hr/>\n                        <div class=\"row\">\n                            <div class=\"col-sm-12\"><h4>Détail de la mission</h4></div>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-6\">\n                            <ul class=\"list-group list-group-flush\">\n                                <li class=\"list-group-item\" *ngIf=\"mission.dateDebut\"><i class=\"fas fa-calendar-alt fa-lg\"></i><span>{{mission.dateDebut | date: 'dd/MM/yyyy'}} - {{mission.dateFin | date: 'dd/MM/yyyy'}} </span><span *ngIf=\"mission.nbJours\">pour une durée de {{mission.nbJours}} jour(s)</span></li>\n                                <li class=\"list-group-item\" *ngIf=\"mission.contact\" ><i class=\"fas fa-address-book fa-lg\"></i><span>{{mission.contact.nom}} {{mission.contact.prenom}}</span></li>\n                                <li class=\"list-group-item\" *ngIf=\"mission.client && mission.client.nom\" ><i class=\"fas fa-building fa-lg\"></i><span>{{mission.client.nom}}</span></li>\n                                <li class=\"list-group-item\" *ngIf=\"mission.financeur && mission.financeur.nom\" ><i class=\"far fa-money-bill-alt fa-lg\"></i><span>{{mission.financeur.nom}}</span></li>\n                                <li class=\"list-group-item line-breaker\" *ngIf=\"mission.commentaire\" ><i class=\"fas fa-comment fa-lg\"></i><span>{{mission.commentaire}}</span></li>\n                                <!--<li class=\"list-group-item\" *ngIf=\"mission.dropboxRepertoire\" ><i class=\"fab fa-dropbox fa-lg\"></i><span>{{mission.dropboxRepertoire}}</span></li>-->\n                            </ul>\n\n                        </div>\n                        <div class=\"col-sm-6\">\n                            <ul class=\"list-group list-group-flush\">\n                                <li class=\"list-group-item\">\n                                    <i class=\"fas fa-euro-sign fa-lg\"></i>\n                                    <b>Programme : </b>{{mission.programme}}<br/>\n                                    <span *ngIf=\"mission.cdt\"><b>CDT</b></span>\n                                </li>\n                                <li class=\"list-group-item\">\n                                    <i class=\"fas fa-rocket fa-lg\"></i>\n                                    <span>\n                                        <b>Type : </b>{{mission.missionType}}<br/>\n                                        <b>Format : </b>{{mission.format}}<br/>\n                                        <b>Thématique : </b>{{mission.thematique}}<br/>\n                                        <b>Cible : </b>{{mission.cible}}<br/>\n                                        <b>Modalité d'obtention : </b>{{mission.modaliteObtention}}<br/>\n                                        <b>Modalité d'IS : </b>{{mission.modaliteIS}}\n                                    </span>\n                                </li>\n                                <li class=\"list-group-item\">\n                                    <i class=\"fas fa-share-alt fa-lg\"></i>\n                                    <span *ngIf=\"!mission.restrictionAcces || mission.restrictionAcces.length==0\">\n                                        Aucune restriction d'accès\n                                    </span>\n                                    <p *ngIf=\"mission.restrictionAcces\">\n                                        <span *ngFor=\"let collaborateur of mission.restrictionAcces\">\n                                            {{collaborateur.nom}} {{collaborateur.prenom}}<br/>\n                                        </span><br/>\n                                    </p>\n                                </li>\n                            </ul>\n                        </div>\n                    </div>\n                    <hr/>\n                    <div class=\"row\">\n                        <div class=\"col-sm-6\">\n                            <h4>Collaborateurs</h4>\n                            <span *ngFor=\"let lien of mission.liensCollaborateur\">\n                                <b>{{lien.role}}</b> : {{lien.collaborateur.nom}} {{lien.collaborateur.prenom}}<br/>\n                            </span>\n                            <span *ngIf=\"!mission.liensCollaborateur || mission.liensCollaborateur.length==0\">\n                                Aucun collaborateur associé\n                            </span>\n                        </div>\n                        <div class=\"col-sm-6\">\n                            <h4>Lien entre mission</h4>\n                            <span *ngFor=\"let lien of mission.liensMission\">\n                                <b>{{lien.type}}</b> : {{lien.mission.nom}}\n                            </span>\n                            <span *ngIf=\"!mission.liensMission || mission.liensMission.length==0\">\n                                Aucun lien avec une autre mission\n                            </span>\n                        </div>\n                    </div>\n                    <hr  *ngIf=\"prospection\"/>\n                    <br/><br/>\n                    <div class=\"row\" *ngIf=\"prospection\">\n                        <div class=\"col-sm-12\">\n                            <h4>Prospection préalable : {{prospection.nom}}</h4>\n                            <ul class=\"list-group list-group-flush\">\n                                <li class=\"list-group-item\">\n                                    <i class=\"fas fa-calendar-alt fa-lg\"></i>\n                                    <span>\n                                        <b>Date contact : </b>{{prospection.dateContact | date: 'dd/MM/yyyy'}}<br/>\n                                        <b>Date cloture : </b>{{prospection.dateChangementStatut | date: 'dd/MM/yyyy'}}\n                                    </span>\n                                </li>\n                                <li class=\"list-group-item\">\n                                    <i class=\"fas fa-euro-sign fa-lg\"></i>\n                                    <span>\n                                        <b>Nombre de jours : </b>{{prospection.nbJours}}<br/>\n                                        <b>Montant proposition : </b>{{prospection.montantProposition}}\n                                    </span>\n                                </li>\n                            </ul>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -1540,11 +1665,11 @@ var MissionComponent = /** @class */ (function () {
         this.editForm = false;
         this.createForm = false;
         this.editSyntheseForm = false;
-        this.mission = new __WEBPACK_IMPORTED_MODULE_1__model__["j" /* Mission */]();
+        this.mission = new __WEBPACK_IMPORTED_MODULE_1__model__["l" /* Mission */]();
         this.collaborateurs = [];
         this.contacts = [];
         this.organismes = [];
-        this.parametres = new __WEBPACK_IMPORTED_MODULE_1__model__["l" /* Parametres */]();
+        this.parametres = new __WEBPACK_IMPORTED_MODULE_1__model__["n" /* Parametres */]();
         this.missions = [];
         this.form = this.fb.group({
             nom: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].required],
@@ -1571,7 +1696,7 @@ var MissionComponent = /** @class */ (function () {
             modaliteIS: [''],
             commentaire: [''],
             restrictionAcces: [''],
-            avancement: [''],
+            avancement: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["g" /* Validators */].required],
             //            dropboxRepertoire: [''],
             liensCollaborateur: this.fb.array([]),
             liensMission: this.fb.array([])
@@ -1743,7 +1868,7 @@ var MissionComponent = /** @class */ (function () {
                 this.mission.restrictionAcces = [];
                 for (var _d = 0, restrictionAcces_1 = restrictionAcces; _d < restrictionAcces_1.length; _d++) {
                     var coll = restrictionAcces_1[_d];
-                    var newColl = new __WEBPACK_IMPORTED_MODULE_1__model__["d" /* Collaborateur */]();
+                    var newColl = new __WEBPACK_IMPORTED_MODULE_1__model__["e" /* Collaborateur */]();
                     newColl._id = coll._id;
                     newColl.nom = coll.nom;
                     newColl.prenom = coll.prenom;
@@ -1761,6 +1886,7 @@ var MissionComponent = /** @class */ (function () {
             }
             this.mission.isClosed = true;
             this.mission.synthese = this.formSynthese.value;
+            this.mission.avancement = "100";
             this.saveMission(this.mission);
         }
         this.formSubmitAttempt = true;
@@ -1796,7 +1922,7 @@ var MissionComponent = /** @class */ (function () {
         });
     };
     MissionComponent.prototype.addLienCollaborateur = function () {
-        this.liensCollaborateur.push(this.createLienCollaborateur(new __WEBPACK_IMPORTED_MODULE_1__model__["g" /* LienMissionCollaborateur */]()));
+        this.liensCollaborateur.push(this.createLienCollaborateur(new __WEBPACK_IMPORTED_MODULE_1__model__["i" /* LienMissionCollaborateur */]()));
     };
     MissionComponent.prototype.removeLienCollaborateur = function (index) {
         this.liensCollaborateur.removeAt(index);
@@ -1810,7 +1936,7 @@ var MissionComponent = /** @class */ (function () {
         });
     };
     MissionComponent.prototype.addLienMission = function () {
-        this.liensMission.push(this.createLienMission(new __WEBPACK_IMPORTED_MODULE_1__model__["f" /* LienEntreMission */]()));
+        this.liensMission.push(this.createLienMission(new __WEBPACK_IMPORTED_MODULE_1__model__["h" /* LienEntreMission */]()));
     };
     MissionComponent.prototype.removeLienMission = function (index) {
         this.liensMission.removeAt(index);
@@ -1850,7 +1976,7 @@ var MissionComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/mission/list/missions.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"card\">\n    <div class=\"card-header\">\n        <h3>Missions</h3>\n    </div>\n    <div class=\"card-body\">\n        <div class=\"d-flex justify-content-between pb-2 form-inline\">\n            <div class=\"d-inline-flex\">\n                <div class=\"input-group\">\n                    <input type=\"text\" class=\"form-control\" aria-label=\"Rechercher\" placeholder='Rechercher ...' (keyup)='updateFilter($event.target.value)'>\n                    <div class=\"input-group-append\">\n                        <div class=\"input-group-text\"><span class=\"fas fa-search \"></span></div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"d-inline-flex\">\n                <label>Année : </label>\n                <select class=\"form-control\" (change)=\"updateFilterYear($event.target.value)\">\n                    <option *ngFor=\"let year of yearFilter\" value=\"{{year}}\"[selected]=\"year == currentYearFilter\">{{year}}</option>\n                </select>\n            </div>\n            <button class='btn btn-primary' routerLink=\"0\"> \n                <i class=\"fas fa-plus fa-lg\"></i> \n            </button>\n        </div>\n\n        <ngx-datatable\n            #table\n            class=\"data-table\"\n            [rows]=\"rows\"\n            [columnMode]=\"'flex'\"\n            [columns]=\"columns\"\n            [headerHeight]=\"50\"\n            [footerHeight]=\"50\"\n            [rowHeight]=\"'auto'\"\n            [limit]=\"10\"\n            [selected]=\"selected\"\n            [selectionType]=\"'single'\"\n            [reorderable]=\"false\"\n            [loadingIndicator]=\"loadingIndicator\"\n            (select)='onSelect($event)'\n            [sorts]=\"[{prop: 'nom', dir: 'asc'}]\">\n            <ngx-datatable-footer>\n                <ng-template \n                    ngx-datatable-footer-template \n                    let-rowCount=\"rowCount\"\n                    let-pageSize=\"pageSize\"\n                    let-curPage=\"curPage\"\n                    let-offset=\"offset\">\n                    <div style=\"padding: 5px 10px\">\n                        <div>\n                            Nombre total : {{rowCount}}\n                        </div>\n                    </div>\n                    <datatable-pager\n                        [pagerLeftArrowIcon]=\"'datatable-icon-left'\"\n                        [pagerRightArrowIcon]=\"'datatable-icon-right'\"\n                        [pagerPreviousIcon]=\"'datatable-icon-prev'\"\n                        [pagerNextIcon]=\"'datatable-icon-skip'\"\n                        [page]=\"curPage\"\n                        [size]=\"pageSize\"\n                        [count]=\"rowCount\"\n                        [hidden]=\"!((rowCount / pageSize) > 1)\"\n                        (change)=\"table.onFooterPage($event)\">\n                </datatable-pager>\n            </ng-template>\n        </ngx-datatable-footer>\n    </ngx-datatable>\n\n</div>\n</div>\n"
+module.exports = "<div class=\"card\">\n    <div class=\"card-header\">\n        <h3>Missions</h3>\n    </div>\n    <div class=\"card-body\">\n        <div class=\"d-flex justify-content-between pb-2 form-inline\">\n            <div class=\"d-inline-flex\">\n                <div class=\"input-group\">\n                    <input type=\"text\" class=\"form-control\" aria-label=\"Rechercher\" placeholder='Rechercher ...' (keyup)='updateFilter($event.target.value)'>\n                    <div class=\"input-group-append\">\n                        <div class=\"input-group-text\"><span class=\"fas fa-search \"></span></div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"d-inline-flex\">\n                <label>Année : </label>\n                <select class=\"form-control\" (change)=\"updateFilterYear($event.target.value)\">\n                    <option *ngFor=\"let year of yearFilter\" value=\"{{year}}\"[selected]=\"year == currentYearFilter\">{{year}}</option>\n                </select>\n            </div>\n            <button class='btn btn-primary' routerLink=\"0\"> \n                <i class=\"fas fa-plus fa-lg\"></i> \n            </button>\n        </div>\n\n        <ngx-datatable\n            #table\n            class=\"data-table\"\n            [rows]=\"rows\"\n            [columnMode]=\"'flex'\"\n            [headerHeight]=\"50\"\n            [footerHeight]=\"50\"\n            [rowHeight]=\"'auto'\"\n            [limit]=\"10\"\n            [selected]=\"selected\"\n            [selectionType]=\"'single'\"\n            [reorderable]=\"false\"\n            [loadingIndicator]=\"loadingIndicator\"\n            (select)='onSelect($event)'\n            [sorts]=\"[{prop: 'nom', dir: 'asc'}]\">\n            <ngx-datatable-column name=\"Nom\" [flexGrow]=\"1\">\n                <ng-template let-value=\"value\" ngx-datatable-cell-template>\n                    {{value}}\n                </ng-template>\n            </ngx-datatable-column>\n            <ngx-datatable-column prop=\"client.nom\" name=\"Client\" [flexGrow]=\"1\">\n                <ng-template let-value=\"value\" ngx-datatable-cell-template>\n                    {{value}}\n                </ng-template>\n            </ngx-datatable-column>\n            <ngx-datatable-column prop=\"contact.nom\" name=\"Contact\" [flexGrow]=\"1\">\n                <ng-template let-value=\"value\" ngx-datatable-cell-template>\n                    {{value}}\n                </ng-template>\n            </ngx-datatable-column>\n            <ngx-datatable-column  prop=\"financeur.nom\" name=\"Financeur\" [flexGrow]=\"1\">\n                <ng-template let-value=\"value\" ngx-datatable-cell-template>\n                    {{value}}\n                </ng-template>\n            </ngx-datatable-column>\n            <ngx-datatable-column prop=\"avancement\" name=\"Avancement\" [flexGrow]=\"2\">\n                <ng-template let-value=\"value\" ngx-datatable-cell-template>\n                    <div class=\"progress\">\n                        <div class=\"progress-bar progress-bar-striped progress-bar-animated\" role=\"progressbar\" [style.width.%]=\"value || 0\"  [attr.aria-valuenow]=\"value || 0\" aria-valuemin=\"0\" aria-valuemax=\"100\">{{value || ''}}%</div>\n                    </div>\n                </ng-template>\n            </ngx-datatable-column>\n            <ngx-datatable-footer>\n                <ng-template \n                    ngx-datatable-footer-template \n                    let-rowCount=\"rowCount\"\n                    let-pageSize=\"pageSize\"\n                    let-curPage=\"curPage\"\n                    let-offset=\"offset\">\n                    <div style=\"padding: 5px 10px\">\n                        <div>\n                            Nombre total : {{rowCount}}\n                        </div>\n                    </div>\n                    <datatable-pager\n                        [pagerLeftArrowIcon]=\"'datatable-icon-left'\"\n                        [pagerRightArrowIcon]=\"'datatable-icon-right'\"\n                        [pagerPreviousIcon]=\"'datatable-icon-prev'\"\n                        [pagerNextIcon]=\"'datatable-icon-skip'\"\n                        [page]=\"curPage\"\n                        [size]=\"pageSize\"\n                        [count]=\"rowCount\"\n                        [hidden]=\"!((rowCount / pageSize) > 1)\"\n                        (change)=\"table.onFooterPage($event)\">\n                </datatable-pager>\n            </ng-template>\n        </ngx-datatable-footer>\n    </ngx-datatable>\n\n</div>\n</div>\n"
 
 /***/ }),
 
@@ -1879,8 +2005,10 @@ module.exports = module.exports.toString();
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MissionsComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__ = __webpack_require__("../../../../../src/app/services/pouchdb-service/pouchdb.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__("../../../../../src/app/utils.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__model__ = __webpack_require__("../../../../../src/app/model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__("../../../../../src/app/utils.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1894,8 +2022,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var MissionsComponent = /** @class */ (function () {
-    function MissionsComponent(pouchdbservice, router) {
+    function MissionsComponent(eventService, pouchdbservice, router) {
+        this.eventService = eventService;
         this.pouchdbservice = pouchdbservice;
         this.router = router;
         this.rows = [];
@@ -1906,18 +2037,20 @@ var MissionsComponent = /** @class */ (function () {
         this.currentYearFilter = new Date().getFullYear();
         this.currentTextFilter = "";
         this.currentStatutFilter = "";
-        this.columns = [
-            { prop: 'nom', flexGrow: 1 },
-            { prop: 'contact.nom', name: 'Contact', flexGrow: 1 },
-            { prop: 'client.nom', name: 'Client', flexGrow: 1 },
-            { prop: 'financeur.nom', name: 'Financeur', flexGrow: 1 },
-            { prop: 'avancement', name: 'Avancement', flexGrow: 1 },
-        ];
         for (var i = 2016; i <= this.currentYearFilter; i++) {
             this.yearFilter.push(i);
         }
     }
     MissionsComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.loadData();
+        this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_2__model__["l" /* Mission */].name) {
+                _this.loadData();
+            }
+        });
+    };
+    MissionsComponent.prototype.loadData = function () {
         var _this = this;
         this.pouchdbservice.getMissions().subscribe(function (data) {
             _this.datas = data;
@@ -1926,7 +2059,7 @@ var MissionsComponent = /** @class */ (function () {
         });
     };
     MissionsComponent.prototype.updateFilter = function (value) {
-        this.currentTextFilter = Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(value);
+        this.currentTextFilter = Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(value);
         this.filter();
     };
     MissionsComponent.prototype.updateFilterYear = function (year) {
@@ -1943,10 +2076,10 @@ var MissionsComponent = /** @class */ (function () {
         });
         if (this.currentTextFilter) {
             tempData = tempData.filter(function (d) {
-                return Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(d.nom).indexOf(self.currentTextFilter) !== -1
-                    || (d.contact && Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(d.contact.nom).indexOf(self.currentTextFilter) !== -1)
-                    || (d.client && Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(d.client.nom).indexOf(self.currentTextFilter) !== -1)
-                    || (d.financeur && Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(d.financeur.nom).indexOf(self.currentTextFilter) !== -1);
+                return Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(d.nom).indexOf(self.currentTextFilter) !== -1
+                    || (d.contact && Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(d.contact.nom).indexOf(self.currentTextFilter) !== -1)
+                    || (d.client && Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(d.client.nom).indexOf(self.currentTextFilter) !== -1)
+                    || (d.financeur && Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(d.financeur.nom).indexOf(self.currentTextFilter) !== -1);
             });
         }
         this.rows = tempData;
@@ -1969,7 +2102,7 @@ var MissionsComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/mission/list/missions.component.html"),
             styles: [__webpack_require__("../../../../../src/app/mission/list/missions.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* Router */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__services_event_service_event_service__["a" /* EventService */], __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]])
     ], MissionsComponent);
     return MissionsComponent;
 }());
@@ -1982,29 +2115,38 @@ var MissionsComponent = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return Collaborateur; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return Contact; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return LienOrganisme; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return Location; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return Adresse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return Organisme; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return Role; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return Collaborateur; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return Contact; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return LienOrganisme; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return Location; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return Adresse; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return Organisme; });
 /* unused harmony export Acknowledge */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return Workpackage; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return Parametres; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return Workpackage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return Parametres; });
 /* unused harmony export MissionSynthese */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return Mission; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return LienMissionCollaborateur; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return LienEntreMission; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return Prospection; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return Mission; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return LienMissionCollaborateur; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return LienEntreMission; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return Prospection; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ActionStatut; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Action; });
 /* unused harmony export UniteCharge */
 /* unused harmony export Imputation */
-/* unused harmony export Activite */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return Activite; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return DocumentSyncEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return PouchDbEvent; });
+var Role;
+(function (Role) {
+    Role["Administrateur"] = "Administrateur";
+    Role["Collaborateur"] = "Collaborateur";
+})(Role || (Role = {}));
 var Collaborateur = /** @class */ (function () {
     function Collaborateur() {
         this.type = Collaborateur.name;
         this.adresse = new Adresse;
+        this.role = Role.Collaborateur;
     }
     return Collaborateur;
 }());
@@ -2094,6 +2236,7 @@ var Mission = /** @class */ (function () {
         this.restrictionAcces = new Array();
         this.liensCollaborateur = new Array();
         this.liensMissions = new Array();
+        this.avancement = "0";
         this.synthese = new MissionSynthese();
     }
     return Mission;
@@ -2153,6 +2296,18 @@ var Activite = /** @class */ (function () {
     return Activite;
 }());
 
+var DocumentSyncEvent = /** @class */ (function () {
+    function DocumentSyncEvent() {
+    }
+    return DocumentSyncEvent;
+}());
+
+var PouchDbEvent = /** @class */ (function () {
+    function PouchDbEvent() {
+    }
+    return PouchDbEvent;
+}());
+
 
 
 /***/ }),
@@ -2208,13 +2363,13 @@ var OrganismeCardComponent = /** @class */ (function () {
     function OrganismeCardComponent(pouchdbservice, sanitizer) {
         this.pouchdbservice = pouchdbservice;
         this.sanitizer = sanitizer;
-        this._organisme = new __WEBPACK_IMPORTED_MODULE_1__model__["k" /* Organisme */]();
+        this._organisme = new __WEBPACK_IMPORTED_MODULE_1__model__["m" /* Organisme */]();
     }
     Object.defineProperty(OrganismeCardComponent.prototype, "organisme", {
         set: function (value) {
             this._organisme = value;
             if (!this._organisme.adresse) {
-                this._organisme.adresse = new __WEBPACK_IMPORTED_MODULE_1__model__["c" /* Adresse */]();
+                this._organisme.adresse = new __WEBPACK_IMPORTED_MODULE_1__model__["d" /* Adresse */]();
             }
             this.loadImage();
         },
@@ -2236,8 +2391,8 @@ var OrganismeCardComponent = /** @class */ (function () {
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__model__["k" /* Organisme */]),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__model__["k" /* Organisme */]])
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__model__["m" /* Organisme */]),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__model__["m" /* Organisme */]])
     ], OrganismeCardComponent.prototype, "organisme", null);
     OrganismeCardComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -2322,7 +2477,7 @@ var OrganismeComponent = /** @class */ (function () {
         this.formSubmitAttempt = false;
         this.editForm = false;
         this.createForm = false;
-        this.organisme = new __WEBPACK_IMPORTED_MODULE_2__model__["k" /* Organisme */]();
+        this.organisme = new __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Organisme */]();
         this.typeOrganisme = [];
         this.form = this.fb.group({
             nom: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required],
@@ -2384,8 +2539,8 @@ var OrganismeComponent = /** @class */ (function () {
         this.place = place;
         if (this.place) {
             //set latitude, longitude and zoom
-            var adresse = new __WEBPACK_IMPORTED_MODULE_2__model__["c" /* Adresse */]();
-            adresse.location = new __WEBPACK_IMPORTED_MODULE_2__model__["i" /* Location */]();
+            var adresse = new __WEBPACK_IMPORTED_MODULE_2__model__["d" /* Adresse */]();
+            adresse.location = new __WEBPACK_IMPORTED_MODULE_2__model__["k" /* Location */]();
             adresse.location.latitude = this.googlePlaceService.latitude(this.place);
             adresse.location.longitude = this.googlePlaceService.longitude(this.place);
             adresse.numero = this.googlePlaceService.street_number(this.place);
@@ -2400,7 +2555,7 @@ var OrganismeComponent = /** @class */ (function () {
             this.form.get('adresse').patchValue(adresse);
         }
         else {
-            this.form.get('adresse').get('location').setValue(new __WEBPACK_IMPORTED_MODULE_2__model__["i" /* Location */]());
+            this.form.get('adresse').get('location').setValue(new __WEBPACK_IMPORTED_MODULE_2__model__["k" /* Location */]());
         }
     };
     OrganismeComponent.prototype.onSubmit = function () {
@@ -2511,8 +2666,10 @@ module.exports = module.exports.toString();
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return OrganismesComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__ = __webpack_require__("../../../../../src/app/services/pouchdb-service/pouchdb.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__("../../../../../src/app/utils.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__model__ = __webpack_require__("../../../../../src/app/model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__("../../../../../src/app/utils.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2526,8 +2683,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var OrganismesComponent = /** @class */ (function () {
-    function OrganismesComponent(pouchdbservice, router) {
+    function OrganismesComponent(eventService, pouchdbservice, router) {
+        this.eventService = eventService;
         this.pouchdbservice = pouchdbservice;
         this.router = router;
         this.rows = [];
@@ -2542,6 +2702,15 @@ var OrganismesComponent = /** @class */ (function () {
     }
     OrganismesComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.loadData();
+        this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Organisme */].name) {
+                _this.loadData();
+            }
+        });
+    };
+    OrganismesComponent.prototype.loadData = function () {
+        var _this = this;
         this.pouchdbservice.getOrganismes().subscribe(function (data) {
             _this.rows = data;
             _this.datas = data;
@@ -2555,11 +2724,11 @@ var OrganismesComponent = /** @class */ (function () {
             return;
         }
         ;
-        val = Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(val);
+        val = Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(val);
         var temp = this.datas.filter(function (d) {
-            return Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(d.nom).indexOf(val) !== -1
-                || (d.adresse && Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(d.adresse.ville).indexOf(val) !== -1)
-                || Object(__WEBPACK_IMPORTED_MODULE_2__utils__["b" /* sanitize */])(d.typeOrganisme).indexOf(val) !== -1;
+            return Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(d.nom).indexOf(val) !== -1
+                || (d.adresse && Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(d.adresse.ville).indexOf(val) !== -1)
+                || Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* sanitize */])(d.typeOrganisme).indexOf(val) !== -1;
         });
         this.rows = temp;
         // Whenever the filter changes, always go back to the first page
@@ -2581,7 +2750,7 @@ var OrganismesComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/organisme/list/organismes.component.html"),
             styles: [__webpack_require__("../../../../../src/app/organisme/list/organismes.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* Router */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__services_event_service_event_service__["a" /* EventService */], __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]])
     ], OrganismesComponent);
     return OrganismesComponent;
 }());
@@ -2697,7 +2866,7 @@ var ParametreComponent = /** @class */ (function () {
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__model__["l" /* Parametres */])
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Parametres */])
     ], ParametreComponent.prototype, "parametres", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
@@ -2760,6 +2929,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_xlsx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_xlsx__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_alertifyjs_build_alertify_js__ = __webpack_require__("../../../../alertifyjs/build/alertify.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_alertifyjs_build_alertify_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_alertifyjs_build_alertify_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2774,15 +2944,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ParametresComponent = /** @class */ (function () {
-    function ParametresComponent(pouchdbservice) {
+    function ParametresComponent(eventService, pouchdbservice) {
+        this.eventService = eventService;
         this.pouchdbservice = pouchdbservice;
         this.editForm = false;
-        this.parametres = new __WEBPACK_IMPORTED_MODULE_1__model__["l" /* Parametres */]();
+        this.parametres = new __WEBPACK_IMPORTED_MODULE_1__model__["n" /* Parametres */]();
         this.listesDeChoix = [];
     }
     ParametresComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.loadData();
+        this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_1__model__["n" /* Parametres */].name) {
+                _this.loadData();
+            }
+        });
     };
     ParametresComponent.prototype.loadData = function () {
         var _this = this;
@@ -2825,7 +3003,7 @@ var ParametresComponent = /** @class */ (function () {
                     var line = data_1[_i];
                     if (line.length >= 2) {
                         if (line[0]) {
-                            var workpackage = new __WEBPACK_IMPORTED_MODULE_1__model__["n" /* Workpackage */]();
+                            var workpackage = new __WEBPACK_IMPORTED_MODULE_1__model__["r" /* Workpackage */]();
                             workpackage.nom = line[0];
                             workpackage.numero = line[0].substring(2, line[0].indexOf(":"));
                             workpackage.sousWorkpackages = new Array();
@@ -2833,7 +3011,7 @@ var ParametresComponent = /** @class */ (function () {
                         }
                         if (line[1]) {
                             var subKey = line[1].substring(0, line[1].indexOf("."));
-                            var sousWorkpackage = new __WEBPACK_IMPORTED_MODULE_1__model__["n" /* Workpackage */]();
+                            var sousWorkpackage = new __WEBPACK_IMPORTED_MODULE_1__model__["r" /* Workpackage */]();
                             sousWorkpackage.nom = line[1];
                             sousWorkpackage.numero = line[1].substring(0, line[1].indexOf(" "));
                             for (var _a = 0, programmes_1 = programmes; _a < programmes_1.length; _a++) {
@@ -2872,7 +3050,7 @@ var ParametresComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/parametres/list/parametres.component.html"),
             styles: [__webpack_require__("../../../../../src/app/parametres/list/parametres.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__services_event_service_event_service__["a" /* EventService */], __WEBPACK_IMPORTED_MODULE_2__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */]])
     ], ParametresComponent);
     return ParametresComponent;
 }());
@@ -3061,11 +3239,11 @@ var ProspectionComponent = /** @class */ (function () {
         this.formSubmitAttempt = false;
         this.editForm = false;
         this.createForm = false;
-        this.prospection = new __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Prospection */]();
+        this.prospection = new __WEBPACK_IMPORTED_MODULE_2__model__["p" /* Prospection */]();
         this.collaborateurs = [];
         this.contacts = [];
         this.organismes = [];
-        this.parametres = new __WEBPACK_IMPORTED_MODULE_2__model__["l" /* Parametres */]();
+        this.parametres = new __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Parametres */]();
         this.actions = [];
         this.form = this.fb.group({
             nom: ['', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required],
@@ -3129,7 +3307,7 @@ var ProspectionComponent = /** @class */ (function () {
         }, function (err) {
             _this.errorMessage = err;
         });
-        this.pouchdbservice.getActions(id, __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Prospection */].name).subscribe(function (data) {
+        this.pouchdbservice.getActions(id, __WEBPACK_IMPORTED_MODULE_2__model__["p" /* Prospection */].name).subscribe(function (data) {
             _this.actions = data;
         }, function (err) {
             _this.errorMessage = err;
@@ -3160,7 +3338,7 @@ var ProspectionComponent = /** @class */ (function () {
         var _this = this;
         if (this.form.valid && this.actionsForm.valid) {
             var oldStatut = this.prospection.statut;
-            var updatedProspection_1 = new __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Prospection */]();
+            var updatedProspection_1 = new __WEBPACK_IMPORTED_MODULE_2__model__["p" /* Prospection */]();
             __WEBPACK_IMPORTED_MODULE_6_lodash__["assign"](updatedProspection_1, this.prospection);
             __WEBPACK_IMPORTED_MODULE_6_lodash__["merge"](updatedProspection_1, this.form.getRawValue());
             if (updatedProspection_1.contact && updatedProspection_1.contact._id) {
@@ -3204,7 +3382,7 @@ var ProspectionComponent = /** @class */ (function () {
     ProspectionComponent.prototype.saveActions = function (prospectionId, actionsToSave) {
         if (actionsToSave) {
             var _loop_1 = function (action) {
-                action.entiteLienType = __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Prospection */].name;
+                action.entiteLienType = __WEBPACK_IMPORTED_MODULE_2__model__["p" /* Prospection */].name;
                 action.entiteLienId = prospectionId;
                 action.entiteLienNom = this_1.prospection.nom;
                 if (action['id']) {
@@ -3271,10 +3449,10 @@ var ProspectionComponent = /** @class */ (function () {
     };
     ProspectionComponent.prototype.createMission = function (prospection) {
         var _this = this;
-        var mission = new __WEBPACK_IMPORTED_MODULE_2__model__["j" /* Mission */]();
+        var mission = new __WEBPACK_IMPORTED_MODULE_2__model__["l" /* Mission */]();
         mission._id = null;
         mission._rev = null;
-        mission.type = __WEBPACK_IMPORTED_MODULE_2__model__["j" /* Mission */].name;
+        mission.type = __WEBPACK_IMPORTED_MODULE_2__model__["l" /* Mission */].name;
         mission.nom = "Mission créée à partir de la prospection : " + prospection.nom;
         mission.prospectionId = prospection._id;
         mission.contact = prospection.contact;
@@ -3382,6 +3560,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__model__ = __webpack_require__("../../../../../src/app/model.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__("../../../../../src/app/utils.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3396,8 +3575,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ProspectionsComponent = /** @class */ (function () {
-    function ProspectionsComponent(pouchdbservice, router) {
+    function ProspectionsComponent(eventService, pouchdbservice, router) {
+        this.eventService = eventService;
         this.pouchdbservice = pouchdbservice;
         this.router = router;
         this.rows = [];
@@ -3408,7 +3589,7 @@ var ProspectionsComponent = /** @class */ (function () {
         this.currentYearFilter = new Date().getFullYear();
         this.currentTextFilter = "";
         this.currentStatutFilter = "";
-        this.parametres = new __WEBPACK_IMPORTED_MODULE_2__model__["l" /* Parametres */]();
+        this.parametres = new __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Parametres */]();
         this.columns = [
             { prop: 'nom', flexGrow: 1 },
             { prop: 'contact.nom', name: 'Contact', flexGrow: 1 },
@@ -3420,6 +3601,15 @@ var ProspectionsComponent = /** @class */ (function () {
         }
     }
     ProspectionsComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.loadData();
+        this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_2__model__["p" /* Prospection */].name) {
+                _this.loadData();
+            }
+        });
+    };
+    ProspectionsComponent.prototype.loadData = function () {
         var _this = this;
         this.pouchdbservice.getProspections().subscribe(function (data) {
             _this.datas = data;
@@ -3481,7 +3671,7 @@ var ProspectionsComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/prospection/list/prospections.component.html"),
             styles: [__webpack_require__("../../../../../src/app/prospection/list/prospections.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__services_event_service_event_service__["a" /* EventService */], __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]])
     ], ProspectionsComponent);
     return ProspectionsComponent;
 }());
@@ -3552,8 +3742,11 @@ var AuthGuard = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__ = __webpack_require__("../../../../rxjs/_esm5/BehaviorSubject.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__user__ = __webpack_require__("../../../../../src/app/services/auth/user.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__model__ = __webpack_require__("../../../../../src/app/model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_pouchdb_service_pouchdb_service__ = __webpack_require__("../../../../../src/app/services/pouchdb-service/pouchdb.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3569,18 +3762,45 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
+
 var AuthService = /** @class */ (function () {
-    function AuthService(router, http) {
+    function AuthService(eventService, pouchdbService, router, http) {
+        var _this = this;
+        this.eventService = eventService;
+        this.pouchdbService = pouchdbService;
         this.router = router;
         this.http = http;
         this.loggedIn = new __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__["BehaviorSubject"](false);
+        this._collaborateur = new __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__["BehaviorSubject"](null);
+        this.admin = new __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__["BehaviorSubject"](false);
         this.REGISTRATION_SERVICE = 'registration/';
         this.FORGOTPASSWORD_SERVICE = 'registration/{login}/resetPassword';
+        this.eventService.getPouchDbEmitter().subscribe(function (item) {
+            if (item.connected) {
+                _this.pouchdbService.getCollaborateurByLogin(_this._user.login).subscribe(function (collaborateur) {
+                    _this._collaborateur.next(collaborateur);
+                    var isAdmin = collaborateur != null && collaborateur.role === __WEBPACK_IMPORTED_MODULE_4__model__["q" /* Role */].Administrateur;
+                    _this.admin.next(isAdmin);
+                    _this.loggedIn.next(true);
+                    if (_this.router.url.indexOf("login") >= 0) {
+                        _this.router.navigate(['/']);
+                    }
+                });
+            }
+            else {
+                _this.loggedIn.next(false);
+                _this.router.navigateByUrl('/login');
+            }
+            _this.eventService.getPouchDbEmitter().unsubscribe();
+        });
         var _login = localStorage.getItem('login');
         var _password = localStorage.getItem('password');
         if (!!_login && !!_password) {
             this.loggedIn.next(true);
             this._user = new __WEBPACK_IMPORTED_MODULE_3__user__["a" /* User */](_login, _password);
+            this.pouchdbService.initConnexion(_login, _password);
         }
     }
     Object.defineProperty(AuthService.prototype, "isLoggedIn", {
@@ -3597,30 +3817,44 @@ var AuthService = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(AuthService.prototype, "collaborateurObs", {
+        get: function () {
+            return this._collaborateur.asObservable();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(AuthService.prototype, "isAdmin", {
+        get: function () {
+            return this.admin.asObservable();
+        },
+        enumerable: true,
+        configurable: true
+    });
     AuthService.prototype.login = function (user) {
         if (user.login !== '' && user.password != '') {
             localStorage.setItem('login', user.login);
             localStorage.setItem('password', user.password);
             this._user = user;
-            this.loggedIn.next(true);
-            this.router.navigate(['/']);
+            this.pouchdbService.initConnexion(user.login, user.password);
         }
     };
     AuthService.prototype.logout = function () {
+        this.pouchdbService.closeConnexion();
         localStorage.clear();
         this._user = null;
         this.loggedIn.next(false);
         this.router.navigateByUrl('/login');
     };
     AuthService.prototype.forgotPassword = function (login) {
-        return this.http.get(__WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].backend_url + this.FORGOTPASSWORD_SERVICE.replace("{login}", encodeURIComponent(login)));
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_5__environments_environment__["a" /* environment */].backend_url + this.FORGOTPASSWORD_SERVICE.replace("{login}", encodeURIComponent(login)));
     };
     AuthService.prototype.registerUser = function (email) {
-        return this.http.post(__WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].backend_url + this.REGISTRATION_SERVICE, { email: email });
+        return this.http.post(__WEBPACK_IMPORTED_MODULE_5__environments_environment__["a" /* environment */].backend_url + this.REGISTRATION_SERVICE, { email: email });
     };
     AuthService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */], __WEBPACK_IMPORTED_MODULE_5__angular_common_http__["a" /* HttpClient */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_7__services_event_service_event_service__["a" /* EventService */], __WEBPACK_IMPORTED_MODULE_8__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */], __WEBPACK_IMPORTED_MODULE_6__angular_common_http__["a" /* HttpClient */]])
     ], AuthService);
     return AuthService;
 }());
@@ -3640,6 +3874,60 @@ var User = /** @class */ (function () {
         this.password = password;
     }
     return User;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/services/event-service/event.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__model__ = __webpack_require__("../../../../../src/app/model.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var EventService = /** @class */ (function () {
+    function EventService() {
+        this.dispatcherDocumentSync = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.dispatcherPouchDb = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    EventService.prototype.emitDocumentSyncEvent = function (type, _id) {
+        if (_id === void 0) { _id = null; }
+        var message = new __WEBPACK_IMPORTED_MODULE_1__model__["g" /* DocumentSyncEvent */]();
+        message.type = type;
+        message._id = _id;
+        this.dispatcherDocumentSync.emit(message);
+    };
+    EventService.prototype.emitPouchDbEvent = function (isConnected, message) {
+        if (message === void 0) { message = null; }
+        var event = new __WEBPACK_IMPORTED_MODULE_1__model__["o" /* PouchDbEvent */]();
+        event.connected = isConnected;
+        event.message = message;
+        this.dispatcherPouchDb.emit(event);
+    };
+    EventService.prototype.getDocumentSyncEmitter = function () {
+        return this.dispatcherDocumentSync;
+    };
+    EventService.prototype.getPouchDbEmitter = function () {
+        return this.dispatcherPouchDb;
+    };
+    EventService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [])
+    ], EventService);
+    return EventService;
 }());
 
 
@@ -3892,7 +4180,7 @@ var PdfGeneratorService = /** @class */ (function () {
                 ul: organismesList
             },
         ];
-        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["e" /* Contact */].name, content);
+        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["f" /* Contact */].name, content);
     };
     PdfGeneratorService.prototype.generateOrganismePdfAndOpen = function (organisme) {
         var title = organisme.nom;
@@ -3942,7 +4230,7 @@ var PdfGeneratorService = /** @class */ (function () {
                 ]
             }
         ];
-        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["k" /* Organisme */].name, content);
+        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["m" /* Organisme */].name, content);
     };
     PdfGeneratorService.prototype.generateMissionPdfAndOpen = function (mission) {
         var title = mission.numFacture + " - " + mission.nom;
@@ -4072,7 +4360,7 @@ var PdfGeneratorService = /** @class */ (function () {
                 },
             ];
         }
-        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["j" /* Mission */].name, content);
+        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["l" /* Mission */].name, content);
     };
     PdfGeneratorService.prototype.generateProspectionPdfAndOpen = function (prospection) {
         var title = prospection.nom;
@@ -4154,7 +4442,7 @@ var PdfGeneratorService = /** @class */ (function () {
                 ]
             }
         ];
-        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["m" /* Prospection */].name, content);
+        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["p" /* Prospection */].name, content);
     };
     PdfGeneratorService.prototype.generatePdfAndOpen = function (title, headerTitle, content) {
         var data = JSON.stringify(content).replace(/(null|undefined)/gi, "-");
@@ -4255,28 +4543,33 @@ var PdfGeneratorService = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PouchDbAdapter; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_pouchdb__ = __webpack_require__("../../../../pouchdb/lib/index-browser.es.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_pouchdb_find__ = __webpack_require__("../../../../pouchdb-find/lib/index-browser.es.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_pouchdb_authentication__ = __webpack_require__("../../../../pouchdb-authentication/lib/index.es.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_BehaviorSubject__ = __webpack_require__("../../../../rxjs/_esm5/BehaviorSubject.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_pouchdb__ = __webpack_require__("../../../../pouchdb/lib/index-browser.es.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_pouchdb_find__ = __webpack_require__("../../../../pouchdb-find/lib/index-browser.es.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_pouchdb_authentication__ = __webpack_require__("../../../../pouchdb-authentication/lib/index.es.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__model__ = __webpack_require__("../../../../../src/app/model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_BehaviorSubject__ = __webpack_require__("../../../../rxjs/_esm5/BehaviorSubject.js");
 
 
 
-__WEBPACK_IMPORTED_MODULE_1_pouchdb__["a" /* default */].plugin(__WEBPACK_IMPORTED_MODULE_2_pouchdb_find__["a" /* default */]);
 
-__WEBPACK_IMPORTED_MODULE_1_pouchdb__["a" /* default */].plugin(__WEBPACK_IMPORTED_MODULE_3_pouchdb_authentication__["a" /* default */]);
+__WEBPACK_IMPORTED_MODULE_2_pouchdb__["a" /* default */].plugin(__WEBPACK_IMPORTED_MODULE_3_pouchdb_find__["a" /* default */]);
+
+__WEBPACK_IMPORTED_MODULE_2_pouchdb__["a" /* default */].plugin(__WEBPACK_IMPORTED_MODULE_4_pouchdb_authentication__["a" /* default */]);
 //import * as PouchUpsert from 'pouchdb-upsert'
 //PouchDB.plugin(PouchUpsert)
+
 
 // import 'rxjs/add/observable/combineLatest';
 // import * as PouchDB from 'pouchdb';
 var PouchDbAdapter = /** @class */ (function () {
-    function PouchDbAdapter(authService, remoteCouchDBAddress, login, password) {
-        this.authService = authService;
+    function PouchDbAdapter(eventService, remoteCouchDBAddress, login, password) {
+        this.eventService = eventService;
+        this.dispatcher = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
         // rxjs behaviour subjects to expose stats flags
-        this.syncStatus = new __WEBPACK_IMPORTED_MODULE_4_rxjs_BehaviorSubject__["BehaviorSubject"](false);
-        this.couchDbUp = new __WEBPACK_IMPORTED_MODULE_4_rxjs_BehaviorSubject__["BehaviorSubject"](false);
+        this.syncStatus = new __WEBPACK_IMPORTED_MODULE_6_rxjs_BehaviorSubject__["BehaviorSubject"](false);
+        this.couchDbUp = new __WEBPACK_IMPORTED_MODULE_6_rxjs_BehaviorSubject__["BehaviorSubject"](false);
         this._remoteCouchDBAddress = remoteCouchDBAddress;
         // string function to extract the database name from the URL
         this._pouchDbName = remoteCouchDBAddress.substr(remoteCouchDBAddress.lastIndexOf('/') + 1);
@@ -4288,8 +4581,8 @@ var PouchDbAdapter = /** @class */ (function () {
         //     // error occurred
         // });
         // init local PouchDB
-        this._pouchDB = new __WEBPACK_IMPORTED_MODULE_1_pouchdb__["a" /* default */](this._pouchDbName);
-        this._remotePouchDB = new __WEBPACK_IMPORTED_MODULE_1_pouchdb__["a" /* default */](remoteCouchDBAddress, { skip_setup: true });
+        this._pouchDB = new __WEBPACK_IMPORTED_MODULE_2_pouchdb__["a" /* default */](this._pouchDbName);
+        this._remotePouchDB = new __WEBPACK_IMPORTED_MODULE_2_pouchdb__["a" /* default */](remoteCouchDBAddress, { skip_setup: true });
         var optionsSync = {
             live: true,
             retry: true,
@@ -4301,6 +4594,7 @@ var PouchDbAdapter = /** @class */ (function () {
         this._remotePouchDB.logIn(login, password).then(function () {
             self._pouchDB.replicate.from(self._remotePouchDB).on('complete', function (info) {
                 console.log('complete');
+                eventService.emitPouchDbEvent(true);
                 self.syncStatus.next(true);
                 self.couchDbUp.next(true);
                 // then two-way, continuous, retriable sync
@@ -4313,13 +4607,30 @@ var PouchDbAdapter = /** @class */ (function () {
                     .on('change', function (info) {
                     console.log('change');
                     self.syncStatus.next(false);
+                    if (info.change && info.change.docs) {
+                        var types = new Array();
+                        var doc = void 0;
+                        for (var _i = 0, _a = info.change.docs; _i < _a.length; _i++) {
+                            doc = _a[_i];
+                            if (types.indexOf(doc.type) <= 0) {
+                                types.push(doc.type);
+                            }
+                            if (doc.type === __WEBPACK_IMPORTED_MODULE_5__model__["e" /* Collaborateur */].name && doc.login === login) {
+                                eventService.emitDocumentSyncEvent(doc.type, doc._id);
+                            }
+                        }
+                        for (var _b = 0, types_1 = types; _b < types_1.length; _b++) {
+                            var type = types_1[_b];
+                            eventService.emitDocumentSyncEvent(type);
+                        }
+                    }
                 })
                     .on('error', function (err) {
                     console.log('PouchDB Error NFCs', err);
                     self.checkRemoteDB();
                     self.syncStatus.next(false);
                     if (err['status'] === 401) {
-                        authService.logout();
+                        eventService.emitPouchDbEvent(false, "Identifiant ou mot de passe incorrect");
                     }
                 });
             }).on('error', function (info) {
@@ -4329,7 +4640,7 @@ var PouchDbAdapter = /** @class */ (function () {
         }).catch(function (error) {
             console.log(error);
             if (error['status'] === 401) {
-                authService.logout();
+                eventService.emitPouchDbEvent(false, "Identifiant ou mot de passe incorrect");
             }
         });
     }
@@ -4339,7 +4650,7 @@ var PouchDbAdapter = /** @class */ (function () {
     };
     PouchDbAdapter.prototype.getDocsOfType = function (docType) {
         var _this = this;
-        return new __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["a" /* Observable */](function (observer) {
+        return new __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */](function (observer) {
             _this._pouchDB.find({
                 selector: { type: docType }
                 //                sort: ['name'],
@@ -4354,7 +4665,7 @@ var PouchDbAdapter = /** @class */ (function () {
     };
     PouchDbAdapter.prototype.getDocsFromSelector = function (selector) {
         var _this = this;
-        return new __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["a" /* Observable */](function (observer) {
+        return new __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */](function (observer) {
             _this._pouchDB.find(selector).then(function (result) {
                 observer.next(result.docs);
             }).catch(function (err) {
@@ -4381,23 +4692,23 @@ var PouchDbAdapter = /** @class */ (function () {
         });
     };
     PouchDbAdapter.prototype.post = function (doc) {
-        return __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["a" /* Observable */].from(this._pouchDB.post(doc));
+        return __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */].from(this._pouchDB.post(doc));
     };
     PouchDbAdapter.prototype.put = function (doc) {
-        return __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["a" /* Observable */].from(this._pouchDB.put(doc));
+        return __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */].from(this._pouchDB.put(doc));
     };
     PouchDbAdapter.prototype.get = function (docId) {
-        return __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["a" /* Observable */].from(this._pouchDB.get(docId));
+        return __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */].from(this._pouchDB.get(docId));
     };
     PouchDbAdapter.prototype.delete = function (docId, rev) {
-        return __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["a" /* Observable */].from(this._pouchDB.put({ _id: docId, _rev: rev, _deleted: true }));
+        return __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */].from(this._pouchDB.put({ _id: docId, _rev: rev, _deleted: true }));
     };
     PouchDbAdapter.prototype.putAttachment = function (docId, rev, attachmentId, myBase64String, contentType) {
-        return __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["a" /* Observable */].from(this._pouchDB.putAttachment(docId, attachmentId, rev, myBase64String, contentType));
+        return __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */].from(this._pouchDB.putAttachment(docId, attachmentId, rev, myBase64String, contentType));
     };
     PouchDbAdapter.prototype.getAttachment = function (docId, attachmentId) {
         var _this = this;
-        return new __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["a" /* Observable */](function (observer) {
+        return new __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */](function (observer) {
             _this._pouchDB.getAttachment(docId, attachmentId)
                 .then((function (blob) {
                 var url = URL.createObjectURL(blob);
@@ -4460,12 +4771,12 @@ var PouchDbAdapter = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_observable_from__ = __webpack_require__("../../../../rxjs/_esm5/add/observable/from.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pouchdb_adapter__ = __webpack_require__("../../../../../src/app/services/pouchdb-service/pouchdb-adapter.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__ = __webpack_require__("../../../../../src/app/services/auth/auth.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__model__ = __webpack_require__("../../../../../src/app/model.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__model__ = __webpack_require__("../../../../../src/app/model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4485,28 +4796,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var REMOTE_COUCH_DB_ADDRESS = __WEBPACK_IMPORTED_MODULE_8__environments_environment__["a" /* environment */].couchdb_url;
+var REMOTE_COUCH_DB_ADDRESS = __WEBPACK_IMPORTED_MODULE_7__environments_environment__["a" /* environment */].couchdb_url;
 //const REMOTE_COUCH_DB_ADDRESS = 'http://login:password@104.155.22.221:5984/ellyx';
 //const REMOTE_COUCH_DB_ADDRESS = 'http://admin:password@localhost:5984/ellyx';
 var PouchdbService = /** @class */ (function () {
     // initiate adapter class and hook up the observables
-    function PouchdbService(http, authService) {
+    function PouchdbService(eventService, http) {
         var _this = this;
+        this.eventService = eventService;
         this.http = http;
-        this.authService = authService;
         // URL of CouchDB (hardwired above)
         this.remoteCouchDBAddress = REMOTE_COUCH_DB_ADDRESS;
-        this.authService.isLoggedIn.subscribe(function (isLogged) {
-            if (isLogged) {
-                _this.initConnexion(authService.user.login, authService.user.password);
-            }
-            else {
-                _this.closeConnexion();
+        this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_4__model__["n" /* Parametres */].name) {
+                _this._parametres = null;
             }
         });
     }
     PouchdbService.prototype.initConnexion = function (login, password) {
-        this._pouchDbAdapter = new __WEBPACK_IMPORTED_MODULE_3__pouchdb_adapter__["a" /* PouchDbAdapter */](this.authService, REMOTE_COUCH_DB_ADDRESS, login, password);
+        this._pouchDbAdapter = new __WEBPACK_IMPORTED_MODULE_3__pouchdb_adapter__["a" /* PouchDbAdapter */](this.eventService, REMOTE_COUCH_DB_ADDRESS, login, password);
         this.syncStatus = this._pouchDbAdapter.syncStatus.asObservable();
         this.couchdbUp = this._pouchDbAdapter.couchDbUp.asObservable();
         this.initDb();
@@ -4519,21 +4827,21 @@ var PouchdbService = /** @class */ (function () {
         return Promise.resolve(this._pouchDbAdapter.put(doc));
     };
     PouchdbService.prototype.getCollaborateurs = function () {
-        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_5__model__["d" /* Collaborateur */].name);
+        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["e" /* Collaborateur */].name);
     };
     PouchdbService.prototype.getMissions = function () {
-        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_5__model__["j" /* Mission */].name);
+        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["l" /* Mission */].name);
     };
     PouchdbService.prototype.getMissionFormProspectionId = function (prospectionId) {
         return this._pouchDbAdapter.getDocsFromSelector({
-            selector: { type: __WEBPACK_IMPORTED_MODULE_5__model__["j" /* Mission */].name, prospectionId: prospectionId }
+            selector: { type: __WEBPACK_IMPORTED_MODULE_4__model__["l" /* Mission */].name, prospectionId: prospectionId }
         });
     };
     PouchdbService.prototype.getCollaborateurByLogin = function (login) {
         var _this = this;
         return new __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */](function (observer) {
             _this._pouchDbAdapter.getDocsFromSelector({
-                selector: { type: __WEBPACK_IMPORTED_MODULE_5__model__["d" /* Collaborateur */].name, mail: login },
+                selector: { type: __WEBPACK_IMPORTED_MODULE_4__model__["e" /* Collaborateur */].name, mail: login },
                 limit: 1
             }).subscribe(function (data) {
                 observer.next(data[0]);
@@ -4541,22 +4849,27 @@ var PouchdbService = /** @class */ (function () {
         });
     };
     PouchdbService.prototype.getProspections = function () {
-        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_5__model__["m" /* Prospection */].name);
+        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["p" /* Prospection */].name);
     };
     PouchdbService.prototype.getOrganismes = function () {
-        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_5__model__["k" /* Organisme */].name);
+        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["m" /* Organisme */].name);
     };
     PouchdbService.prototype.getContacts = function () {
-        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_5__model__["e" /* Contact */].name);
+        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["f" /* Contact */].name);
     };
     PouchdbService.prototype.getActions = function (entiteLienId, entiteLienType) {
         return this._pouchDbAdapter.getDocsFromSelector({
-            selector: { type: __WEBPACK_IMPORTED_MODULE_5__model__["a" /* Action */].name, entiteLienId: entiteLienId, entiteLienType: entiteLienType }
+            selector: { type: __WEBPACK_IMPORTED_MODULE_4__model__["a" /* Action */].name, entiteLienId: entiteLienId, entiteLienType: entiteLienType }
         });
     };
     PouchdbService.prototype.getActionsForCollaborateur = function (collaborateurId) {
         return this._pouchDbAdapter.getDocsFromSelector({
-            selector: { type: __WEBPACK_IMPORTED_MODULE_5__model__["a" /* Action */].name, "collaborateur._id": collaborateurId }
+            selector: { type: __WEBPACK_IMPORTED_MODULE_4__model__["a" /* Action */].name, "collaborateur._id": collaborateurId }
+        });
+    };
+    PouchdbService.prototype.getActiviteForCollaborateurAndSemaine = function (collaborateurId, semaine) {
+        return this._pouchDbAdapter.getDocsFromSelector({
+            selector: { type: __WEBPACK_IMPORTED_MODULE_4__model__["c" /* Activite */].name, "collaborateur._id": collaborateurId, semaine: semaine }
         });
     };
     PouchdbService.prototype.get = function (docId) {
@@ -4566,7 +4879,7 @@ var PouchdbService = /** @class */ (function () {
         return this._pouchDbAdapter.delete(docId, rev);
     };
     PouchdbService.prototype.save = function (doc) {
-        if (doc._id === __WEBPACK_IMPORTED_MODULE_5__model__["l" /* Parametres */].name) {
+        if (doc._id === __WEBPACK_IMPORTED_MODULE_4__model__["n" /* Parametres */].name) {
             this._parametres = null;
         }
         if (!!doc._id) {
@@ -4583,7 +4896,7 @@ var PouchdbService = /** @class */ (function () {
                 observer.next(_this._parametres);
             }
             else {
-                _this._pouchDbAdapter.get(__WEBPACK_IMPORTED_MODULE_5__model__["l" /* Parametres */].name).subscribe(function (data) {
+                _this._pouchDbAdapter.get(__WEBPACK_IMPORTED_MODULE_4__model__["n" /* Parametres */].name).subscribe(function (data) {
                     _this._parametres = data;
                     observer.next(_this._parametres);
                 }, function (err) { return observer.error(err); });
@@ -4636,9 +4949,9 @@ var PouchdbService = /** @class */ (function () {
         //            }
         //        });
         this.getParametres().subscribe(function (data) {
-            var parametres = new __WEBPACK_IMPORTED_MODULE_5__model__["l" /* Parametres */]();
+            var parametres = new __WEBPACK_IMPORTED_MODULE_4__model__["n" /* Parametres */]();
             if (Object.keys(data.listesDeChoix).length != Object.keys(parametres.listesDeChoix).length) {
-                parametres = __WEBPACK_IMPORTED_MODULE_7_lodash__["merge"](parametres, data);
+                parametres = __WEBPACK_IMPORTED_MODULE_6_lodash__["merge"](parametres, data);
                 parametres.listesDeChoix = Object.assign(parametres.listesDeChoix, data.listesDeChoix);
                 _this.save(parametres);
                 console.log("parameters already exist but new variable in 'listeDeChoix'");
@@ -4649,8 +4962,8 @@ var PouchdbService = /** @class */ (function () {
             _this.http.get('./assets/data/parametres.json')
                 .subscribe(function (data) {
                 var _parametres = data;
-                var parametres = new __WEBPACK_IMPORTED_MODULE_5__model__["l" /* Parametres */]();
-                parametres = __WEBPACK_IMPORTED_MODULE_7_lodash__["merge"](parametres, _parametres);
+                var parametres = new __WEBPACK_IMPORTED_MODULE_4__model__["n" /* Parametres */]();
+                parametres = __WEBPACK_IMPORTED_MODULE_6_lodash__["merge"](parametres, _parametres);
                 parametres.listesDeChoix = Object.assign(parametres.listesDeChoix, _parametres.listesDeChoix);
                 _this.save(parametres);
             });
@@ -4658,7 +4971,7 @@ var PouchdbService = /** @class */ (function () {
     };
     PouchdbService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_6__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_4__auth_auth_service__["a" /* AuthService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_8__event_service_event_service__["a" /* EventService */], __WEBPACK_IMPORTED_MODULE_5__angular_common_http__["a" /* HttpClient */]])
     ], PouchdbService);
     return PouchdbService;
 }());
@@ -4832,7 +5145,7 @@ var FooterComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/widgets/menu/menu.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\r\n<div class=\"nav-side-menu\" *ngIf=\"isLoggedIn$ | async \">\r\n  <div class=\"brand\"><img id=\"logo\" src=\"./assets/images/logo.jpg\" style=\"height:60px\" class=\"d-inline-block align-top\" alt=\"\"></div>\r\n  <a class=\"toogle-btn\" (click)=\"isCollapsed = !isCollapsed\" [attr.aria-expanded]=\"!isCollapsed\" aria-controls=\"menu-content\">\r\n    <span class=\"fas fa-bars fa-2x toggle-btn\" ></span>\r\n  </a>\r\n\r\n  <div class=\"menu-list\" >\r\n\r\n    <ul id=\"menu-content\" class=\"menu-content\" [ngbCollapse]=\"isCollapsed\">\r\n      <li>\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"\"><i class=\"fas fa-home fa-lg\"></i><span>Accueil</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"missions\"><i class=\"fas fa-rocket fa-lg\"></i><span>Missions</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"contacts\"><i class=\"fas fa-address-book fa-lg\"></i><span>Contacts</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"organismes\"><i class=\"fas fa-building fa-lg\"></i><span>Organismes</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"activite\"><i class=\"fas fa-tasks fa-lg\"></i><span>Activités</span></a>\r\n      </li>\r\n      <li>\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"\"><i class=\"fas fa-chart-line fa-lg\"></i><span>Pilotage</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"prospections\"><i class=\"fas fa-globe fa-lg\"></i><span>Prospection commerciale</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"collaborateurs\"><i class=\"fas fa-users fa-lg\"></i><span>Equipe</span></a>\r\n      </li>\r\n      <li>\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"\"><i class=\"fas fa-sticky-note fa-lg\"></i><span>Note interne</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"parametres\"><i class=\"fas fa-cog fa-lg\"></i><span>Paramètres</span></a>\r\n      </li>\r\n      <li>\r\n        <a class=\"nav-link\" href=\"#\" (click)=\"onLogout()\"><i class=\"fas fa-sign-out-alt fa-lg\"></i><span>Logout</span></a>\r\n      </li>\r\n\r\n    </ul>\r\n  </div>\r\n</div>"
+module.exports = "\r\n<div class=\"nav-side-menu\" *ngIf=\"isLoggedIn$ | async \">\r\n  <div class=\"brand\"><img id=\"logo\" src=\"./assets/images/logo.jpg\" style=\"height:60px\" class=\"d-inline-block align-top\" alt=\"\"></div>\r\n  <a class=\"toogle-btn\" (click)=\"isCollapsed = !isCollapsed\" [attr.aria-expanded]=\"!isCollapsed\" aria-controls=\"menu-content\">\r\n    <span class=\"fas fa-bars fa-2x toggle-btn\" ></span>\r\n  </a>\r\n\r\n  <div class=\"menu-list\" >\r\n\r\n    <ul id=\"menu-content\" class=\"menu-content\" [ngbCollapse]=\"isCollapsed\">\r\n      <li>\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"\"><i class=\"fas fa-home fa-lg\"></i><span>Accueil</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"missions\"><i class=\"fas fa-rocket fa-lg\"></i><span>Missions</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"contacts\"><i class=\"fas fa-address-book fa-lg\"></i><span>Contacts</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"organismes\"><i class=\"fas fa-building fa-lg\"></i><span>Organismes</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"activites\"><i class=\"fas fa-tasks fa-lg\"></i><span>Activités</span></a>\r\n      </li>\r\n      <li *ngIf=\"isAdmin$ | async\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"\"><i class=\"fas fa-chart-line fa-lg\"></i><span>Pilotage</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"prospections\"><i class=\"fas fa-globe fa-lg\"></i><span>Prospection commerciale</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"collaborateurs\"><i class=\"fas fa-users fa-lg\"></i><span>Equipe</span></a>\r\n      </li>\r\n      <li>\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"\"><i class=\"fas fa-sticky-note fa-lg\"></i><span>Note interne</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"parametres\"><i class=\"fas fa-cog fa-lg\"></i><span>Paramètres</span></a>\r\n      </li>\r\n      <li>\r\n        <a class=\"nav-link\" href=\"#\" (click)=\"onLogout()\"><i class=\"fas fa-sign-out-alt fa-lg\"></i><span>Logout</span></a>\r\n      </li>\r\n\r\n    </ul>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -4879,6 +5192,7 @@ var MenuComponent = /** @class */ (function () {
     }
     MenuComponent.prototype.ngOnInit = function () {
         this.isLoggedIn$ = this.authService.isLoggedIn;
+        this.isAdmin$ = this.authService.isAdmin;
     };
     MenuComponent.prototype.onLogout = function () {
         this.authService.logout();
