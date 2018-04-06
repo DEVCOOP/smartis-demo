@@ -20,7 +20,7 @@ webpackEmptyAsyncContext.id = "../../../../../src/$$_lazy_route_resource lazy re
 /***/ "../../../../../src/app/activite/activite.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"card\">\n    <div class=\"card-header\">\n        <h3>Compte rendu d'activité</h3>\n    </div>\n    <div class=\"card-body\">\n        <div class=\"d-flex justify-content-between pb-2 form-inline\">\n            <div class=\"d-inline-flex\">\n                <label>Année : {{currentYear}}</label>\n            </div>\n            <div class=\"d-inline-flex\">\n                <button class=\"btn btn-link\" (click)=\"previous()\">\n                    <span class=\"fa fa-chevron-left\"></span>\n                </button>\n                <label>{{currentStartDateOfWeek}} - {{currentEndDateOfWeek}}</label>\n                <button class=\"btn btn-link\" (click)=\"next()\">\n                    <span class=\"fa fa-chevron-right\"></span>\n                </button>\n            </div>\n            <div class=\"d-inline-flex\">\n                <label>Semaine : {{currentWeek}}</label>\n            </div>\n        </div>\n        <table class=\"table table-striped table-sm\">\n            <thead>\n            <th>Activité</th>\n            <th>Description</th>\n            <th>Charge</th>\n            <th *ngFor=\"let day of dateToDisplay\" class=\"text-center\" style=\"width:32px\">{{day.numero}}<br/>{{day.label}}</th>\n            </thead>\n        </table>\n        <hr/>\n        <div class=\"form-inline mt-3\">\n                <div class=\"input-group\">\n                    <select class=\"form-control\">\n                        <option value=\"Mission\">Mission</option>\n                        <option value=\"Recherche\">Recherche</option>\n                        <option *ngFor=\"let item of parametres.listesDeChoix.activite\" [ngValue]=\"item\">{{item}}</option>\n                    </select>\n                    <div class=\"input-group-append\">\n                        <button type=\"button\" class=\"btn btn-primary btn-md\" (click)=\"addActivite()\">\n                            <i class=\"fas fa-plus\"></i>\n                        </button>\n                    </div>\n                </div>\n        </div>\n    </div>\n</div>"
+module.exports = "<div class=\"card\">\n    <div class=\"card-header\">\n        <h3>Compte rendu d'activité</h3>\n    </div>\n    <div class=\"card-body\">\n        <div class=\"d-flex justify-content-between pb-2 form-inline\">\n            <div class=\"d-inline-flex\">\n                <label>Année : {{currentYear}}</label>\n            </div>\n            <div class=\"d-inline-flex\">\n                <button class=\"btn btn-link\" (click)=\"previous()\">\n                    <span class=\"fa fa-chevron-left\"></span>\n                </button>\n                <label>{{currentStartDateOfWeek}} - {{currentEndDateOfWeek}}</label>\n                <button class=\"btn btn-link\" (click)=\"next()\">\n                    <span class=\"fa fa-chevron-right\"></span>\n                </button>\n            </div>\n            <div class=\"d-inline-flex\">\n                <label>Semaine : {{currentWeek}}</label>\n            </div>\n        </div>\n        <table class=\"table table-striped table-sm\">\n            <thead>\n            <th>Activité</th>\n            <th>Description</th>\n            <th>Catégorie</th>\n            <th *ngFor=\"let day of dateToDisplay\" class=\"text-center\" style=\"width:32px\">{{day.numero}}<br/>{{day.label}}</th>\n            <th></th>\n            </thead>\n            <tbody>\n            <!------------------------Missions ------------------------------------>\n            <ng-template ngFor let-ligne [ngForOf]=\"getActiviteMissions()\" let-ligneIndex=\"index\">\n                <tr>\n                    <td class=\"font-weight-bold\" [attr.rowspan]=\"getRowspanActiviteMissions()+1\" *ngIf=\"ligneIndex==0\">Mission</td>\n                    <td [attr.rowspan]=\"ligne.sousLignes.length + 2\">{{ligne.label}}</td>\n                    <td></td>\n                    <td (click)=\"editLigne(ligne, true)\" *ngFor=\"let charge of ligne.charges;let j = index\"  class=\"charge\">\n                        <span *ngIf=\"!ligne.editMode\">{{charge.value|| '-'}}</span>\n                        <input type=\"number\" *ngIf=\"ligne.editMode\" [(ngModel)]=\"getActiviteMissions()[ligneIndex].charges[j].value\"  class=\"form-control form-control-sm\" min=\"0\" max=\"9\"/>\n                    </td>\n                    <td *ngIf=\"ligne.editMode\" class=\"action\">\n                        <button class=\"btn btn-link btn-sm\" (click)=\"editLigne(ligne, false)\">\n                            <span class=\"fa fa-check\"></span>\n                        </button>\n                    </td>\n                    <td *ngIf=\"!ligne.editMode\" class=\"action\">\n                        <button class=\"btn btn-link btn-sm\" (click)=\"removeLigne(ligne)\">\n                            <span class=\"fa fa-times\"></span>\n                        </button>\n                    </td>\n                </tr>\n                <tr class=\"font-weight-light\" *ngFor=\"let sousLigne of ligne.sousLignes; first as isFirst; let n=index\">\n                    <td>{{sousLigne.label|| sousLigne.activite}}</td>\n                    <td (click)=\"editLigne(sousLigne, true)\" *ngFor=\"let charge of sousLigne.charges;let j = index\"  class=\"charge small\">\n                        <span *ngIf=\"!sousLigne.editMode\">{{charge.value?charge.value+'%':'-'}}</span>\n                        <input type=\"number\" *ngIf=\"sousLigne.editMode\" [(ngModel)]=\"getActiviteMissions()[ligneIndex].sousLignes[n].charges[j].value\"  class=\"form-control form-control-sm\" min=\"0\" max=\"9\"/>\n                    </td>\n                    <td *ngIf=\"sousLigne.editMode\" class=\"action\">\n                        <button class=\"btn btn-link btn-sm\" (click)=\"editLigne(sousLigne, false)\">\n                            <span class=\"fa fa-check\"></span>\n                        </button>\n                    </td>\n                    <td *ngIf=\"!sousLigne.editMode\" class=\"action\">\n                        <button *ngIf=\"sousLigne.activite=='Recherche'\" class=\"btn btn-link btn-sm\" (click)=\"removeSousLigne(ligne, sousLigne)\">\n                                <span class=\"fa fa-times\"></span>\n                        </button>\n                    </td>\n                </tr>\n                <tr *ngIf=\"ligne.sousLignes && ligne.sousLignes.length>0\">\n                    <td><select class=\"form-control w-75 custom-select custom-select-sm\" (change)=\"addProgrammeToLigne(ligne, $event.target.value)\">\n                            <option value=\"\">Ajouter un programme</option>\n                            <ng-template ngFor let-programme [ngForOf]=\"parametres.programmes\" let-clauseIndex=\"index\">\n                                         <option *ngFor=\"let item of programme.sousWorkpackages\" [ngValue]=\"item.nom\">{{item.nom}}</option>\n                            </ng-template>\n                        </select>\n                    </td>\n                    <td colspan=\"8\"></td>\n                </tr>\n            </ng-template>\n            <!------------------------Recherche ------------------------------------>\n            <ng-template ngFor let-ligne [ngForOf]=\"getActiviteProgramme()\" let-ligneIndex=\"index\">\n                <tr>\n                    <td class=\"font-weight-bold\" [attr.rowspan]=\"getActiviteProgramme().length\" *ngIf=\"ligneIndex==0\">Recherche</td>\n                    <td colspan=\"2\">{{ligne.label}}</td>\n                    <td (click)=\"editLigne(ligne, true)\" *ngFor=\"let charge of ligne.charges;let j = index\"  class=\"charge\">\n                        <span *ngIf=\"!ligne.editMode\">{{charge.value|| '-'}}</span>\n                        <input type=\"number\" *ngIf=\"ligne.editMode\" [(ngModel)]=\"getActiviteProgramme()[ligneIndex].charges[j].value\"  class=\"form-control form-control-sm\" min=\"0\" max=\"9\"/>\n                    </td>\n                    <td *ngIf=\"ligne.editMode\" class=\"action\">\n                        <button class=\"btn btn-link btn-sm\" (click)=\"editLigne(ligne, false)\">\n                            <span class=\"fa fa-check\"></span>\n                        </button>\n                    </td>\n                    <td *ngIf=\"!ligne.editMode\" class=\"action\">\n                        <button class=\"btn btn-link btn-sm\" (click)=\"removeLigne(ligne)\">\n                            <span class=\"fa fa-times\"></span>\n                        </button>\n                    </td>\n                </tr>\n            </ng-template>\n            <!------------------------Autre ------------------------------------>\n            <ng-template ngFor let-ligne [ngForOf]=\"getActiviteOther()\" let-ligneIndex=\"index\">\n                         <tr>\n                    <td class=\"font-weight-bold\">{{ligne.activite}}</td>\n                    <td>{{ligne.label}}</td>\n                    <td></td>\n                    <td (click)=\"editLigne(ligne, true)\" *ngFor=\"let charge of ligne.charges;let j = index\"  class=\"charge\">\n                        <span *ngIf=\"!ligne.editMode\">{{charge.value|| '-'}}</span>\n                        <input type=\"number\" *ngIf=\"ligne.editMode\" [(ngModel)]=\"getActiviteOther()[ligneIndex].charges[j].value\"  class=\"form-control form-control-sm\" min=\"0\" max=\"9\"/>\n                    </td>\n                    <td *ngIf=\"ligne.editMode\" class=\"action\">\n                        <button class=\"btn btn-link btn-sm\" (click)=\"editLigne(ligne, false)\">\n                            <span class=\"fa fa-check\"></span>\n                        </button>\n                    </td>\n                    <td *ngIf=\"!ligne.editMode\" class=\"action\">\n                        <button class=\"btn btn-link btn-sm\" (click)=\"removeLigne(ligne)\">\n                            <span class=\"fa fa-times\"></span>\n                        </button>\n                    </td>\n                </tr>\n            </ng-template>\n            <tr class=\"font-weight-bold table-primary\">\n                <td></td>\n                <td></td>\n                <td class=\"text-right\">TOTAL</td>\n                <td *ngFor=\"let charge of getTotaux()\" class=\"charge\" [style.color]=\"charge>8?'red':''\">{{charge}}</td>\n                <td></td>\n            </tr>\n            </tbody>\n        </table>\n        <hr/>\n        <div class=\"form-inline mt-3\">\n            <div class=\"input-group w-100\">\n                <select class=\"form-control w-25\" [(ngModel)]=\"newActivite\" >\n                    <option value=\"Mission\">Mission</option>\n                    <option value=\"Recherche\">Recherche</option>\n                    <option *ngFor=\"let item of parametres.listesDeChoix.activite\" [ngValue]=\"item\" >{{item}}</option>\n                </select>\n                <div class=\"input-group-append w-75\">\n                    <select class=\"form-control w-75\" [(ngModel)]=\"newMission\" *ngIf=\"newActivite=='Mission'\">\n                        <option *ngFor=\"let mission of missions\" [ngValue]=\"mission.nom\">{{mission.nom}}</option>\n                    </select>\n\n                    <select class=\"form-control w-75\" [(ngModel)]=\"newRecherche\" *ngIf=\"newActivite=='Recherche'\">\n                        <ng-template ngFor let-programme [ngForOf]=\"parametres.programmes\" let-clauseIndex=\"index\">\n                                     <option *ngFor=\"let item of programme.sousWorkpackages\" [ngValue]=\"item.nom\">{{item.nom}}</option>\n                        </ng-template>\n                    </select>\n                    <button type=\"button\" class=\"btn btn-primary btn-md\" (click)=\"addLine()\">\n                        <i class=\"fas fa-plus\"></i>\n                    </button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -32,7 +32,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "tr.font-weight-light .btn-sm {\n  line-height: 1; }\n\ntr td {\n  max-width: 250px;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis; }\n\ntr td .form-control-sm {\n    padding: 0px;\n    width: 35px; }\n\ntr td.charge {\n    padding-left: 1px;\n    padding-right: 1px;\n    text-align: center;\n    width: 40px; }\n\ntr td.action {\n    width: 44px; }\n", ""]);
 
 // exports
 
@@ -55,6 +55,8 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_auth_auth_service__ = __webpack_require__("../../../../../src/app/services/auth/auth.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_moment__ = __webpack_require__("../../../../moment/moment.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_moment__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_alertifyjs_build_alertify_js__ = __webpack_require__("../../../../alertifyjs/build/alertify.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_alertifyjs_build_alertify_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_alertifyjs_build_alertify_js__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -71,6 +73,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ActiviteComponent = /** @class */ (function () {
     function ActiviteComponent(eventService, pouchdbservice, authService, router) {
         this.eventService = eventService;
@@ -78,9 +81,11 @@ var ActiviteComponent = /** @class */ (function () {
         this.authService = authService;
         this.router = router;
         this.activites = new Array();
+        this.missions = new Array();
         this.parametres = new __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Parametres */]();
         this.dateToDisplay = new Array();
         this.currentDate = __WEBPACK_IMPORTED_MODULE_6_moment__();
+        this.lignes = new Array();
     }
     ActiviteComponent.prototype.ngOnInit = function () {
         this.loadData();
@@ -93,6 +98,7 @@ var ActiviteComponent = /** @class */ (function () {
             if (_this.collaborateur) {
                 _this.pouchdbservice.getActiviteForCollaborateurAndSemaine(_this.collaborateur._id, _this.currentDate.isoWeek()).subscribe(function (data) {
                     _this.activites = data;
+                    _this.convertData();
                 }, function (err) {
                     _this.errorMessage = err;
                 });
@@ -104,6 +110,75 @@ var ActiviteComponent = /** @class */ (function () {
             _this.errorMessage = err;
         });
     };
+    ActiviteComponent.prototype.convertData = function () {
+        this.lignes.length = 0;
+        var missions = Array.from(new Set(this.activites.filter(function (item) { return item.imputation.activite === __WEBPACK_IMPORTED_MODULE_2__model__["l" /* Mission */].name; }).map(function (item) { return item.imputation.entiteLienNom; })));
+        var recherches = Array.from(new Set(this.activites.filter(function (item) { return item.imputation.activite === "Recherche"; }).map(function (item) { return item.imputation.entiteLienNom; })));
+        var autres = Array.from(new Set(this.activites.filter(function (item) { return item.imputation.activite !== "Recherche" && item.imputation.activite !== __WEBPACK_IMPORTED_MODULE_2__model__["l" /* Mission */].name; }).map(function (item) { return item.imputation.activite; })));
+        for (var _i = 0, missions_1 = missions; _i < missions_1.length; _i++) {
+            var mission = missions_1[_i];
+            this.lignes.push(new ActiviteLigne(__WEBPACK_IMPORTED_MODULE_2__model__["l" /* Mission */].name, mission));
+        }
+        for (var _a = 0, recherches_1 = recherches; _a < recherches_1.length; _a++) {
+            var recherche = recherches_1[_a];
+            this.lignes.push(new ActiviteLigne("Recherche", recherche));
+        }
+        for (var _b = 0, autres_1 = autres; _b < autres_1.length; _b++) {
+            var autre = autres_1[_b];
+            this.lignes.push(new ActiviteLigne(autre));
+        }
+    };
+    ActiviteComponent.prototype.addLine = function () {
+        var activiteLigne;
+        if (this.newActivite === __WEBPACK_IMPORTED_MODULE_2__model__["l" /* Mission */].name) {
+            if (!this.newMission) {
+                __WEBPACK_IMPORTED_MODULE_7_alertifyjs_build_alertify_js__["warning"]('Vous devez sélectionner une mission');
+                return;
+            }
+            activiteLigne = new ActiviteLigne(this.newActivite, this.newMission);
+            activiteLigne.sousLignes.push(new ActiviteSousLigne("CDT"));
+        }
+        else if (this.newActivite === "Recherche") {
+            if (!this.newRecherche) {
+                __WEBPACK_IMPORTED_MODULE_7_alertifyjs_build_alertify_js__["warning"]('Vous devez sélectionner une programme de recherche');
+                return;
+            }
+            activiteLigne = new ActiviteLigne(this.newActivite, this.newRecherche);
+        }
+        else {
+            activiteLigne = new ActiviteLigne(this.newActivite);
+        }
+        this.lignes.push(activiteLigne);
+    };
+    ActiviteComponent.prototype.addProgrammeToLigne = function (ligne, programme) {
+        if (programme) {
+            if (ligne) {
+                ligne.sousLignes.push(new ActiviteSousLigne("Recherche", programme));
+            }
+            else {
+                this.lignes.push(new ActiviteLigne("Recherche", programme));
+            }
+        }
+    };
+    ActiviteComponent.prototype.removeSousLigne = function (ligne, sousLigne) {
+        ligne.sousLignes = ligne.sousLignes.filter(function (obj) { return obj !== sousLigne; });
+    };
+    ActiviteComponent.prototype.removeLigne = function (ligne) {
+        this.lignes = this.lignes.filter(function (obj) { return obj !== ligne; });
+    };
+    ActiviteComponent.prototype.editLigne = function (ligne, edit) {
+        ligne.editMode = edit;
+    };
+    ActiviteComponent.prototype.editSousLigne = function (sousLigne, edit) {
+        sousLigne.editMode = edit;
+    };
+    ActiviteComponent.prototype.addActivite = function () {
+        var activite = new __WEBPACK_IMPORTED_MODULE_2__model__["c" /* Activite */]();
+        activite.imputation.activite = this.newActivite;
+        activite.collaborateur._id = this.collaborateur._id;
+        activite.collaborateur.nom = this.collaborateur.nom;
+        activite.collaborateur.prenom = this.collaborateur.prenom;
+    };
     ActiviteComponent.prototype.previous = function () {
         this.currentDate = this.currentDate.add(-1, 'weeks');
         this.renderTimesheet(this.currentDate);
@@ -113,6 +188,7 @@ var ActiviteComponent = /** @class */ (function () {
         this.renderTimesheet(this.currentDate);
     };
     ActiviteComponent.prototype.renderTimesheet = function (date) {
+        var _this = this;
         var weekDate = __WEBPACK_IMPORTED_MODULE_6_moment__(date);
         weekDate = weekDate.startOf('isoWeek');
         this.currentYear = weekDate.year();
@@ -124,6 +200,39 @@ var ActiviteComponent = /** @class */ (function () {
             weekDate.add(1, 'd');
         }
         this.currentEndDateOfWeek = weekDate.format("L");
+        this.pouchdbservice.getCurrentMissions(this.currentDate.startOf('isoWeek').toDate()).subscribe(function (data) {
+            _this.missions = data;
+        }, function (err) {
+            _this.errorMessage = err;
+        });
+    };
+    ActiviteComponent.prototype.getActiviteMissions = function () {
+        return this.lignes.filter(function (item) { return item.activite === 'Mission'; });
+    };
+    ActiviteComponent.prototype.getRowspanActiviteMissions = function () {
+        var lignes = this.lignes.filter(function (item) { return item.activite === 'Mission'; });
+        var rowspan = -1;
+        for (var _i = 0, lignes_1 = lignes; _i < lignes_1.length; _i++) {
+            var ligne = lignes_1[_i];
+            rowspan += ligne.sousLignes.length + 2;
+        }
+        return rowspan;
+    };
+    ActiviteComponent.prototype.getActiviteProgramme = function () {
+        return this.lignes.filter(function (item) { return item.activite === 'Recherche'; }).sort(function (a, b) { return a.label.localeCompare(b.label); });
+    };
+    ActiviteComponent.prototype.getActiviteOther = function () {
+        return this.lignes.filter(function (item) { return item.activite !== 'Mission' && item.activite !== 'Recherche'; }).sort(function (a, b) { return a.activite.localeCompare(b.activite); });
+    };
+    ActiviteComponent.prototype.getTotaux = function () {
+        var result = [0, 0, 0, 0, 0, 0, 0];
+        for (var _i = 0, _a = this.lignes; _i < _a.length; _i++) {
+            var ligne = _a[_i];
+            for (var i = 0; i < result.length; i++) {
+                result[i] += ligne.charges[i].value || 0;
+            }
+        }
+        return result;
     };
     ActiviteComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -136,6 +245,29 @@ var ActiviteComponent = /** @class */ (function () {
     return ActiviteComponent;
 }());
 
+var ActiviteLigne = /** @class */ (function () {
+    function ActiviteLigne(activite, label) {
+        if (label === void 0) { label = null; }
+        this.sousLignes = new Array();
+        this.uniteCharge = __WEBPACK_IMPORTED_MODULE_2__model__["r" /* UniteCharge */].HEURE;
+        this.editMode = false;
+        this.activite = activite;
+        this.label = label;
+        this.charges = [{ value: 0 }, { value: 0 }, { value: 0 }, { value: 0 }, { value: 0 }, { value: 0 }, { value: 0 }];
+    }
+    return ActiviteLigne;
+}());
+var ActiviteSousLigne = /** @class */ (function () {
+    function ActiviteSousLigne(activite, label) {
+        if (label === void 0) { label = null; }
+        this.uniteCharge = __WEBPACK_IMPORTED_MODULE_2__model__["r" /* UniteCharge */].POURCENTAGE;
+        this.editMode = false;
+        this.activite = activite;
+        this.label = label;
+        this.charges = [{ value: 0 }, { value: 0 }, { value: 0 }, { value: 0 }, { value: 0 }, { value: 0 }, { value: 0 }];
+    }
+    return ActiviteSousLigne;
+}());
 
 
 /***/ }),
@@ -1634,6 +1766,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash__ = __webpack_require__("../../../../lodash/lodash.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_lodash__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1653,8 +1786,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var MissionComponent = /** @class */ (function () {
-    function MissionComponent(fb, route, pouchdbservice, router, pdfGeneratorService) {
+    function MissionComponent(eventService, fb, route, pouchdbservice, router, pdfGeneratorService) {
+        this.eventService = eventService;
         this.fb = fb;
         this.route = route;
         this.pouchdbservice = pouchdbservice;
@@ -1723,6 +1858,14 @@ var MissionComponent = /** @class */ (function () {
     }
     MissionComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_1__model__["l" /* Mission */].name && _this.mission && item.ids.indexOf(_this.mission._id) != -1) {
+                if (_this.editForm) {
+                    __WEBPACK_IMPORTED_MODULE_6_alertifyjs_build_alertify_js__["warning"]("La mission a été modifiée par un autre utilisateur, si vous enregistrez vos modifications, vous écraserez les siennes");
+                }
+                _this.loadMission(_this.mission._id);
+            }
+        });
         this.route.params.subscribe(function (params) {
             var id = params['id'];
             if (id == '0') {
@@ -1963,7 +2106,7 @@ var MissionComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/mission/edit/mission.component.html"),
             styles: [__webpack_require__("../../../../../src/app/mission/edit/mission.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */], __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* ActivatedRoute */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_9__services_event_service_event_service__["a" /* EventService */], __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */], __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* ActivatedRoute */],
             __WEBPACK_IMPORTED_MODULE_4__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* Router */], __WEBPACK_IMPORTED_MODULE_5__services_pdf_generator_pdf_generator_service__["a" /* PdfGeneratorService */]])
     ], MissionComponent);
     return MissionComponent;
@@ -2123,7 +2266,7 @@ var MissionsComponent = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return Adresse; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return Organisme; });
 /* unused harmony export Acknowledge */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return Workpackage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return Workpackage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return Parametres; });
 /* unused harmony export MissionSynthese */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return Mission; });
@@ -2132,7 +2275,7 @@ var MissionsComponent = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return Prospection; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ActionStatut; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Action; });
-/* unused harmony export UniteCharge */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return UniteCharge; });
 /* unused harmony export Imputation */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return Activite; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return DocumentSyncEvent; });
@@ -2280,8 +2423,8 @@ var Action = /** @class */ (function () {
 
 var UniteCharge;
 (function (UniteCharge) {
-    UniteCharge[UniteCharge["HEURE"] = 0] = "HEURE";
-    UniteCharge[UniteCharge["POURCENTAGE"] = 1] = "POURCENTAGE";
+    UniteCharge["HEURE"] = "h";
+    UniteCharge["POURCENTAGE"] = "%";
 })(UniteCharge || (UniteCharge = {}));
 var Imputation = /** @class */ (function () {
     function Imputation() {
@@ -2293,6 +2436,8 @@ var Imputation = /** @class */ (function () {
 var Activite = /** @class */ (function () {
     function Activite() {
         this.type = Activite.name;
+        this.collaborateur = new Collaborateur();
+        this.imputation = new Imputation();
     }
     return Activite;
 }());
@@ -3004,7 +3149,7 @@ var ParametresComponent = /** @class */ (function () {
                     var line = data_1[_i];
                     if (line.length >= 2) {
                         if (line[0]) {
-                            var workpackage = new __WEBPACK_IMPORTED_MODULE_1__model__["r" /* Workpackage */]();
+                            var workpackage = new __WEBPACK_IMPORTED_MODULE_1__model__["s" /* Workpackage */]();
                             workpackage.nom = line[0];
                             workpackage.numero = line[0].substring(2, line[0].indexOf(":"));
                             workpackage.sousWorkpackages = new Array();
@@ -3012,7 +3157,7 @@ var ParametresComponent = /** @class */ (function () {
                         }
                         if (line[1]) {
                             var subKey = line[1].substring(0, line[1].indexOf("."));
-                            var sousWorkpackage = new __WEBPACK_IMPORTED_MODULE_1__model__["r" /* Workpackage */]();
+                            var sousWorkpackage = new __WEBPACK_IMPORTED_MODULE_1__model__["s" /* Workpackage */]();
                             sousWorkpackage.nom = line[1];
                             sousWorkpackage.numero = line[1].substring(0, line[1].indexOf(" "));
                             for (var _a = 0, programmes_1 = programmes; _a < programmes_1.length; _a++) {
@@ -3904,11 +4049,11 @@ var EventService = /** @class */ (function () {
         this.dispatcherDocumentSync = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
         this.dispatcherPouchDb = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
     }
-    EventService.prototype.emitDocumentSyncEvent = function (type, _id) {
-        if (_id === void 0) { _id = null; }
+    EventService.prototype.emitDocumentSyncEvent = function (type, ids) {
+        if (ids === void 0) { ids = null; }
         var message = new __WEBPACK_IMPORTED_MODULE_1__model__["g" /* DocumentSyncEvent */]();
         message.type = type;
-        message._id = _id;
+        message.ids = ids;
         this.dispatcherDocumentSync.emit(message);
     };
     EventService.prototype.emitPouchDbEvent = function (isConnected, message) {
@@ -4549,8 +4694,7 @@ var PdfGeneratorService = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_pouchdb__ = __webpack_require__("../../../../pouchdb/lib/index-browser.es.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_pouchdb_find__ = __webpack_require__("../../../../pouchdb-find/lib/index-browser.es.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_pouchdb_authentication__ = __webpack_require__("../../../../pouchdb-authentication/lib/index.es.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__model__ = __webpack_require__("../../../../../src/app/model.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_BehaviorSubject__ = __webpack_require__("../../../../rxjs/_esm5/BehaviorSubject.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_BehaviorSubject__ = __webpack_require__("../../../../rxjs/_esm5/BehaviorSubject.js");
 
 
 
@@ -4558,9 +4702,6 @@ var PdfGeneratorService = /** @class */ (function () {
 __WEBPACK_IMPORTED_MODULE_2_pouchdb__["a" /* default */].plugin(__WEBPACK_IMPORTED_MODULE_3_pouchdb_find__["a" /* default */]);
 
 __WEBPACK_IMPORTED_MODULE_2_pouchdb__["a" /* default */].plugin(__WEBPACK_IMPORTED_MODULE_4_pouchdb_authentication__["a" /* default */]);
-//import * as PouchUpsert from 'pouchdb-upsert'
-//PouchDB.plugin(PouchUpsert)
-
 
 // import 'rxjs/add/observable/combineLatest';
 // import * as PouchDB from 'pouchdb';
@@ -4569,8 +4710,8 @@ var PouchDbAdapter = /** @class */ (function () {
         this.eventService = eventService;
         this.dispatcher = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
         // rxjs behaviour subjects to expose stats flags
-        this.syncStatus = new __WEBPACK_IMPORTED_MODULE_6_rxjs_BehaviorSubject__["BehaviorSubject"](false);
-        this.couchDbUp = new __WEBPACK_IMPORTED_MODULE_6_rxjs_BehaviorSubject__["BehaviorSubject"](false);
+        this.syncStatus = new __WEBPACK_IMPORTED_MODULE_5_rxjs_BehaviorSubject__["BehaviorSubject"](false);
+        this.couchDbUp = new __WEBPACK_IMPORTED_MODULE_5_rxjs_BehaviorSubject__["BehaviorSubject"](false);
         this._remoteCouchDBAddress = remoteCouchDBAddress;
         // string function to extract the database name from the URL
         this._pouchDbName = remoteCouchDBAddress.substr(remoteCouchDBAddress.lastIndexOf('/') + 1);
@@ -4609,21 +4750,20 @@ var PouchDbAdapter = /** @class */ (function () {
                     console.log('change');
                     self.syncStatus.next(false);
                     if (info.change && info.change.docs) {
-                        var types = new Array();
+                        var types = new Map();
                         var doc = void 0;
                         for (var _i = 0, _a = info.change.docs; _i < _a.length; _i++) {
                             doc = _a[_i];
-                            if (types.indexOf(doc.type) <= 0) {
-                                types.push(doc.type);
+                            if (!types.has(doc.type)) {
+                                types.set(doc.type, [doc._id]);
                             }
-                            if (doc.type === __WEBPACK_IMPORTED_MODULE_5__model__["e" /* Collaborateur */].name && doc.login === login) {
-                                eventService.emitDocumentSyncEvent(doc.type, doc._id);
+                            else {
+                                types.get(doc.type).push(doc._id);
                             }
                         }
-                        for (var _b = 0, types_1 = types; _b < types_1.length; _b++) {
-                            var type = types_1[_b];
-                            eventService.emitDocumentSyncEvent(type);
-                        }
+                        types.forEach(function (ids, key) {
+                            eventService.emitDocumentSyncEvent(key, ids);
+                        });
                     }
                 })
                     .on('error', function (err) {
@@ -4871,6 +5011,11 @@ var PouchdbService = /** @class */ (function () {
     PouchdbService.prototype.getActiviteForCollaborateurAndSemaine = function (collaborateurId, semaine) {
         return this._pouchDbAdapter.getDocsFromSelector({
             selector: { type: __WEBPACK_IMPORTED_MODULE_4__model__["c" /* Activite */].name, "collaborateur._id": collaborateurId, semaine: semaine }
+        });
+    };
+    PouchdbService.prototype.getCurrentMissions = function (date) {
+        return this._pouchDbAdapter.getDocsFromSelector({
+            selector: { type: __WEBPACK_IMPORTED_MODULE_4__model__["l" /* Mission */].name, $or: [{ dateCloture: { $lte: date.toISOString() } }, { dateCloture: { $gt: null } }] }
         });
     };
     PouchdbService.prototype.get = function (docId) {
