@@ -50,13 +50,11 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__ = __webpack_require__("../../../../../src/app/services/pouchdb-service/pouchdb.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__model__ = __webpack_require__("../../../../../src/app/model.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_auth_auth_service__ = __webpack_require__("../../../../../src/app/services/auth/auth.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_moment__ = __webpack_require__("../../../../moment/moment.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_moment__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_alertifyjs_build_alertify_js__ = __webpack_require__("../../../../alertifyjs/build/alertify.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_alertifyjs_build_alertify_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_alertifyjs_build_alertify_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_auth_auth_service__ = __webpack_require__("../../../../../src/app/services/auth/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_moment__ = __webpack_require__("../../../../moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_moment__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_alertifyjs_build_alertify_js__ = __webpack_require__("../../../../alertifyjs/build/alertify.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_alertifyjs_build_alertify_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_alertifyjs_build_alertify_js__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -72,22 +70,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
-
 var ActiviteComponent = /** @class */ (function () {
-    function ActiviteComponent(eventService, pouchdbservice, authService, router) {
-        this.eventService = eventService;
+    function ActiviteComponent(pouchdbservice, authService) {
         this.pouchdbservice = pouchdbservice;
         this.authService = authService;
-        this.router = router;
         this.activite = new __WEBPACK_IMPORTED_MODULE_2__model__["c" /* Activite */]();
         this.missions = new Array();
         this.collaborateurs = new Array();
-        this.parametres = new __WEBPACK_IMPORTED_MODULE_2__model__["o" /* Parametres */]();
+        this.parametres = new __WEBPACK_IMPORTED_MODULE_2__model__["p" /* Parametres */]();
         this.dateToDisplay = new Array();
-        this.currentDate = __WEBPACK_IMPORTED_MODULE_6_moment__();
-        this.numberOfWeek = __WEBPACK_IMPORTED_MODULE_6_moment__().isoWeeksInYear();
-        this.actualYear = __WEBPACK_IMPORTED_MODULE_6_moment__().year();
+        this.currentDate = __WEBPACK_IMPORTED_MODULE_4_moment__();
+        this.numberOfWeek = __WEBPACK_IMPORTED_MODULE_4_moment__().isoWeeksInYear();
+        this.actualYear = __WEBPACK_IMPORTED_MODULE_4_moment__().year();
         this.fakeWeeksArray = new Array(53);
         this.isAdmin$ = this.authService.isAdmin;
     }
@@ -109,7 +103,7 @@ var ActiviteComponent = /** @class */ (function () {
                 }, function (err) {
                     _this.errorMessage = err;
                 });
-                _this.pouchdbservice.getActiviteForSemaine(__WEBPACK_IMPORTED_MODULE_6_moment__().year(), __WEBPACK_IMPORTED_MODULE_6_moment__().isoWeeks()).subscribe(function (datas) {
+                _this.pouchdbservice.getActiviteForSemaine(__WEBPACK_IMPORTED_MODULE_4_moment__().year(), __WEBPACK_IMPORTED_MODULE_4_moment__().isoWeeks()).subscribe(function (datas) {
                     var _loop_1 = function (data) {
                         var col = _this.collaborateurs.find(function (item) { return item._id === data.collaborateur._id; });
                         if (col) {
@@ -145,7 +139,7 @@ var ActiviteComponent = /** @class */ (function () {
             this.pouchdbservice.getActiviteForCollaborateurAndSemaine(this.displayCollaborateurId, this.currentDate.year(), this.currentDate.isoWeeks()).subscribe(function (data) {
                 if (!data || data.length == 0) {
                     // if no data copy previous week to the current without charges
-                    var previousweek = __WEBPACK_IMPORTED_MODULE_6_moment__(_this.currentDate).add(-1, 'weeks');
+                    var previousweek = __WEBPACK_IMPORTED_MODULE_4_moment__(_this.currentDate).add(-1, 'weeks');
                     _this.pouchdbservice.getActiviteForCollaborateurAndSemaine(_this.displayCollaborateurId, previousweek.year(), previousweek.isoWeeks()).subscribe(function (data) {
                         var activite = new __WEBPACK_IMPORTED_MODULE_2__model__["c" /* Activite */]();
                         activite.semaine = _this.currentDate.isoWeeks();
@@ -188,16 +182,16 @@ var ActiviteComponent = /** @class */ (function () {
         }
     };
     ActiviteComponent.prototype.addLine = function () {
-        if (this.newActivite === __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Mission */].name) {
+        if (this.newActivite === __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Mission */].name) {
             if (!this.newMission) {
-                __WEBPACK_IMPORTED_MODULE_7_alertifyjs_build_alertify_js__["warning"]('Vous devez sélectionner une mission');
+                __WEBPACK_IMPORTED_MODULE_5_alertifyjs_build_alertify_js__["warning"]('Vous devez sélectionner une mission');
                 return;
             }
             this.activite.missions.push(this.createImputationMission(this.newMission));
         }
         else if (this.newActivite === "Recherche") {
             if (!this.newRecherche) {
-                __WEBPACK_IMPORTED_MODULE_7_alertifyjs_build_alertify_js__["warning"]('Vous devez sélectionner une programme de recherche');
+                __WEBPACK_IMPORTED_MODULE_5_alertifyjs_build_alertify_js__["warning"]('Vous devez sélectionner une programme de recherche');
                 return;
             }
             this.activite.recherches.push(this.createImputationRecherche(this.newRecherche));
@@ -215,20 +209,22 @@ var ActiviteComponent = /** @class */ (function () {
     ActiviteComponent.prototype.createImputationRecherche = function (rechercheNum) {
         var imp = new __WEBPACK_IMPORTED_MODULE_2__model__["h" /* Imputation */]();
         imp.activite = "Recherche";
-        imp.entiteLienType = __WEBPACK_IMPORTED_MODULE_2__model__["s" /* Workpackage */].name;
+        imp.entiteLienType = __WEBPACK_IMPORTED_MODULE_2__model__["t" /* Workpackage */].name;
         imp.entiteLienId = rechercheNum;
         var recherche = this.parametres.programmes.filter(function (pgm) { return pgm.sousWorkpackages.some(function (item) { return item.numero === rechercheNum; }); }).map(function (pgm) { return pgm.sousWorkpackages.find(function (item) { return item.numero === rechercheNum; }); });
         imp.entiteLienNom = recherche[0].nom;
         imp.label = "WP " + recherche[0].numero;
+        imp.entiteLienCode = "WP " + recherche[0].numero;
         return imp;
     };
     ActiviteComponent.prototype.createImputationMission = function (missionId) {
         var imp = new __WEBPACK_IMPORTED_MODULE_2__model__["h" /* Imputation */]();
-        imp.activite = __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Mission */].name;
-        imp.entiteLienType = __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Mission */].name;
+        imp.activite = __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Mission */].name;
+        imp.entiteLienType = __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Mission */].name;
         imp.entiteLienId = this.newMission;
         var mission = this.missions.find(function (item) { return item._id === missionId; });
         imp.entiteLienNom = mission.nom;
+        imp.entiteLienCode = mission.numFacture;
         imp.label = mission.numFacture;
         var sousImp = new __WEBPACK_IMPORTED_MODULE_2__model__["h" /* Imputation */]();
         sousImp.activite = "CDT";
@@ -251,7 +247,7 @@ var ActiviteComponent = /** @class */ (function () {
         this.save();
     };
     ActiviteComponent.prototype.removeImputation = function (type, imputation) {
-        if (type === __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Mission */].name) {
+        if (type === __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Mission */].name) {
             this.activite.missions = this.activite.missions.filter(function (obj) { return obj !== imputation; });
         }
         else if (type === "Recherche") {
@@ -287,7 +283,7 @@ var ActiviteComponent = /** @class */ (function () {
         this.loadData();
     };
     ActiviteComponent.prototype.previous = function () {
-        var newDate = __WEBPACK_IMPORTED_MODULE_6_moment__(this.currentDate).add(-1, 'weeks');
+        var newDate = __WEBPACK_IMPORTED_MODULE_4_moment__(this.currentDate).add(-1, 'weeks');
         if (newDate.year() < this.actualYear - 1) {
             return;
         }
@@ -296,7 +292,7 @@ var ActiviteComponent = /** @class */ (function () {
         this.loadData();
     };
     ActiviteComponent.prototype.next = function () {
-        var newDate = __WEBPACK_IMPORTED_MODULE_6_moment__(this.currentDate).add(1, 'weeks');
+        var newDate = __WEBPACK_IMPORTED_MODULE_4_moment__(this.currentDate).add(1, 'weeks');
         if (newDate.year() > this.actualYear) {
             return;
         }
@@ -315,7 +311,7 @@ var ActiviteComponent = /** @class */ (function () {
         }
     };
     ActiviteComponent.prototype.renderTimesheet = function (date) {
-        var weekDate = __WEBPACK_IMPORTED_MODULE_6_moment__(date);
+        var weekDate = __WEBPACK_IMPORTED_MODULE_4_moment__(date);
         weekDate = weekDate.startOf('isoWeek');
         this.currentYear = weekDate.year();
         this.currentWeek = weekDate.isoWeeks();
@@ -365,7 +361,7 @@ var ActiviteComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/activite/activite.component.html"),
             styles: [__webpack_require__("../../../../../src/app/activite/activite.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__services_event_service_event_service__["a" /* EventService */], __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_5__services_auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_3__angular_router__["b" /* Router */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */], __WEBPACK_IMPORTED_MODULE_3__services_auth_auth_service__["a" /* AuthService */]])
     ], ActiviteComponent);
     return ActiviteComponent;
 }());
@@ -397,12 +393,14 @@ var ActiviteComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__prospection_list_prospections_component__ = __webpack_require__("../../../../../src/app/prospection/list/prospections.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__prospection_edit_prospection_component__ = __webpack_require__("../../../../../src/app/prospection/edit/prospection.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__activite_activite_component__ = __webpack_require__("../../../../../src/app/activite/activite.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pilotage_pilotage_component__ = __webpack_require__("../../../../../src/app/pilotage/pilotage.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -430,6 +428,7 @@ var routes = [
     { path: 'missions', component: __WEBPACK_IMPORTED_MODULE_9__mission_list_missions_component__["a" /* MissionsComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_auth_auth_guard__["a" /* AuthGuard */]] },
     { path: 'missions/:id', component: __WEBPACK_IMPORTED_MODULE_10__mission_edit_mission_component__["a" /* MissionComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_auth_auth_guard__["a" /* AuthGuard */]] },
     { path: 'activites', component: __WEBPACK_IMPORTED_MODULE_17__activite_activite_component__["a" /* ActiviteComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_auth_auth_guard__["a" /* AuthGuard */]] },
+    { path: 'pilotage', component: __WEBPACK_IMPORTED_MODULE_18__pilotage_pilotage_component__["a" /* PilotageComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_auth_auth_guard__["a" /* AuthGuard */]] },
     { path: 'collaborateurs', component: __WEBPACK_IMPORTED_MODULE_14__collaborateur_list_collaborateurs_component__["a" /* CollaborateursComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_auth_auth_guard__["a" /* AuthGuard */]] },
     { path: 'collaborateurs/:id', component: __WEBPACK_IMPORTED_MODULE_13__collaborateur_edit_collaborateur_component__["a" /* CollaborateurComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_auth_auth_guard__["a" /* AuthGuard */]] },
     { path: 'prospections', component: __WEBPACK_IMPORTED_MODULE_15__prospection_list_prospections_component__["a" /* ProspectionsComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_auth_auth_guard__["a" /* AuthGuard */]] },
@@ -544,35 +543,46 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__contact_edit_contact_component__ = __webpack_require__("../../../../../src/app/contact/edit/contact.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__swimlane_ngx_datatable__ = __webpack_require__("../../../../@swimlane/ngx-datatable/release/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__swimlane_ngx_datatable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_17__swimlane_ngx_datatable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__widgets_widgets_module__ = __webpack_require__("../../../../../src/app/widgets/widgets.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__angular_platform_browser_animations__ = __webpack_require__("../../../platform-browser/esm5/animations.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__agm_core__ = __webpack_require__("../../../../@agm/core/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_pdf_generator_pdf_generator_service__ = __webpack_require__("../../../../../src/app/services/pdf-generator/pdf-generator.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_google_place_service_google_place_service__ = __webpack_require__("../../../../../src/app/services/google-place-service/google-place.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__directives_google_place_directive__ = __webpack_require__("../../../../../src/app/directives/google-place.directive.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__organisme_card_organisme_card_component__ = __webpack_require__("../../../../../src/app/organisme/card/organisme-card.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__parametres_list_parametres_component__ = __webpack_require__("../../../../../src/app/parametres/list/parametres.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__pipes_capitalize_camel_pipe__ = __webpack_require__("../../../../../src/app/pipes/capitalize-camel.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__parametres_edit_parametre_component__ = __webpack_require__("../../../../../src/app/parametres/edit/parametre.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pipes_liens_organisme_pipe__ = __webpack_require__("../../../../../src/app/pipes/liens-organisme.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pipes_liens_organisme_ville_pipe__ = __webpack_require__("../../../../../src/app/pipes/liens-organisme-ville.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__mission_list_missions_component__ = __webpack_require__("../../../../../src/app/mission/list/missions.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__mission_edit_mission_component__ = __webpack_require__("../../../../../src/app/mission/edit/mission.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__collaborateur_edit_collaborateur_component__ = __webpack_require__("../../../../../src/app/collaborateur/edit/collaborateur.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__collaborateur_list_collaborateurs_component__ = __webpack_require__("../../../../../src/app/collaborateur/list/collaborateurs.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__collaborateur_card_collaborateur_card_component__ = __webpack_require__("../../../../../src/app/collaborateur/card/collaborateur-card.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__prospection_list_prospections_component__ = __webpack_require__("../../../../../src/app/prospection/list/prospections.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__prospection_edit_prospection_component__ = __webpack_require__("../../../../../src/app/prospection/edit/prospection.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__auth_forgot_password_forgot_password_component__ = __webpack_require__("../../../../../src/app/auth/forgot-password/forgot-password.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__activite_activite_component__ = __webpack_require__("../../../../../src/app/activite/activite.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__ngx_loading_bar_core__ = __webpack_require__("../../../../@ngx-loading-bar/core/esm5/ngx-loading-bar-core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__swimlane_ngx_charts__ = __webpack_require__("../../../../@swimlane/ngx-charts/release/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__swimlane_ngx_charts___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_18__swimlane_ngx_charts__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__widgets_widgets_module__ = __webpack_require__("../../../../../src/app/widgets/widgets.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__angular_platform_browser_animations__ = __webpack_require__("../../../platform-browser/esm5/animations.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__agm_core__ = __webpack_require__("../../../../@agm/core/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_pdf_generator_pdf_generator_service__ = __webpack_require__("../../../../../src/app/services/pdf-generator/pdf-generator.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__services_google_place_service_google_place_service__ = __webpack_require__("../../../../../src/app/services/google-place-service/google-place.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__directives_google_place_directive__ = __webpack_require__("../../../../../src/app/directives/google-place.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__organisme_card_organisme_card_component__ = __webpack_require__("../../../../../src/app/organisme/card/organisme-card.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__parametres_list_parametres_component__ = __webpack_require__("../../../../../src/app/parametres/list/parametres.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__pipes_capitalize_camel_pipe__ = __webpack_require__("../../../../../src/app/pipes/capitalize-camel.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__parametres_edit_parametre_component__ = __webpack_require__("../../../../../src/app/parametres/edit/parametre.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pipes_liens_organisme_pipe__ = __webpack_require__("../../../../../src/app/pipes/liens-organisme.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__pipes_liens_organisme_ville_pipe__ = __webpack_require__("../../../../../src/app/pipes/liens-organisme-ville.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__mission_list_missions_component__ = __webpack_require__("../../../../../src/app/mission/list/missions.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__mission_edit_mission_component__ = __webpack_require__("../../../../../src/app/mission/edit/mission.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__collaborateur_edit_collaborateur_component__ = __webpack_require__("../../../../../src/app/collaborateur/edit/collaborateur.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__collaborateur_list_collaborateurs_component__ = __webpack_require__("../../../../../src/app/collaborateur/list/collaborateurs.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__collaborateur_card_collaborateur_card_component__ = __webpack_require__("../../../../../src/app/collaborateur/card/collaborateur-card.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__prospection_list_prospections_component__ = __webpack_require__("../../../../../src/app/prospection/list/prospections.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__prospection_edit_prospection_component__ = __webpack_require__("../../../../../src/app/prospection/edit/prospection.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__auth_forgot_password_forgot_password_component__ = __webpack_require__("../../../../../src/app/auth/forgot-password/forgot-password.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__activite_activite_component__ = __webpack_require__("../../../../../src/app/activite/activite.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__ngx_loading_bar_core__ = __webpack_require__("../../../../@ngx-loading-bar/core/esm5/ngx-loading-bar-core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__pilotage_pilotage_component__ = __webpack_require__("../../../../../src/app/pilotage/pilotage.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__pilotage_charts_chart_secteur_activite_chart_secteur_activite_component__ = __webpack_require__("../../../../../src/app/pilotage/charts/chart-secteur-activite/chart-secteur-activite.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__pilotage_charts_chart_missions_chart_missions_component__ = __webpack_require__("../../../../../src/app/pilotage/charts/chart-missions/chart-missions.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__pilotage_charts_chart_recherche_chart_recherche_component__ = __webpack_require__("../../../../../src/app/pilotage/charts/chart-recherche/chart-recherche.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
+
+
 
 
 
@@ -628,22 +638,26 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_14__organisme_edit_organisme_component__["a" /* OrganismeComponent */],
                 __WEBPACK_IMPORTED_MODULE_16__contact_edit_contact_component__["a" /* ContactComponent */],
                 __WEBPACK_IMPORTED_MODULE_15__contact_list_contacts_component__["a" /* ContactsComponent */],
-                __WEBPACK_IMPORTED_MODULE_24__directives_google_place_directive__["a" /* GooglePlaceDirective */],
-                __WEBPACK_IMPORTED_MODULE_25__organisme_card_organisme_card_component__["a" /* OrganismeCardComponent */],
-                __WEBPACK_IMPORTED_MODULE_26__parametres_list_parametres_component__["a" /* ParametresComponent */],
-                __WEBPACK_IMPORTED_MODULE_27__pipes_capitalize_camel_pipe__["a" /* CapitalizeCamelPipe */],
-                __WEBPACK_IMPORTED_MODULE_28__parametres_edit_parametre_component__["a" /* ParametreComponent */],
-                __WEBPACK_IMPORTED_MODULE_29__pipes_liens_organisme_pipe__["a" /* LiensOrganismePipe */],
-                __WEBPACK_IMPORTED_MODULE_30__pipes_liens_organisme_ville_pipe__["a" /* LiensOrganismeVillePipe */],
-                __WEBPACK_IMPORTED_MODULE_31__mission_list_missions_component__["a" /* MissionsComponent */],
-                __WEBPACK_IMPORTED_MODULE_32__mission_edit_mission_component__["a" /* MissionComponent */],
-                __WEBPACK_IMPORTED_MODULE_33__collaborateur_edit_collaborateur_component__["a" /* CollaborateurComponent */],
-                __WEBPACK_IMPORTED_MODULE_34__collaborateur_list_collaborateurs_component__["a" /* CollaborateursComponent */],
-                __WEBPACK_IMPORTED_MODULE_35__collaborateur_card_collaborateur_card_component__["a" /* CollaborateurCardComponent */],
-                __WEBPACK_IMPORTED_MODULE_36__prospection_list_prospections_component__["a" /* ProspectionsComponent */],
-                __WEBPACK_IMPORTED_MODULE_37__prospection_edit_prospection_component__["a" /* ProspectionComponent */],
-                __WEBPACK_IMPORTED_MODULE_38__auth_forgot_password_forgot_password_component__["a" /* ForgotPasswordComponent */],
-                __WEBPACK_IMPORTED_MODULE_39__activite_activite_component__["a" /* ActiviteComponent */],
+                __WEBPACK_IMPORTED_MODULE_25__directives_google_place_directive__["a" /* GooglePlaceDirective */],
+                __WEBPACK_IMPORTED_MODULE_26__organisme_card_organisme_card_component__["a" /* OrganismeCardComponent */],
+                __WEBPACK_IMPORTED_MODULE_27__parametres_list_parametres_component__["a" /* ParametresComponent */],
+                __WEBPACK_IMPORTED_MODULE_28__pipes_capitalize_camel_pipe__["a" /* CapitalizeCamelPipe */],
+                __WEBPACK_IMPORTED_MODULE_29__parametres_edit_parametre_component__["a" /* ParametreComponent */],
+                __WEBPACK_IMPORTED_MODULE_30__pipes_liens_organisme_pipe__["a" /* LiensOrganismePipe */],
+                __WEBPACK_IMPORTED_MODULE_31__pipes_liens_organisme_ville_pipe__["a" /* LiensOrganismeVillePipe */],
+                __WEBPACK_IMPORTED_MODULE_32__mission_list_missions_component__["a" /* MissionsComponent */],
+                __WEBPACK_IMPORTED_MODULE_33__mission_edit_mission_component__["a" /* MissionComponent */],
+                __WEBPACK_IMPORTED_MODULE_34__collaborateur_edit_collaborateur_component__["a" /* CollaborateurComponent */],
+                __WEBPACK_IMPORTED_MODULE_35__collaborateur_list_collaborateurs_component__["a" /* CollaborateursComponent */],
+                __WEBPACK_IMPORTED_MODULE_36__collaborateur_card_collaborateur_card_component__["a" /* CollaborateurCardComponent */],
+                __WEBPACK_IMPORTED_MODULE_37__prospection_list_prospections_component__["a" /* ProspectionsComponent */],
+                __WEBPACK_IMPORTED_MODULE_38__prospection_edit_prospection_component__["a" /* ProspectionComponent */],
+                __WEBPACK_IMPORTED_MODULE_39__auth_forgot_password_forgot_password_component__["a" /* ForgotPasswordComponent */],
+                __WEBPACK_IMPORTED_MODULE_40__activite_activite_component__["a" /* ActiviteComponent */],
+                __WEBPACK_IMPORTED_MODULE_42__pilotage_pilotage_component__["a" /* PilotageComponent */],
+                __WEBPACK_IMPORTED_MODULE_43__pilotage_charts_chart_secteur_activite_chart_secteur_activite_component__["a" /* ChartSecteurActiviteComponent */],
+                __WEBPACK_IMPORTED_MODULE_44__pilotage_charts_chart_missions_chart_missions_component__["a" /* ChartMissionsComponent */],
+                __WEBPACK_IMPORTED_MODULE_45__pilotage_charts_chart_recherche_chart_recherche_component__["a" /* ChartRechercheComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
@@ -653,22 +667,23 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_11__app_routing_module__["a" /* AppRoutingModule */],
                 __WEBPACK_IMPORTED_MODULE_12__ng_bootstrap_ng_bootstrap__["a" /* NgbModule */],
                 __WEBPACK_IMPORTED_MODULE_17__swimlane_ngx_datatable__["NgxDatatableModule"],
-                __WEBPACK_IMPORTED_MODULE_19__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-                __WEBPACK_IMPORTED_MODULE_18__widgets_widgets_module__["a" /* WidgetsModule */],
-                __WEBPACK_IMPORTED_MODULE_20__agm_core__["a" /* AgmCoreModule */].forRoot({
+                __WEBPACK_IMPORTED_MODULE_18__swimlane_ngx_charts__["NgxChartsModule"],
+                __WEBPACK_IMPORTED_MODULE_20__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+                __WEBPACK_IMPORTED_MODULE_19__widgets_widgets_module__["a" /* WidgetsModule */],
+                __WEBPACK_IMPORTED_MODULE_21__agm_core__["a" /* AgmCoreModule */].forRoot({
                     apiKey: 'AIzaSyByAVVURZudjBg5ncvzbjlDOqNz02ZwIw0',
                     libraries: ["places"]
                 }),
-                __WEBPACK_IMPORTED_MODULE_40__ngx_loading_bar_core__["a" /* LoadingBarModule */].forRoot()
+                __WEBPACK_IMPORTED_MODULE_41__ngx_loading_bar_core__["a" /* LoadingBarModule */].forRoot()
             ],
             providers: [
                 __WEBPACK_IMPORTED_MODULE_6__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */],
                 __WEBPACK_IMPORTED_MODULE_7__services_auth_auth_service__["a" /* AuthService */],
                 __WEBPACK_IMPORTED_MODULE_8__services_auth_auth_guard__["a" /* AuthGuard */],
-                __WEBPACK_IMPORTED_MODULE_23__services_google_place_service_google_place_service__["a" /* GooglePlaceService */],
+                __WEBPACK_IMPORTED_MODULE_24__services_google_place_service_google_place_service__["a" /* GooglePlaceService */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_common__["DatePipe"],
-                __WEBPACK_IMPORTED_MODULE_22__services_pdf_generator_pdf_generator_service__["a" /* PdfGeneratorService */],
-                __WEBPACK_IMPORTED_MODULE_21__services_event_service_event_service__["a" /* EventService */]
+                __WEBPACK_IMPORTED_MODULE_23__services_pdf_generator_pdf_generator_service__["a" /* PdfGeneratorService */],
+                __WEBPACK_IMPORTED_MODULE_22__services_event_service_event_service__["a" /* EventService */]
             ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
         })
@@ -1030,7 +1045,7 @@ var CollaborateurComponent = /** @class */ (function () {
         this.createForm = false;
         this.collaborateur = new __WEBPACK_IMPORTED_MODULE_2__model__["e" /* Collaborateur */]();
         this.civilites = [];
-        this.roles = Object.keys(__WEBPACK_IMPORTED_MODULE_2__model__["r" /* Role */]).filter(function (f) { return isNaN(Number(f)); });
+        this.roles = Object.keys(__WEBPACK_IMPORTED_MODULE_2__model__["s" /* Role */]).filter(function (f) { return isNaN(Number(f)); });
         this.isAdmin$ = this.authService.isAdmin;
         this.form = this.fb.group({
             nom: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required],
@@ -1093,7 +1108,7 @@ var CollaborateurComponent = /** @class */ (function () {
         if (this.place) {
             //set latitude, longitude and zoom
             var adresse = new __WEBPACK_IMPORTED_MODULE_2__model__["d" /* Adresse */]();
-            adresse.location = new __WEBPACK_IMPORTED_MODULE_2__model__["l" /* Location */]();
+            adresse.location = new __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Location */]();
             adresse.location.latitude = this.googlePlaceService.latitude(this.place);
             adresse.location.longitude = this.googlePlaceService.longitude(this.place);
             adresse.numero = this.googlePlaceService.street_number(this.place);
@@ -1107,7 +1122,7 @@ var CollaborateurComponent = /** @class */ (function () {
             this.form.get('adresse').patchValue(adresse);
         }
         else {
-            this.form.get('adresse').get('location').setValue(new __WEBPACK_IMPORTED_MODULE_2__model__["l" /* Location */]());
+            this.form.get('adresse').get('location').setValue(new __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Location */]());
         }
     };
     CollaborateurComponent.prototype.onSubmit = function () {
@@ -1489,7 +1504,7 @@ var ContactComponent = /** @class */ (function () {
         });
     };
     ContactComponent.prototype.addLien = function () {
-        this.liens.push(this.createLien(new __WEBPACK_IMPORTED_MODULE_2__model__["k" /* LienOrganisme */]()));
+        this.liens.push(this.createLien(new __WEBPACK_IMPORTED_MODULE_2__model__["l" /* LienOrganisme */]()));
     };
     ContactComponent.prototype.removeLien = function (index) {
         this.liens.removeAt(index);
@@ -1902,11 +1917,11 @@ var MissionComponent = /** @class */ (function () {
         this.editForm = false;
         this.createForm = false;
         this.editSyntheseForm = false;
-        this.mission = new __WEBPACK_IMPORTED_MODULE_1__model__["m" /* Mission */]();
+        this.mission = new __WEBPACK_IMPORTED_MODULE_1__model__["n" /* Mission */]();
         this.collaborateurs = [];
         this.contacts = [];
         this.organismes = [];
-        this.parametres = new __WEBPACK_IMPORTED_MODULE_1__model__["o" /* Parametres */]();
+        this.parametres = new __WEBPACK_IMPORTED_MODULE_1__model__["p" /* Parametres */]();
         this.missions = [];
         this.rows = [];
         this.chargeTotal = 0;
@@ -1974,7 +1989,7 @@ var MissionComponent = /** @class */ (function () {
             else {
                 _this.loadMission(id);
                 _this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
-                    if (item.type === __WEBPACK_IMPORTED_MODULE_1__model__["m" /* Mission */].name && item.ids.indexOf(id) != -1) {
+                    if (item.type === __WEBPACK_IMPORTED_MODULE_1__model__["n" /* Mission */].name && item.ids.indexOf(id) != -1) {
                         if (_this.editForm) {
                             __WEBPACK_IMPORTED_MODULE_6_alertifyjs_build_alertify_js__["warning"]("La mission a été modifiée par un autre utilisateur, si vous enregistrez vos modifications, vous écraserez les siennes");
                         }
@@ -2173,7 +2188,7 @@ var MissionComponent = /** @class */ (function () {
         });
     };
     MissionComponent.prototype.addLienCollaborateur = function () {
-        this.liensCollaborateur.push(this.createLienCollaborateur(new __WEBPACK_IMPORTED_MODULE_1__model__["j" /* LienMissionCollaborateur */]()));
+        this.liensCollaborateur.push(this.createLienCollaborateur(new __WEBPACK_IMPORTED_MODULE_1__model__["k" /* LienMissionCollaborateur */]()));
     };
     MissionComponent.prototype.removeLienCollaborateur = function (index) {
         this.liensCollaborateur.removeAt(index);
@@ -2187,7 +2202,7 @@ var MissionComponent = /** @class */ (function () {
         });
     };
     MissionComponent.prototype.addLienMission = function () {
-        this.liensMission.push(this.createLienMission(new __WEBPACK_IMPORTED_MODULE_1__model__["i" /* LienEntreMission */]()));
+        this.liensMission.push(this.createLienMission(new __WEBPACK_IMPORTED_MODULE_1__model__["j" /* LienEntreMission */]()));
     };
     MissionComponent.prototype.removeLienMission = function (index) {
         this.liensMission.removeAt(index);
@@ -2336,7 +2351,7 @@ var MissionsComponent = /** @class */ (function () {
         var _this = this;
         this.loadData();
         this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
-            if (item.type === __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Mission */].name) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Mission */].name) {
                 _this.loadData();
             }
         });
@@ -2406,28 +2421,29 @@ var MissionsComponent = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return Role; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return Role; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return Collaborateur; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return Contact; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return LienOrganisme; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return Location; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return LienOrganisme; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return Location; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return Adresse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return Organisme; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return Organisme; });
 /* unused harmony export Acknowledge */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return Workpackage; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return Parametres; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return Workpackage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return Parametres; });
 /* unused harmony export MissionSynthese */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return Mission; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return LienMissionCollaborateur; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return LienEntreMission; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return Prospection; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return Mission; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return LienMissionCollaborateur; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return LienEntreMission; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return Prospection; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ActionStatut; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Action; });
 /* unused harmony export Charge */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return Imputation; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return Activite; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return ImputationCube; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return DocumentSyncEvent; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return PouchDbEvent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return PouchDbEvent; });
 var Role;
 (function (Role) {
     Role["Administrateur"] = "Administrateur";
@@ -2595,6 +2611,13 @@ var Activite = /** @class */ (function () {
     return Activite;
 }());
 
+var ImputationCube = /** @class */ (function () {
+    function ImputationCube() {
+        this.charge = 0;
+    }
+    return ImputationCube;
+}());
+
 var DocumentSyncEvent = /** @class */ (function () {
     function DocumentSyncEvent() {
     }
@@ -2662,7 +2685,7 @@ var OrganismeCardComponent = /** @class */ (function () {
     function OrganismeCardComponent(pouchdbservice, sanitizer) {
         this.pouchdbservice = pouchdbservice;
         this.sanitizer = sanitizer;
-        this._organisme = new __WEBPACK_IMPORTED_MODULE_1__model__["n" /* Organisme */]();
+        this._organisme = new __WEBPACK_IMPORTED_MODULE_1__model__["o" /* Organisme */]();
     }
     Object.defineProperty(OrganismeCardComponent.prototype, "organisme", {
         set: function (value) {
@@ -2690,8 +2713,8 @@ var OrganismeCardComponent = /** @class */ (function () {
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__model__["n" /* Organisme */]),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__model__["n" /* Organisme */]])
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__model__["o" /* Organisme */]),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__model__["o" /* Organisme */]])
     ], OrganismeCardComponent.prototype, "organisme", null);
     OrganismeCardComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -2776,7 +2799,7 @@ var OrganismeComponent = /** @class */ (function () {
         this.formSubmitAttempt = false;
         this.editForm = false;
         this.createForm = false;
-        this.organisme = new __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Organisme */]();
+        this.organisme = new __WEBPACK_IMPORTED_MODULE_2__model__["o" /* Organisme */]();
         this.typeOrganisme = [];
         this.form = this.fb.group({
             nom: ['', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required],
@@ -2839,7 +2862,7 @@ var OrganismeComponent = /** @class */ (function () {
         if (this.place) {
             //set latitude, longitude and zoom
             var adresse = new __WEBPACK_IMPORTED_MODULE_2__model__["d" /* Adresse */]();
-            adresse.location = new __WEBPACK_IMPORTED_MODULE_2__model__["l" /* Location */]();
+            adresse.location = new __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Location */]();
             adresse.location.latitude = this.googlePlaceService.latitude(this.place);
             adresse.location.longitude = this.googlePlaceService.longitude(this.place);
             adresse.numero = this.googlePlaceService.street_number(this.place);
@@ -2854,7 +2877,7 @@ var OrganismeComponent = /** @class */ (function () {
             this.form.get('adresse').patchValue(adresse);
         }
         else {
-            this.form.get('adresse').get('location').setValue(new __WEBPACK_IMPORTED_MODULE_2__model__["l" /* Location */]());
+            this.form.get('adresse').get('location').setValue(new __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Location */]());
         }
     };
     OrganismeComponent.prototype.onSubmit = function () {
@@ -3003,7 +3026,7 @@ var OrganismesComponent = /** @class */ (function () {
         var _this = this;
         this.loadData();
         this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
-            if (item.type === __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Organisme */].name) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_2__model__["o" /* Organisme */].name) {
                 _this.loadData();
             }
         });
@@ -3165,7 +3188,7 @@ var ParametreComponent = /** @class */ (function () {
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__model__["o" /* Parametres */])
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__model__["p" /* Parametres */])
     ], ParametreComponent.prototype, "parametres", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
@@ -3249,14 +3272,14 @@ var ParametresComponent = /** @class */ (function () {
         this.eventService = eventService;
         this.pouchdbservice = pouchdbservice;
         this.editForm = false;
-        this.parametres = new __WEBPACK_IMPORTED_MODULE_1__model__["o" /* Parametres */]();
+        this.parametres = new __WEBPACK_IMPORTED_MODULE_1__model__["p" /* Parametres */]();
         this.listesDeChoix = [];
     }
     ParametresComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.loadData();
         this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
-            if (item.type === __WEBPACK_IMPORTED_MODULE_1__model__["o" /* Parametres */].name) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_1__model__["p" /* Parametres */].name) {
                 _this.loadData();
             }
         });
@@ -3302,7 +3325,7 @@ var ParametresComponent = /** @class */ (function () {
                     var line = data_1[_i];
                     if (line.length >= 2) {
                         if (line[0]) {
-                            var workpackage = new __WEBPACK_IMPORTED_MODULE_1__model__["s" /* Workpackage */]();
+                            var workpackage = new __WEBPACK_IMPORTED_MODULE_1__model__["t" /* Workpackage */]();
                             workpackage.nom = line[0];
                             workpackage.numero = line[0].substring(2, line[0].indexOf(":"));
                             workpackage.sousWorkpackages = new Array();
@@ -3310,7 +3333,7 @@ var ParametresComponent = /** @class */ (function () {
                         }
                         if (line[1]) {
                             var subKey = line[1].substring(0, line[1].indexOf("."));
-                            var sousWorkpackage = new __WEBPACK_IMPORTED_MODULE_1__model__["s" /* Workpackage */]();
+                            var sousWorkpackage = new __WEBPACK_IMPORTED_MODULE_1__model__["t" /* Workpackage */]();
                             sousWorkpackage.nom = line[1];
                             sousWorkpackage.numero = line[1].substring(0, line[1].indexOf(" "));
                             for (var _a = 0, programmes_1 = programmes; _a < programmes_1.length; _a++) {
@@ -3352,6 +3375,399 @@ var ParametresComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__services_event_service_event_service__["a" /* EventService */], __WEBPACK_IMPORTED_MODULE_2__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */]])
     ], ParametresComponent);
     return ParametresComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/pilotage/charts/chart-missions/chart-missions.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"card\">\n\n    <div class=\"card-header\">\n        <h4>Missions</h4>\n    </div>\n    <div class=\"card-body\">\n        <ngx-charts-bar-vertical\n            [view]=\"[600, 300]\"\n            [results]=\"dataFiltered\"\n            [yAxisLabel]=\"'Nb jours'\"\n            [showYAxisLabel]=\"true\"\n            [xAxis]=\"true\"\n            [yAxis]=\"true\">\n    </ngx-charts-bar-vertical>\n</div>\n</div>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pilotage/charts/chart-missions/chart-missions.component.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pilotage/charts/chart-missions/chart-missions.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChartMissionsComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__model__ = __webpack_require__("../../../../../src/app/model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_d3__ = __webpack_require__("../../../../d3/index.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var ChartMissionsComponent = /** @class */ (function () {
+    function ChartMissionsComponent() {
+        this._datas = [];
+    }
+    Object.defineProperty(ChartMissionsComponent.prototype, "datas", {
+        set: function (values) {
+            this._datas = values;
+            this.refreshData();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ChartMissionsComponent.prototype.ngOnInit = function () {
+        this.refreshData();
+    };
+    ChartMissionsComponent.prototype.refreshData = function () {
+        var self = this;
+        var datasWithFilter = this._datas.filter(function (d) { return d.entiteLienType === __WEBPACK_IMPORTED_MODULE_1__model__["n" /* Mission */].name; });
+        this.dataFiltered = __WEBPACK_IMPORTED_MODULE_2_d3__["a" /* nest */]()
+            .key(function (d) { return d.entiteLienCode; })
+            .rollup(function (v) { return __WEBPACK_IMPORTED_MODULE_2_d3__["b" /* sum */](v, function (d) { return d.charge; }); })
+            .entries(datasWithFilter)
+            .map(function (group) {
+            return {
+                name: group.key,
+                value: group.value
+            };
+        });
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
+    ], ChartMissionsComponent.prototype, "datas", null);
+    ChartMissionsComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-chart-missions',
+            template: __webpack_require__("../../../../../src/app/pilotage/charts/chart-missions/chart-missions.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/pilotage/charts/chart-missions/chart-missions.component.scss")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], ChartMissionsComponent);
+    return ChartMissionsComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/pilotage/charts/chart-recherche/chart-recherche.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"card\">\n\n    <div class=\"card-header\">\n        <h4>Recherche</h4>\n    </div>\n    <div class=\"card-body\">\n\n        <ngx-charts-bar-horizontal\n            [view]=\"[400, 300]\"\n            [results]=\"dataFiltered\"\n            [xAxisLabel]=\"'Nb jours'\"\n            [showXAxisLabel]=\"true\"\n            [xAxis]=\"true\"\n            [yAxis]=\"true\">\n    </ngx-charts-bar-horizontal>\n</div>\n</div>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pilotage/charts/chart-recherche/chart-recherche.component.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pilotage/charts/chart-recherche/chart-recherche.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChartRechercheComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_d3__ = __webpack_require__("../../../../d3/index.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ChartRechercheComponent = /** @class */ (function () {
+    function ChartRechercheComponent() {
+        this._datas = [];
+    }
+    Object.defineProperty(ChartRechercheComponent.prototype, "datas", {
+        set: function (values) {
+            this._datas = values;
+            this.refreshData();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ChartRechercheComponent.prototype.ngOnInit = function () {
+        this.refreshData();
+    };
+    ChartRechercheComponent.prototype.refreshData = function () {
+        var self = this;
+        var datasWithFilter = this._datas.filter(function (d) { return d.activite === "Recherche"; });
+        this.dataFiltered = __WEBPACK_IMPORTED_MODULE_1_d3__["a" /* nest */]()
+            .key(function (d) { return d.label; })
+            .rollup(function (v) { return __WEBPACK_IMPORTED_MODULE_1_d3__["b" /* sum */](v, function (d) { return d.charge; }); })
+            .entries(datasWithFilter)
+            .map(function (group) {
+            return {
+                name: group.key,
+                value: group.value
+            };
+        });
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
+    ], ChartRechercheComponent.prototype, "datas", null);
+    ChartRechercheComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-chart-recherche',
+            template: __webpack_require__("../../../../../src/app/pilotage/charts/chart-recherche/chart-recherche.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/pilotage/charts/chart-recherche/chart-recherche.component.scss")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], ChartRechercheComponent);
+    return ChartRechercheComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/pilotage/charts/chart-secteur-activite/chart-secteur-activite.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"card\">\n\n    <div class=\"card-header\">\n        <h4>Secteur d'activités</h4>\n    </div>\n    <div class=\"card-body\">\n        <ngx-charts-pie-chart\n            [results]=\"dataFiltered\"\n            [labels]=\"true\"\n            [trimLabels]=\"false\">\n    </ngx-charts-pie-chart>\n</div>\n</div>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pilotage/charts/chart-secteur-activite/chart-secteur-activite.component.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pilotage/charts/chart-secteur-activite/chart-secteur-activite.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChartSecteurActiviteComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_d3__ = __webpack_require__("../../../../d3/index.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ChartSecteurActiviteComponent = /** @class */ (function () {
+    function ChartSecteurActiviteComponent() {
+        this._datas = [];
+    }
+    Object.defineProperty(ChartSecteurActiviteComponent.prototype, "datas", {
+        set: function (values) {
+            this._datas = values;
+            this.refreshData();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ChartSecteurActiviteComponent.prototype.ngOnInit = function () {
+    };
+    ChartSecteurActiviteComponent.prototype.refreshData = function () {
+        this.dataFiltered = __WEBPACK_IMPORTED_MODULE_1_d3__["a" /* nest */]()
+            .key(function (d) { return d.activite; })
+            .rollup(function (v) { return __WEBPACK_IMPORTED_MODULE_1_d3__["b" /* sum */](v, function (d) { return d.charge; }); })
+            .entries(this._datas)
+            .map(function (group) {
+            return {
+                name: group.key,
+                value: group.value
+            };
+        });
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
+    ], ChartSecteurActiviteComponent.prototype, "datas", null);
+    ChartSecteurActiviteComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-chart-secteur-activite',
+            template: __webpack_require__("../../../../../src/app/pilotage/charts/chart-secteur-activite/chart-secteur-activite.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/pilotage/charts/chart-secteur-activite/chart-secteur-activite.component.scss")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], ChartSecteurActiviteComponent);
+    return ChartSecteurActiviteComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/pilotage/pilotage.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"card\">\n    <div class=\"card-header\">\n        <h3>Pilotage</h3>\n    </div>\n    <div class=\"card-body\">\n        <div class=\"d-flex justify-content-between pb-2 form-inline\">\n            <div class=\"d-inline-flex\">\n                <label>Année : </label>\n                <select class=\"form-control custom-select custom-select-sm\" [(ngModel)]=\"selectedYear\" (change)=\"refreshData()\">\n                    <option  [ngValue]=\"actualYear-1\">{{actualYear-1}}</option>\n                    <option  [ngValue]=\"actualYear\">{{actualYear}}</option>\n                </select>\n            </div>\n            <div class=\"d-inline-flex\">\n                <label>Mois : </label>\n                <select class=\"form-control custom-select custom-select-sm\" [(ngModel)]=\"selectedMonth\" (change)=\"refreshData()\">\n                    <option value=\"-1\">Tous</option>\n                    <option *ngFor=\"let month of months; let i = index\" [ngValue]=\"i\">{{month}}</option>\n                </select>\n            </div>\n            <div class=\"d-inline-flex\">\n                <label>Collaborateur : </label>\n                <select class=\"form-control custom-select custom-select-sm\" [(ngModel)]=\"selectedCollaborateur\" (change)=\"refreshData()\">\n                    <option value=\"\">Tous</option>\n                    <option *ngFor=\"let collaborateur of collaborateurs\" [ngValue]=\"collaborateur._id\">{{collaborateur.nom+ \" \" + collaborateur.prenom}}</option>\n                </select>\n            </div>\n        </div>\n\n\n\n        <div class=\"row\">\n            <div class=\"col-md-6\">\n                <app-chart-secteur-activite [datas]=\"rows\"></app-chart-secteur-activite>\n            </div>\n            <div class=\"col-md-6\">\n                <app-chart-recherche [datas]=\"rows\"></app-chart-recherche>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-md-12\">\n                <app-chart-missions [datas]=\"rows\"></app-chart-missions>\n            </div>\n        </div>\n    </div>\n\n    <div class=\"card-body\">\n\n        <ngx-datatable\n            #table\n            class=\"data-table\"\n            [rows]=\"rows\"\n            [columnMode]=\"'flex'\"\n            [columns]=\"columns\"\n            [headerHeight]=\"50\"\n            [footerHeight]=\"50\"\n            [rowHeight]=\"'auto'\"\n            [limit]=\"20\"\n            [reorderable]=\"false\"\n            [loadingIndicator]=\"loadingIndicator\"\n            [sorts]=\"[{prop: 'date', dir: 'asc'}]\">\n\n            <ngx-datatable-footer>\n                <ng-template \n                    ngx-datatable-footer-template \n                    let-rowCount=\"rowCount\"\n                    let-pageSize=\"pageSize\"\n                    let-curPage=\"curPage\"\n                    let-offset=\"offset\">\n                    <div style=\"padding: 5px 10px\">\n                        <div>\n                            Nombre total : {{rowCount}}\n                        </div>\n                    </div>\n                    <datatable-pager\n                        [pagerLeftArrowIcon]=\"'datatable-icon-left'\"\n                        [pagerRightArrowIcon]=\"'datatable-icon-right'\"\n                        [pagerPreviousIcon]=\"'datatable-icon-prev'\"\n                        [pagerNextIcon]=\"'datatable-icon-skip'\"\n                        [page]=\"curPage\"\n                        [size]=\"pageSize\"\n                        [count]=\"rowCount\"\n                        [hidden]=\"!((rowCount / pageSize) > 1)\"\n                        (change)=\"table.onFooterPage($event)\">\n                </datatable-pager>\n            </ng-template>\n        </ngx-datatable-footer>\n    </ngx-datatable>\n</div>\n\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/pilotage/pilotage.component.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/pilotage/pilotage.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PilotageComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__ = __webpack_require__("../../../../../src/app/services/pouchdb-service/pouchdb.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_alertifyjs_build_alertify_js__ = __webpack_require__("../../../../alertifyjs/build/alertify.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_alertifyjs_build_alertify_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_alertifyjs_build_alertify_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment__ = __webpack_require__("../../../../moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_moment__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var PilotageComponent = /** @class */ (function () {
+    function PilotageComponent(pouchdbservice) {
+        this.pouchdbservice = pouchdbservice;
+        this.datas = [];
+        this.rows = [];
+        this.months = Array.apply(0, Array(12)).map(function (_, i) { return __WEBPACK_IMPORTED_MODULE_3_moment__().month(i).format('MMMM'); });
+        this.selectedMonth = -1;
+        this.selectedYear = __WEBPACK_IMPORTED_MODULE_3_moment__().year();
+        this.selectedCollaborateur = "";
+        this.collaborateurs = new Array();
+        this.actualYear = __WEBPACK_IMPORTED_MODULE_3_moment__().year();
+        this.columns = [
+            { prop: 'annee', flexGrow: 1 },
+            { prop: 'mois', flexGrow: 1 },
+            { prop: 'semaine', flexGrow: 1 },
+            { prop: 'jour', flexGrow: 1 },
+            { prop: 'date', flexGrow: 2 },
+            { prop: 'collaborateurNom', flexGrow: 2 },
+            { prop: 'activite', flexGrow: 2 },
+            { prop: 'label', flexGrow: 2 },
+            { prop: 'entiteLienType', label: 'Type Entité', flexGrow: 2 },
+            { prop: 'entiteLienCode', label: 'Code Entité', flexGrow: 2 },
+            { prop: 'charge', flexGrow: 1 }
+        ];
+    }
+    PilotageComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.pouchdbservice.getImputationCube().subscribe(function (data) {
+            _this.datas = data;
+            _this.rows = data;
+        }, function (err) {
+            __WEBPACK_IMPORTED_MODULE_2_alertifyjs_build_alertify_js__["error"](err);
+        });
+        this.pouchdbservice.getCollaborateurs().subscribe(function (data) {
+            _this.collaborateurs = data;
+        }, function (err) {
+            __WEBPACK_IMPORTED_MODULE_2_alertifyjs_build_alertify_js__["error"](err);
+        });
+    };
+    PilotageComponent.prototype.updateFilter = function (event) {
+        this.table.offset = 0;
+    };
+    PilotageComponent.prototype.refreshData = function () {
+        var self = this;
+        this.rows = this.datas.filter(function (d) {
+            return d.annee === self.selectedYear
+                && (self.selectedMonth >= 0 ? d.mois === self.selectedMonth : true)
+                && (self.selectedCollaborateur ? d.collaborateurId === self.selectedCollaborateur : true);
+        });
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('table'),
+        __metadata("design:type", Object)
+    ], PilotageComponent.prototype, "table", void 0);
+    PilotageComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-pilotage',
+            template: __webpack_require__("../../../../../src/app/pilotage/pilotage.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/pilotage/pilotage.component.scss")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */]])
+    ], PilotageComponent);
+    return PilotageComponent;
 }());
 
 
@@ -3538,11 +3954,11 @@ var ProspectionComponent = /** @class */ (function () {
         this.formSubmitAttempt = false;
         this.editForm = false;
         this.createForm = false;
-        this.prospection = new __WEBPACK_IMPORTED_MODULE_2__model__["q" /* Prospection */]();
+        this.prospection = new __WEBPACK_IMPORTED_MODULE_2__model__["r" /* Prospection */]();
         this.collaborateurs = [];
         this.contacts = [];
         this.organismes = [];
-        this.parametres = new __WEBPACK_IMPORTED_MODULE_2__model__["o" /* Parametres */]();
+        this.parametres = new __WEBPACK_IMPORTED_MODULE_2__model__["p" /* Parametres */]();
         this.actions = [];
         this.form = this.fb.group({
             nom: ['', __WEBPACK_IMPORTED_MODULE_3__angular_forms__["g" /* Validators */].required],
@@ -3606,7 +4022,7 @@ var ProspectionComponent = /** @class */ (function () {
         }, function (err) {
             _this.errorMessage = err;
         });
-        this.pouchdbservice.getActions(id, __WEBPACK_IMPORTED_MODULE_2__model__["q" /* Prospection */].name).subscribe(function (data) {
+        this.pouchdbservice.getActions(id, __WEBPACK_IMPORTED_MODULE_2__model__["r" /* Prospection */].name).subscribe(function (data) {
             _this.actions = data;
         }, function (err) {
             _this.errorMessage = err;
@@ -3637,7 +4053,7 @@ var ProspectionComponent = /** @class */ (function () {
         var _this = this;
         if (this.form.valid && this.actionsForm.valid) {
             var oldStatut = this.prospection.statut;
-            var updatedProspection_1 = new __WEBPACK_IMPORTED_MODULE_2__model__["q" /* Prospection */]();
+            var updatedProspection_1 = new __WEBPACK_IMPORTED_MODULE_2__model__["r" /* Prospection */]();
             __WEBPACK_IMPORTED_MODULE_6_lodash__["assign"](updatedProspection_1, this.prospection);
             __WEBPACK_IMPORTED_MODULE_6_lodash__["merge"](updatedProspection_1, this.form.getRawValue());
             if (updatedProspection_1.contact && updatedProspection_1.contact._id) {
@@ -3681,7 +4097,7 @@ var ProspectionComponent = /** @class */ (function () {
     ProspectionComponent.prototype.saveActions = function (prospectionId, actionsToSave) {
         if (actionsToSave) {
             var _loop_1 = function (action) {
-                action.entiteLienType = __WEBPACK_IMPORTED_MODULE_2__model__["q" /* Prospection */].name;
+                action.entiteLienType = __WEBPACK_IMPORTED_MODULE_2__model__["r" /* Prospection */].name;
                 action.entiteLienId = prospectionId;
                 action.entiteLienNom = this_1.prospection.nom;
                 if (action['id']) {
@@ -3748,10 +4164,10 @@ var ProspectionComponent = /** @class */ (function () {
     };
     ProspectionComponent.prototype.createMission = function (prospection) {
         var _this = this;
-        var mission = new __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Mission */]();
+        var mission = new __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Mission */]();
         mission._id = null;
         mission._rev = null;
-        mission.type = __WEBPACK_IMPORTED_MODULE_2__model__["m" /* Mission */].name;
+        mission.type = __WEBPACK_IMPORTED_MODULE_2__model__["n" /* Mission */].name;
         mission.nom = "Mission créée à partir de la prospection : " + prospection.nom;
         mission.prospectionId = prospection._id;
         mission.contact = prospection.contact;
@@ -3888,7 +4304,7 @@ var ProspectionsComponent = /** @class */ (function () {
         this.currentYearFilter = new Date().getFullYear();
         this.currentTextFilter = "";
         this.currentStatutFilter = "";
-        this.parametres = new __WEBPACK_IMPORTED_MODULE_2__model__["o" /* Parametres */]();
+        this.parametres = new __WEBPACK_IMPORTED_MODULE_2__model__["p" /* Parametres */]();
         this.columns = [
             { prop: 'nom', flexGrow: 1 },
             { prop: 'contact.nom', name: 'Contact', flexGrow: 1 },
@@ -3903,7 +4319,7 @@ var ProspectionsComponent = /** @class */ (function () {
         var _this = this;
         this.loadData();
         this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
-            if (item.type === __WEBPACK_IMPORTED_MODULE_2__model__["q" /* Prospection */].name) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_2__model__["r" /* Prospection */].name) {
                 _this.loadData();
             }
         });
@@ -4080,7 +4496,7 @@ var AuthService = /** @class */ (function () {
             if (item.connected) {
                 _this.pouchdbService.getCollaborateurByLogin(_this._user.login).subscribe(function (collaborateur) {
                     _this._collaborateur.next(collaborateur);
-                    var isAdmin = collaborateur != null && collaborateur.role === __WEBPACK_IMPORTED_MODULE_4__model__["r" /* Role */].Administrateur;
+                    var isAdmin = collaborateur != null && collaborateur.role === __WEBPACK_IMPORTED_MODULE_4__model__["s" /* Role */].Administrateur;
                     _this.admin.next(isAdmin);
                     _this.loggedIn.next(true);
                     if (_this.router.url.indexOf("login") >= 0) {
@@ -4211,7 +4627,7 @@ var EventService = /** @class */ (function () {
     };
     EventService.prototype.emitPouchDbEvent = function (isConnected, message) {
         if (message === void 0) { message = null; }
-        var event = new __WEBPACK_IMPORTED_MODULE_1__model__["p" /* PouchDbEvent */]();
+        var event = new __WEBPACK_IMPORTED_MODULE_1__model__["q" /* PouchDbEvent */]();
         event.connected = isConnected;
         event.message = message;
         this.dispatcherPouchDb.emit(event);
@@ -4529,7 +4945,7 @@ var PdfGeneratorService = /** @class */ (function () {
                 ]
             }
         ];
-        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["n" /* Organisme */].name, content);
+        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["o" /* Organisme */].name, content);
     };
     PdfGeneratorService.prototype.generateMissionPdfAndOpen = function (mission) {
         var title = mission.numFacture + " - " + mission.nom;
@@ -4659,7 +5075,7 @@ var PdfGeneratorService = /** @class */ (function () {
                 },
             ];
         }
-        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["m" /* Mission */].name, content);
+        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["n" /* Mission */].name, content);
     };
     PdfGeneratorService.prototype.generateProspectionPdfAndOpen = function (prospection) {
         var title = prospection.nom;
@@ -4741,7 +5157,7 @@ var PdfGeneratorService = /** @class */ (function () {
                 ]
             }
         ];
-        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["q" /* Prospection */].name, content);
+        this.generatePdfAndOpen(title, __WEBPACK_IMPORTED_MODULE_1__model__["r" /* Prospection */].name, content);
     };
     PdfGeneratorService.prototype.generatePdfAndOpen = function (title, headerTitle, content) {
         var data = JSON.stringify(content).replace(/(null|undefined)/gi, "-");
@@ -5087,6 +5503,8 @@ var PouchDbAdapter = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_lodash__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__event_service_event_service__ = __webpack_require__("../../../../../src/app/services/event-service/event.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_moment__ = __webpack_require__("../../../../moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_moment__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5106,6 +5524,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var REMOTE_COUCH_DB_ADDRESS = __WEBPACK_IMPORTED_MODULE_7__environments_environment__["a" /* environment */].couchdb_url;
 //const REMOTE_COUCH_DB_ADDRESS = 'http://login:password@104.155.22.221:5984/ellyx';
 //const REMOTE_COUCH_DB_ADDRESS = 'http://admin:password@localhost:5984/ellyx';
@@ -5118,7 +5537,7 @@ var PouchdbService = /** @class */ (function () {
         // URL of CouchDB (hardwired above)
         this.remoteCouchDBAddress = REMOTE_COUCH_DB_ADDRESS;
         this.eventService.getDocumentSyncEmitter().subscribe(function (item) {
-            if (item.type === __WEBPACK_IMPORTED_MODULE_4__model__["o" /* Parametres */].name) {
+            if (item.type === __WEBPACK_IMPORTED_MODULE_4__model__["p" /* Parametres */].name) {
                 _this._parametres = null;
             }
         });
@@ -5140,11 +5559,11 @@ var PouchdbService = /** @class */ (function () {
         return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["e" /* Collaborateur */].name);
     };
     PouchdbService.prototype.getMissions = function () {
-        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["m" /* Mission */].name);
+        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["n" /* Mission */].name);
     };
     PouchdbService.prototype.getMissionFormProspectionId = function (prospectionId) {
         return this._pouchDbAdapter.getDocsFromSelector({
-            selector: { type: __WEBPACK_IMPORTED_MODULE_4__model__["m" /* Mission */].name, prospectionId: prospectionId }
+            selector: { type: __WEBPACK_IMPORTED_MODULE_4__model__["n" /* Mission */].name, prospectionId: prospectionId }
         });
     };
     PouchdbService.prototype.getCollaborateurByLogin = function (login) {
@@ -5173,11 +5592,85 @@ var PouchdbService = /** @class */ (function () {
             }, function (err) { return observer.error(err); });
         });
     };
+    PouchdbService.prototype.getImputationCube = function () {
+        var _this = this;
+        var self = this;
+        return new __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */](function (observer) {
+            _this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["c" /* Activite */].name).subscribe(function (data) {
+                var result = new Array();
+                data.forEach(function (activite) {
+                    activite.missions.forEach(function (imputation) {
+                        var date = __WEBPACK_IMPORTED_MODULE_9_moment__(activite.date);
+                        imputation.charges.forEach(function (charge, i) {
+                            if (charge.value > 0) {
+                                result.push(self.createImputationCube(activite, imputation, null, charge, date, i));
+                            }
+                            date.add(1, 'days');
+                        });
+                        imputation.sousImputations.forEach(function (sousImputation, i) {
+                            var date = __WEBPACK_IMPORTED_MODULE_9_moment__(activite.date);
+                            imputation.charges.forEach(function (charge) {
+                                if (charge.value > 0) {
+                                    result.push(self.createImputationCube(activite, imputation, sousImputation, charge, date, i));
+                                }
+                                date.add(1, 'days');
+                            });
+                        });
+                    });
+                    activite.recherches.forEach(function (imputation) {
+                        var date = __WEBPACK_IMPORTED_MODULE_9_moment__(activite.date);
+                        imputation.charges.forEach(function (charge, i) {
+                            if (charge.value > 0) {
+                                result.push(self.createImputationCube(activite, imputation, null, charge, date, i));
+                            }
+                            date.add(1, 'days');
+                        });
+                    });
+                    activite.autres.forEach(function (imputation) {
+                        var date = __WEBPACK_IMPORTED_MODULE_9_moment__(activite.date);
+                        imputation.charges.forEach(function (charge, i) {
+                            if (charge.value > 0) {
+                                result.push(self.createImputationCube(activite, imputation, null, charge, date, i));
+                            }
+                            date.add(1, 'days');
+                        });
+                    });
+                });
+                observer.next(result);
+            }, function (err) { return observer.error(err); });
+        });
+    };
+    PouchdbService.prototype.createImputationCube = function (activite, imputation, sousImputation, charge, date, index) {
+        var impCube = new __WEBPACK_IMPORTED_MODULE_4__model__["i" /* ImputationCube */]();
+        impCube._id = activite._id;
+        impCube.semaine = activite.semaine;
+        impCube.collaborateurId = activite.collaborateur._id;
+        impCube.collaborateurNom = activite.collaborateur.nom;
+        impCube.label = imputation.label;
+        impCube.entiteLienType = imputation.entiteLienType;
+        impCube.entiteLienId = imputation.entiteLienId;
+        impCube.entiteLienNom = imputation.entiteLienNom;
+        impCube.entiteLienCode = imputation.entiteLienCode || imputation.label;
+        impCube.annee = date.year();
+        impCube.date = date.format('L');
+        impCube.mois = date.month();
+        impCube.jour = date.date();
+        if (sousImputation) {
+            impCube.label = sousImputation.label;
+            impCube.activite = sousImputation.activite;
+            impCube.charge = (charge.value * imputation.charges[index].value) / 10000;
+        }
+        else {
+            impCube.activite = imputation.activite;
+            impCube.charge = charge.value / 100;
+        }
+        return impCube;
+    };
     PouchdbService.prototype.getProspections = function () {
-        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["q" /* Prospection */].name);
+        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["r" /* Prospection */].name);
     };
     PouchdbService.prototype.getOrganismes = function () {
-        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["n" /* Organisme */].name);
+        return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["o" /* Organisme */].name);
     };
     PouchdbService.prototype.getContacts = function () {
         return this._pouchDbAdapter.getDocsOfType(__WEBPACK_IMPORTED_MODULE_4__model__["f" /* Contact */].name);
@@ -5204,7 +5697,7 @@ var PouchdbService = /** @class */ (function () {
     };
     PouchdbService.prototype.getCurrentMissions = function (date) {
         return this._pouchDbAdapter.getDocsFromSelector({
-            selector: { type: __WEBPACK_IMPORTED_MODULE_4__model__["m" /* Mission */].name, $or: [{ dateCloture: { $lte: date.toISOString() } }, { dateCloture: { $gt: null } }] }
+            selector: { type: __WEBPACK_IMPORTED_MODULE_4__model__["n" /* Mission */].name, $or: [{ dateCloture: { $lte: date.toISOString() } }, { dateCloture: { $gt: null } }] }
         });
     };
     PouchdbService.prototype.get = function (docId) {
@@ -5214,7 +5707,7 @@ var PouchdbService = /** @class */ (function () {
         return this._pouchDbAdapter.delete(docId, rev);
     };
     PouchdbService.prototype.save = function (doc) {
-        if (doc._id === __WEBPACK_IMPORTED_MODULE_4__model__["o" /* Parametres */].name) {
+        if (doc._id === __WEBPACK_IMPORTED_MODULE_4__model__["p" /* Parametres */].name) {
             this._parametres = null;
         }
         if (!!doc._id) {
@@ -5231,7 +5724,7 @@ var PouchdbService = /** @class */ (function () {
                 observer.next(_this._parametres);
             }
             else {
-                _this._pouchDbAdapter.get(__WEBPACK_IMPORTED_MODULE_4__model__["o" /* Parametres */].name).subscribe(function (data) {
+                _this._pouchDbAdapter.get(__WEBPACK_IMPORTED_MODULE_4__model__["p" /* Parametres */].name).subscribe(function (data) {
                     _this._parametres = data;
                     observer.next(_this._parametres);
                 }, function (err) { return observer.error(err); });
@@ -5284,7 +5777,7 @@ var PouchdbService = /** @class */ (function () {
         //            }
         //        });
         this.getParametres().subscribe(function (data) {
-            var parametres = new __WEBPACK_IMPORTED_MODULE_4__model__["o" /* Parametres */]();
+            var parametres = new __WEBPACK_IMPORTED_MODULE_4__model__["p" /* Parametres */]();
             if (Object.keys(data.listesDeChoix).length != Object.keys(parametres.listesDeChoix).length) {
                 parametres = __WEBPACK_IMPORTED_MODULE_6_lodash__["merge"](parametres, data);
                 parametres.listesDeChoix = Object.assign(parametres.listesDeChoix, data.listesDeChoix);
@@ -5297,7 +5790,7 @@ var PouchdbService = /** @class */ (function () {
             _this.http.get('./assets/data/parametres.json')
                 .subscribe(function (data) {
                 var _parametres = data;
-                var parametres = new __WEBPACK_IMPORTED_MODULE_4__model__["o" /* Parametres */]();
+                var parametres = new __WEBPACK_IMPORTED_MODULE_4__model__["p" /* Parametres */]();
                 parametres = __WEBPACK_IMPORTED_MODULE_6_lodash__["merge"](parametres, _parametres);
                 parametres.listesDeChoix = Object.assign(parametres.listesDeChoix, _parametres.listesDeChoix);
                 _this.save(parametres);
@@ -5480,7 +5973,7 @@ var FooterComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/widgets/menu/menu.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "\r\n<div class=\"nav-side-menu\" *ngIf=\"isLoggedIn$ | async \">\r\n  <div class=\"brand\"><img id=\"logo\" src=\"./assets/images/logo.jpg\" style=\"height:60px\" class=\"d-inline-block align-top\" alt=\"\"></div>\r\n  <a class=\"toogle-btn\" (click)=\"isCollapsed = !isCollapsed\" [attr.aria-expanded]=\"!isCollapsed\" aria-controls=\"menu-content\">\r\n    <span class=\"fas fa-bars fa-2x toggle-btn\" ></span>\r\n  </a>\r\n\r\n  <div class=\"menu-list\" >\r\n\r\n    <ul id=\"menu-content\" class=\"menu-content\" [ngbCollapse]=\"isCollapsed\">\r\n      <li>\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"\"><i class=\"fas fa-home fa-lg\"></i><span>Accueil</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"missions\"><i class=\"fas fa-rocket fa-lg\"></i><span>Missions</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"contacts\"><i class=\"fas fa-address-book fa-lg\"></i><span>Contacts</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"organismes\"><i class=\"fas fa-building fa-lg\"></i><span>Organismes</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"activites\"><i class=\"fas fa-tasks fa-lg\"></i><span>Activités</span></a>\r\n      </li>\r\n      <li *ngIf=\"isAdmin$ | async\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"\"><i class=\"fas fa-chart-line fa-lg\"></i><span>Pilotage</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"prospections\"><i class=\"fas fa-globe fa-lg\"></i><span>Prospection commerciale</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"collaborateurs\"><i class=\"fas fa-users fa-lg\"></i><span>Equipe</span></a>\r\n      </li>\r\n      <li>\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"\"><i class=\"fas fa-sticky-note fa-lg\"></i><span>Note interne</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"parametres\"><i class=\"fas fa-cog fa-lg\"></i><span>Paramètres</span></a>\r\n      </li>\r\n      <li>\r\n        <a class=\"nav-link\" href=\"#\" (click)=\"onLogout()\"><i class=\"fas fa-sign-out-alt fa-lg\"></i><span>Logout</span></a>\r\n      </li>\r\n\r\n    </ul>\r\n  </div>\r\n</div>"
+module.exports = "\r\n<div class=\"nav-side-menu\" *ngIf=\"isLoggedIn$ | async \">\r\n  <div class=\"brand\"><img id=\"logo\" src=\"./assets/images/logo.jpg\" style=\"height:60px\" class=\"d-inline-block align-top\" alt=\"\"></div>\r\n  <a class=\"toogle-btn\" (click)=\"isCollapsed = !isCollapsed\" [attr.aria-expanded]=\"!isCollapsed\" aria-controls=\"menu-content\">\r\n    <span class=\"fas fa-bars fa-2x toggle-btn\" ></span>\r\n  </a>\r\n\r\n  <div class=\"menu-list\" >\r\n\r\n    <ul id=\"menu-content\" class=\"menu-content\" [ngbCollapse]=\"isCollapsed\">\r\n      <li>\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"\"><i class=\"fas fa-home fa-lg\"></i><span>Accueil</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"missions\"><i class=\"fas fa-rocket fa-lg\"></i><span>Missions</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"contacts\"><i class=\"fas fa-address-book fa-lg\"></i><span>Contacts</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"organismes\"><i class=\"fas fa-building fa-lg\"></i><span>Organismes</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"activites\"><i class=\"fas fa-tasks fa-lg\"></i><span>Activités</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\" *ngIf=\"isAdmin$ | async\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"pilotage\"><i class=\"fas fa-chart-line fa-lg\"></i><span>Pilotage</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"prospections\"><i class=\"fas fa-globe fa-lg\"></i><span>Prospection commerciale</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"collaborateurs\"><i class=\"fas fa-users fa-lg\"></i><span>Equipe</span></a>\r\n      </li>\r\n      <li>\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"\"><i class=\"fas fa-sticky-note fa-lg\"></i><span>Note interne</span></a>\r\n      </li>\r\n      <li [routerLinkActive]=\"['active']\">\r\n        <a class=\"nav-link\" href=\"#\" routerLink=\"parametres\"><i class=\"fas fa-cog fa-lg\"></i><span>Paramètres</span></a>\r\n      </li>\r\n      <li>\r\n        <a class=\"nav-link\" href=\"#\" (click)=\"onLogout()\"><i class=\"fas fa-sign-out-alt fa-lg\"></i><span>Logout</span></a>\r\n      </li>\r\n\r\n    </ul>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
