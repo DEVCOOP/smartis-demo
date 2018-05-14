@@ -180,6 +180,46 @@
         "action": [
             "Rappeler le contact",
             "Relancer par mail"
+        ],
+        "cdt": [
+            "Mise en réseau",
+            "Expertise : évaluation projet",
+            "Appui au montage de dossier : appel d'offre",
+            "Appui au montage de dossier : demande de financement",
+            "Organisation d'événement",
+            "Expertise : veille, étude",
+            "Expertise : formation",
+            "Appui au montage de dossier : CIFRE",
+            "Appui au montage de dossier : dossier Europe"
+        ],
+        "programme": [
+            "FEDER"
+        ],
+        "activite": [
+            "Veille",
+            "Administratif",
+            "CDT",
+            "Programme",
+            "Recherche",
+            "Congés"
+        ],
+        "civilite": [
+            "M.",
+            "Mme"
+        ],
+        "missionRole": [
+            "Directeur de contrat",
+            "Chef de mission",
+            "Rédacteur",
+            "Chargé de mission"
+        ],
+        "prospectionStatut": [
+            "En rédaction",
+            "Contact",
+            "Validée",
+            "Annuler",
+            "Rejetée"
         ]
+
     }
 }
