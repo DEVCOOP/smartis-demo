@@ -1,5 +1,11 @@
 {
     "listesDeChoix": {
+        "noteType": [
+            "Rapport d’étonnement",
+            "Note de prospection",
+            "Note de rencontre d’entreprise"
+
+        ],
         "cible": [
             "Personnes en situation de handicap",
             "Personnes âgées - seniors",
@@ -220,6 +226,5 @@
             "Annuler",
             "Rejetée"
         ]
-
     }
 }
