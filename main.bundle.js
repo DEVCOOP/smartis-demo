@@ -1100,7 +1100,7 @@ var AppModule = /** @class */ (function () {
                     libraries: ["places"]
                 }),
                 __WEBPACK_IMPORTED_MODULE_44__ngx_loading_bar_core__["a" /* LoadingBarModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_55__environments_environment__["a" /* environment */].production ? __WEBPACK_IMPORTED_MODULE_5__angular_service_worker__["a" /* ServiceWorkerModule */].register('ngsw-worker.js') : []
+                __WEBPACK_IMPORTED_MODULE_55__environments_environment__["a" /* environment */].production ? __WEBPACK_IMPORTED_MODULE_5__angular_service_worker__["a" /* ServiceWorkerModule */].register('./ngsw-worker.js') : []
             ],
             providers: [
                 __WEBPACK_IMPORTED_MODULE_7__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */],
