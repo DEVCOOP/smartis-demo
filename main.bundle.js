@@ -926,57 +926,59 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common__ = __webpack_require__("./node_modules/@angular/common/esm5/common.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_common_http__ = __webpack_require__("./node_modules/@angular/common/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__("./src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_pouchdb_service_pouchdb_service__ = __webpack_require__("./src/app/services/pouchdb-service/pouchdb.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_auth_auth_service__ = __webpack_require__("./src/app/services/auth/auth.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_auth_auth_guard__ = __webpack_require__("./src/app/services/auth/auth.guard.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__home_home_component__ = __webpack_require__("./src/app/home/home.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__auth_login_login_component__ = __webpack_require__("./src/app/auth/login/login.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__app_routing_module__ = __webpack_require__("./src/app/app-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ng_bootstrap_ng_bootstrap__ = __webpack_require__("./node_modules/@ng-bootstrap/ng-bootstrap/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__organisme_list_organismes_component__ = __webpack_require__("./src/app/organisme/list/organismes.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__organisme_edit_organisme_component__ = __webpack_require__("./src/app/organisme/edit/organisme.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__contact_list_contacts_component__ = __webpack_require__("./src/app/contact/list/contacts.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__contact_edit_contact_component__ = __webpack_require__("./src/app/contact/edit/contact.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__swimlane_ngx_datatable__ = __webpack_require__("./node_modules/@swimlane/ngx-datatable/release/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__swimlane_ngx_datatable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_17__swimlane_ngx_datatable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__swimlane_ngx_charts__ = __webpack_require__("./node_modules/@swimlane/ngx-charts/release/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__swimlane_ngx_charts___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_18__swimlane_ngx_charts__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__widgets_widgets_module__ = __webpack_require__("./src/app/widgets/widgets.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__agm_core__ = __webpack_require__("./node_modules/@agm/core/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22_ngx_toggle_switch__ = __webpack_require__("./node_modules/ngx-toggle-switch/ui-switch.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_event_service_event_service__ = __webpack_require__("./src/app/services/event-service/event.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__services_pdf_generator_pdf_generator_service__ = __webpack_require__("./src/app/services/pdf-generator/pdf-generator.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__services_google_place_service_google_place_service__ = __webpack_require__("./src/app/services/google-place-service/google-place.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__directives_google_place_directive__ = __webpack_require__("./src/app/directives/google-place.directive.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__organisme_card_organisme_card_component__ = __webpack_require__("./src/app/organisme/card/organisme-card.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__parametres_list_parametres_component__ = __webpack_require__("./src/app/parametres/list/parametres.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pipes_safehtml_pipe__ = __webpack_require__("./src/app/pipes/safehtml.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pipes_capitalize_camel_pipe__ = __webpack_require__("./src/app/pipes/capitalize-camel.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__parametres_edit_parametre_component__ = __webpack_require__("./src/app/parametres/edit/parametre.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__pipes_liens_organisme_pipe__ = __webpack_require__("./src/app/pipes/liens-organisme.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__pipes_liens_organisme_ville_pipe__ = __webpack_require__("./src/app/pipes/liens-organisme-ville.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__mission_list_missions_component__ = __webpack_require__("./src/app/mission/list/missions.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__mission_edit_mission_component__ = __webpack_require__("./src/app/mission/edit/mission.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__collaborateur_edit_collaborateur_component__ = __webpack_require__("./src/app/collaborateur/edit/collaborateur.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__collaborateur_list_collaborateurs_component__ = __webpack_require__("./src/app/collaborateur/list/collaborateurs.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__collaborateur_card_collaborateur_card_component__ = __webpack_require__("./src/app/collaborateur/card/collaborateur-card.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__prospection_list_prospections_component__ = __webpack_require__("./src/app/prospection/list/prospections.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__prospection_edit_prospection_component__ = __webpack_require__("./src/app/prospection/edit/prospection.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__auth_forgot_password_forgot_password_component__ = __webpack_require__("./src/app/auth/forgot-password/forgot-password.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__activite_activite_component__ = __webpack_require__("./src/app/activite/activite.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__ngx_loading_bar_core__ = __webpack_require__("./node_modules/@ngx-loading-bar/core/esm5/ngx-loading-bar-core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__pilotage_pilotage_component__ = __webpack_require__("./src/app/pilotage/pilotage.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__pilotage_charts_chart_secteur_activite_chart_secteur_activite_component__ = __webpack_require__("./src/app/pilotage/charts/chart-secteur-activite/chart-secteur-activite.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__pilotage_charts_chart_missions_chart_missions_component__ = __webpack_require__("./src/app/pilotage/charts/chart-missions/chart-missions.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_47__pilotage_charts_chart_recherche_chart_recherche_component__ = __webpack_require__("./src/app/pilotage/charts/chart-recherche/chart-recherche.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_48__pilotage_charts_chart_cdt_chart_cdt_component__ = __webpack_require__("./src/app/pilotage/charts/chart-cdt/chart-cdt.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_49__pilotage_charts_chart_programme_chart_programme_component__ = __webpack_require__("./src/app/pilotage/charts/chart-programme/chart-programme.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_50__home_charts_chart_activite_chart_activite_component__ = __webpack_require__("./src/app/home/charts/chart-activite/chart-activite.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_51__note_list_notes_component__ = __webpack_require__("./src/app/note/list/notes.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_52__note_edit_note_component__ = __webpack_require__("./src/app/note/edit/note.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_53_ngx_img_cropper__ = __webpack_require__("./node_modules/ngx-img-cropper/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_service_worker__ = __webpack_require__("./node_modules/@angular/service-worker/fesm5/service-worker.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__("./src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_pouchdb_service_pouchdb_service__ = __webpack_require__("./src/app/services/pouchdb-service/pouchdb.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_auth_auth_service__ = __webpack_require__("./src/app/services/auth/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_auth_auth_guard__ = __webpack_require__("./src/app/services/auth/auth.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__home_home_component__ = __webpack_require__("./src/app/home/home.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__auth_login_login_component__ = __webpack_require__("./src/app/auth/login/login.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__app_routing_module__ = __webpack_require__("./src/app/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ng_bootstrap_ng_bootstrap__ = __webpack_require__("./node_modules/@ng-bootstrap/ng-bootstrap/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__organisme_list_organismes_component__ = __webpack_require__("./src/app/organisme/list/organismes.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__organisme_edit_organisme_component__ = __webpack_require__("./src/app/organisme/edit/organisme.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__contact_list_contacts_component__ = __webpack_require__("./src/app/contact/list/contacts.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__contact_edit_contact_component__ = __webpack_require__("./src/app/contact/edit/contact.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__swimlane_ngx_datatable__ = __webpack_require__("./node_modules/@swimlane/ngx-datatable/release/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__swimlane_ngx_datatable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_18__swimlane_ngx_datatable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__swimlane_ngx_charts__ = __webpack_require__("./node_modules/@swimlane/ngx-charts/release/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__swimlane_ngx_charts___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_19__swimlane_ngx_charts__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__widgets_widgets_module__ = __webpack_require__("./src/app/widgets/widgets.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__agm_core__ = __webpack_require__("./node_modules/@agm/core/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23_ngx_toggle_switch__ = __webpack_require__("./node_modules/ngx-toggle-switch/ui-switch.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__services_event_service_event_service__ = __webpack_require__("./src/app/services/event-service/event.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__services_pdf_generator_pdf_generator_service__ = __webpack_require__("./src/app/services/pdf-generator/pdf-generator.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_google_place_service_google_place_service__ = __webpack_require__("./src/app/services/google-place-service/google-place.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__directives_google_place_directive__ = __webpack_require__("./src/app/directives/google-place.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__organisme_card_organisme_card_component__ = __webpack_require__("./src/app/organisme/card/organisme-card.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__parametres_list_parametres_component__ = __webpack_require__("./src/app/parametres/list/parametres.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pipes_safehtml_pipe__ = __webpack_require__("./src/app/pipes/safehtml.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__pipes_capitalize_camel_pipe__ = __webpack_require__("./src/app/pipes/capitalize-camel.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__parametres_edit_parametre_component__ = __webpack_require__("./src/app/parametres/edit/parametre.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__pipes_liens_organisme_pipe__ = __webpack_require__("./src/app/pipes/liens-organisme.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__pipes_liens_organisme_ville_pipe__ = __webpack_require__("./src/app/pipes/liens-organisme-ville.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__mission_list_missions_component__ = __webpack_require__("./src/app/mission/list/missions.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__mission_edit_mission_component__ = __webpack_require__("./src/app/mission/edit/mission.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__collaborateur_edit_collaborateur_component__ = __webpack_require__("./src/app/collaborateur/edit/collaborateur.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__collaborateur_list_collaborateurs_component__ = __webpack_require__("./src/app/collaborateur/list/collaborateurs.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__collaborateur_card_collaborateur_card_component__ = __webpack_require__("./src/app/collaborateur/card/collaborateur-card.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__prospection_list_prospections_component__ = __webpack_require__("./src/app/prospection/list/prospections.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__prospection_edit_prospection_component__ = __webpack_require__("./src/app/prospection/edit/prospection.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__auth_forgot_password_forgot_password_component__ = __webpack_require__("./src/app/auth/forgot-password/forgot-password.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__activite_activite_component__ = __webpack_require__("./src/app/activite/activite.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__ngx_loading_bar_core__ = __webpack_require__("./node_modules/@ngx-loading-bar/core/esm5/ngx-loading-bar-core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__pilotage_pilotage_component__ = __webpack_require__("./src/app/pilotage/pilotage.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__pilotage_charts_chart_secteur_activite_chart_secteur_activite_component__ = __webpack_require__("./src/app/pilotage/charts/chart-secteur-activite/chart-secteur-activite.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_47__pilotage_charts_chart_missions_chart_missions_component__ = __webpack_require__("./src/app/pilotage/charts/chart-missions/chart-missions.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_48__pilotage_charts_chart_recherche_chart_recherche_component__ = __webpack_require__("./src/app/pilotage/charts/chart-recherche/chart-recherche.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_49__pilotage_charts_chart_cdt_chart_cdt_component__ = __webpack_require__("./src/app/pilotage/charts/chart-cdt/chart-cdt.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_50__pilotage_charts_chart_programme_chart_programme_component__ = __webpack_require__("./src/app/pilotage/charts/chart-programme/chart-programme.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_51__home_charts_chart_activite_chart_activite_component__ = __webpack_require__("./src/app/home/charts/chart-activite/chart-activite.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_52__note_list_notes_component__ = __webpack_require__("./src/app/note/list/notes.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_53__note_edit_note_component__ = __webpack_require__("./src/app/note/edit/note.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_54_ngx_img_cropper__ = __webpack_require__("./node_modules/ngx-img-cropper/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_55__environments_environment__ = __webpack_require__("./src/environments/environment.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -989,7 +991,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-//import { ServiceWorkerModule } from '@angular/service-worker';
+
+
 
 
 
@@ -1045,69 +1048,70 @@ var AppModule = /** @class */ (function () {
     AppModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */],
-                __WEBPACK_IMPORTED_MODULE_9__home_home_component__["a" /* HomeComponent */],
-                __WEBPACK_IMPORTED_MODULE_10__auth_login_login_component__["a" /* LoginComponent */],
-                __WEBPACK_IMPORTED_MODULE_13__organisme_list_organismes_component__["a" /* OrganismesComponent */],
-                __WEBPACK_IMPORTED_MODULE_14__organisme_edit_organisme_component__["a" /* OrganismeComponent */],
-                __WEBPACK_IMPORTED_MODULE_16__contact_edit_contact_component__["a" /* ContactComponent */],
-                __WEBPACK_IMPORTED_MODULE_15__contact_list_contacts_component__["a" /* ContactsComponent */],
-                __WEBPACK_IMPORTED_MODULE_26__directives_google_place_directive__["a" /* GooglePlaceDirective */],
-                __WEBPACK_IMPORTED_MODULE_27__organisme_card_organisme_card_component__["a" /* OrganismeCardComponent */],
-                __WEBPACK_IMPORTED_MODULE_28__parametres_list_parametres_component__["a" /* ParametresComponent */],
-                __WEBPACK_IMPORTED_MODULE_30__pipes_capitalize_camel_pipe__["a" /* CapitalizeCamelPipe */],
-                __WEBPACK_IMPORTED_MODULE_31__parametres_edit_parametre_component__["a" /* ParametreComponent */],
-                __WEBPACK_IMPORTED_MODULE_32__pipes_liens_organisme_pipe__["a" /* LiensOrganismePipe */],
-                __WEBPACK_IMPORTED_MODULE_33__pipes_liens_organisme_ville_pipe__["a" /* LiensOrganismeVillePipe */],
-                __WEBPACK_IMPORTED_MODULE_29__pipes_safehtml_pipe__["a" /* SafeHtmlPipe */],
-                __WEBPACK_IMPORTED_MODULE_34__mission_list_missions_component__["a" /* MissionsComponent */],
-                __WEBPACK_IMPORTED_MODULE_35__mission_edit_mission_component__["a" /* MissionComponent */],
-                __WEBPACK_IMPORTED_MODULE_36__collaborateur_edit_collaborateur_component__["a" /* CollaborateurComponent */],
-                __WEBPACK_IMPORTED_MODULE_37__collaborateur_list_collaborateurs_component__["a" /* CollaborateursComponent */],
-                __WEBPACK_IMPORTED_MODULE_38__collaborateur_card_collaborateur_card_component__["a" /* CollaborateurCardComponent */],
-                __WEBPACK_IMPORTED_MODULE_39__prospection_list_prospections_component__["a" /* ProspectionsComponent */],
-                __WEBPACK_IMPORTED_MODULE_40__prospection_edit_prospection_component__["a" /* ProspectionComponent */],
-                __WEBPACK_IMPORTED_MODULE_41__auth_forgot_password_forgot_password_component__["a" /* ForgotPasswordComponent */],
-                __WEBPACK_IMPORTED_MODULE_42__activite_activite_component__["a" /* ActiviteComponent */],
-                __WEBPACK_IMPORTED_MODULE_44__pilotage_pilotage_component__["a" /* PilotageComponent */],
-                __WEBPACK_IMPORTED_MODULE_45__pilotage_charts_chart_secteur_activite_chart_secteur_activite_component__["a" /* ChartSecteurActiviteComponent */],
-                __WEBPACK_IMPORTED_MODULE_46__pilotage_charts_chart_missions_chart_missions_component__["a" /* ChartMissionsComponent */],
-                __WEBPACK_IMPORTED_MODULE_47__pilotage_charts_chart_recherche_chart_recherche_component__["a" /* ChartRechercheComponent */],
-                __WEBPACK_IMPORTED_MODULE_48__pilotage_charts_chart_cdt_chart_cdt_component__["a" /* ChartCDTComponent */],
-                __WEBPACK_IMPORTED_MODULE_49__pilotage_charts_chart_programme_chart_programme_component__["a" /* ChartProgrammeComponent */],
-                __WEBPACK_IMPORTED_MODULE_50__home_charts_chart_activite_chart_activite_component__["a" /* ChartActiviteComponent */],
-                __WEBPACK_IMPORTED_MODULE_51__note_list_notes_component__["a" /* NotesComponent */],
-                __WEBPACK_IMPORTED_MODULE_52__note_edit_note_component__["a" /* NoteComponent */]
+                __WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* AppComponent */],
+                __WEBPACK_IMPORTED_MODULE_10__home_home_component__["a" /* HomeComponent */],
+                __WEBPACK_IMPORTED_MODULE_11__auth_login_login_component__["a" /* LoginComponent */],
+                __WEBPACK_IMPORTED_MODULE_14__organisme_list_organismes_component__["a" /* OrganismesComponent */],
+                __WEBPACK_IMPORTED_MODULE_15__organisme_edit_organisme_component__["a" /* OrganismeComponent */],
+                __WEBPACK_IMPORTED_MODULE_17__contact_edit_contact_component__["a" /* ContactComponent */],
+                __WEBPACK_IMPORTED_MODULE_16__contact_list_contacts_component__["a" /* ContactsComponent */],
+                __WEBPACK_IMPORTED_MODULE_27__directives_google_place_directive__["a" /* GooglePlaceDirective */],
+                __WEBPACK_IMPORTED_MODULE_28__organisme_card_organisme_card_component__["a" /* OrganismeCardComponent */],
+                __WEBPACK_IMPORTED_MODULE_29__parametres_list_parametres_component__["a" /* ParametresComponent */],
+                __WEBPACK_IMPORTED_MODULE_31__pipes_capitalize_camel_pipe__["a" /* CapitalizeCamelPipe */],
+                __WEBPACK_IMPORTED_MODULE_32__parametres_edit_parametre_component__["a" /* ParametreComponent */],
+                __WEBPACK_IMPORTED_MODULE_33__pipes_liens_organisme_pipe__["a" /* LiensOrganismePipe */],
+                __WEBPACK_IMPORTED_MODULE_34__pipes_liens_organisme_ville_pipe__["a" /* LiensOrganismeVillePipe */],
+                __WEBPACK_IMPORTED_MODULE_30__pipes_safehtml_pipe__["a" /* SafeHtmlPipe */],
+                __WEBPACK_IMPORTED_MODULE_35__mission_list_missions_component__["a" /* MissionsComponent */],
+                __WEBPACK_IMPORTED_MODULE_36__mission_edit_mission_component__["a" /* MissionComponent */],
+                __WEBPACK_IMPORTED_MODULE_37__collaborateur_edit_collaborateur_component__["a" /* CollaborateurComponent */],
+                __WEBPACK_IMPORTED_MODULE_38__collaborateur_list_collaborateurs_component__["a" /* CollaborateursComponent */],
+                __WEBPACK_IMPORTED_MODULE_39__collaborateur_card_collaborateur_card_component__["a" /* CollaborateurCardComponent */],
+                __WEBPACK_IMPORTED_MODULE_40__prospection_list_prospections_component__["a" /* ProspectionsComponent */],
+                __WEBPACK_IMPORTED_MODULE_41__prospection_edit_prospection_component__["a" /* ProspectionComponent */],
+                __WEBPACK_IMPORTED_MODULE_42__auth_forgot_password_forgot_password_component__["a" /* ForgotPasswordComponent */],
+                __WEBPACK_IMPORTED_MODULE_43__activite_activite_component__["a" /* ActiviteComponent */],
+                __WEBPACK_IMPORTED_MODULE_45__pilotage_pilotage_component__["a" /* PilotageComponent */],
+                __WEBPACK_IMPORTED_MODULE_46__pilotage_charts_chart_secteur_activite_chart_secteur_activite_component__["a" /* ChartSecteurActiviteComponent */],
+                __WEBPACK_IMPORTED_MODULE_47__pilotage_charts_chart_missions_chart_missions_component__["a" /* ChartMissionsComponent */],
+                __WEBPACK_IMPORTED_MODULE_48__pilotage_charts_chart_recherche_chart_recherche_component__["a" /* ChartRechercheComponent */],
+                __WEBPACK_IMPORTED_MODULE_49__pilotage_charts_chart_cdt_chart_cdt_component__["a" /* ChartCDTComponent */],
+                __WEBPACK_IMPORTED_MODULE_50__pilotage_charts_chart_programme_chart_programme_component__["a" /* ChartProgrammeComponent */],
+                __WEBPACK_IMPORTED_MODULE_51__home_charts_chart_activite_chart_activite_component__["a" /* ChartActiviteComponent */],
+                __WEBPACK_IMPORTED_MODULE_52__note_list_notes_component__["a" /* NotesComponent */],
+                __WEBPACK_IMPORTED_MODULE_53__note_edit_note_component__["a" /* NoteComponent */]
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_22_ngx_toggle_switch__["a" /* UiSwitchModule */],
+                __WEBPACK_IMPORTED_MODULE_23_ngx_toggle_switch__["a" /* UiSwitchModule */],
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
                 __WEBPACK_IMPORTED_MODULE_3__angular_forms__["f" /* ReactiveFormsModule */],
                 __WEBPACK_IMPORTED_MODULE_3__angular_forms__["b" /* FormsModule */],
                 __WEBPACK_IMPORTED_MODULE_4__angular_common_http__["b" /* HttpClientModule */],
-                __WEBPACK_IMPORTED_MODULE_11__app_routing_module__["a" /* AppRoutingModule */],
-                __WEBPACK_IMPORTED_MODULE_12__ng_bootstrap_ng_bootstrap__["b" /* NgbModule */],
-                __WEBPACK_IMPORTED_MODULE_17__swimlane_ngx_datatable__["NgxDatatableModule"],
-                __WEBPACK_IMPORTED_MODULE_18__swimlane_ngx_charts__["NgxChartsModule"],
-                __WEBPACK_IMPORTED_MODULE_20__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-                __WEBPACK_IMPORTED_MODULE_19__widgets_widgets_module__["a" /* WidgetsModule */],
-                __WEBPACK_IMPORTED_MODULE_53_ngx_img_cropper__["b" /* ImageCropperModule */],
-                __WEBPACK_IMPORTED_MODULE_21__agm_core__["a" /* AgmCoreModule */].forRoot({
+                __WEBPACK_IMPORTED_MODULE_12__app_routing_module__["a" /* AppRoutingModule */],
+                __WEBPACK_IMPORTED_MODULE_13__ng_bootstrap_ng_bootstrap__["b" /* NgbModule */],
+                __WEBPACK_IMPORTED_MODULE_18__swimlane_ngx_datatable__["NgxDatatableModule"],
+                __WEBPACK_IMPORTED_MODULE_19__swimlane_ngx_charts__["NgxChartsModule"],
+                __WEBPACK_IMPORTED_MODULE_21__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+                __WEBPACK_IMPORTED_MODULE_20__widgets_widgets_module__["a" /* WidgetsModule */],
+                __WEBPACK_IMPORTED_MODULE_54_ngx_img_cropper__["b" /* ImageCropperModule */],
+                __WEBPACK_IMPORTED_MODULE_22__agm_core__["a" /* AgmCoreModule */].forRoot({
                     apiKey: 'AIzaSyByAVVURZudjBg5ncvzbjlDOqNz02ZwIw0',
                     libraries: ["places"]
                 }),
-                __WEBPACK_IMPORTED_MODULE_43__ngx_loading_bar_core__["a" /* LoadingBarModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_44__ngx_loading_bar_core__["a" /* LoadingBarModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_5__angular_service_worker__["a" /* ServiceWorkerModule */].register('./ngsw-worker.js', { enabled: __WEBPACK_IMPORTED_MODULE_55__environments_environment__["a" /* environment */].production })
             ],
             providers: [
-                __WEBPACK_IMPORTED_MODULE_6__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */],
-                __WEBPACK_IMPORTED_MODULE_7__services_auth_auth_service__["a" /* AuthService */],
-                __WEBPACK_IMPORTED_MODULE_8__services_auth_auth_guard__["a" /* AuthGuard */],
-                __WEBPACK_IMPORTED_MODULE_25__services_google_place_service_google_place_service__["a" /* GooglePlaceService */],
+                __WEBPACK_IMPORTED_MODULE_7__services_pouchdb_service_pouchdb_service__["a" /* PouchdbService */],
+                __WEBPACK_IMPORTED_MODULE_8__services_auth_auth_service__["a" /* AuthService */],
+                __WEBPACK_IMPORTED_MODULE_9__services_auth_auth_guard__["a" /* AuthGuard */],
+                __WEBPACK_IMPORTED_MODULE_26__services_google_place_service_google_place_service__["a" /* GooglePlaceService */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_common__["DatePipe"],
-                __WEBPACK_IMPORTED_MODULE_24__services_pdf_generator_pdf_generator_service__["a" /* PdfGeneratorService */],
-                __WEBPACK_IMPORTED_MODULE_23__services_event_service_event_service__["a" /* EventService */]
+                __WEBPACK_IMPORTED_MODULE_25__services_pdf_generator_pdf_generator_service__["a" /* PdfGeneratorService */],
+                __WEBPACK_IMPORTED_MODULE_24__services_event_service_event_service__["a" /* EventService */]
             ],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
     return AppModule;
