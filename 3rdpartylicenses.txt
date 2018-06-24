@@ -1185,10 +1185,6 @@ SOFTWARE.
 MIT
 MIT
 
-@angular/service-worker@6.0.6
-MIT
-MIT
-
 @ng-bootstrap/ng-bootstrap@1.1.2
 MIT
 The MIT License (MIT)
