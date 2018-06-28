@@ -6542,10 +6542,18 @@ var AuthService = /** @class */ (function () {
         });
         var _login = localStorage.getItem('login');
         var _password = localStorage.getItem('password');
+        try {
+            _password = window.atob(_password);
+        }
+        catch (error) {
+            this.loggedIn.next(false);
+            console.log("Impossible de lire le mot de passe");
+            return;
+        }
         if (!!_login && !!_password) {
             this.loggedIn.next(true);
             this._user = new __WEBPACK_IMPORTED_MODULE_3__user__["a" /* User */](_login, _password);
-            this.pouchdbService.initConnexion(_login, window.atob(_password));
+            this.pouchdbService.initConnexion(_login, _password);
         }
     }
     Object.defineProperty(AuthService.prototype, "isLoggedIn", {
