@@ -1043,6 +1043,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -1110,7 +1111,8 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_26__services_google_place_service_google_place_service__["a" /* GooglePlaceService */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_common__["DatePipe"],
                 __WEBPACK_IMPORTED_MODULE_25__services_pdf_generator_pdf_generator_service__["a" /* PdfGeneratorService */],
-                __WEBPACK_IMPORTED_MODULE_24__services_event_service_event_service__["a" /* EventService */]
+                __WEBPACK_IMPORTED_MODULE_24__services_event_service_event_service__["a" /* EventService */],
+                __WEBPACK_IMPORTED_MODULE_12__ng_bootstrap_ng_bootstrap__["a" /* NgbActiveModal */]
             ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
         })
@@ -1978,9 +1980,6 @@ var ContactEditComponent = /** @class */ (function () {
             liensOrganisme: this.fb.array([])
         });
         this.liens = this.form.get('liensOrganisme');
-        if (this.activeModal) {
-            this.isModal = true;
-        }
     }
     ContactEditComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -1988,7 +1987,7 @@ var ContactEditComponent = /** @class */ (function () {
             _this.organismes = data;
             _this.route.params.subscribe(function (params) {
                 var id = params['id'];
-                if (id == '0' || _this.isModal) {
+                if (id == '0' || _this.isModal || !id) {
                     _this.createForm = true;
                 }
                 else {
@@ -3155,7 +3154,9 @@ var MissionComponent = /** @class */ (function () {
     MissionComponent.prototype.addContact = function (event) {
         var _this = this;
         event.preventDefault();
-        this.modalService.open(__WEBPACK_IMPORTED_MODULE_12__contact_edit_contact_edit_component__["a" /* ContactEditComponent */], { size: 'lg' }).result.then(function (_id) {
+        var modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_12__contact_edit_contact_edit_component__["a" /* ContactEditComponent */], { size: 'lg' });
+        modalRef.componentInstance.isModal = true;
+        modalRef.result.then(function (_id) {
             _this.pouchdbservice.get(_id).subscribe(function (data) {
                 _this.contacts.push(data);
                 _this.contacts.sort(function (x, y) { return x.nom.localeCompare(y.nom); });
@@ -3164,7 +3165,6 @@ var MissionComponent = /** @class */ (function () {
                 console.log(err);
             });
         }, function (reason) {
-            console.log(reason);
         });
     };
     MissionComponent = __decorate([
@@ -4110,7 +4110,9 @@ var NoteComponent = /** @class */ (function () {
     NoteComponent.prototype.addContact = function (event) {
         var _this = this;
         event.preventDefault();
-        this.modalService.open(__WEBPACK_IMPORTED_MODULE_13__contact_edit_contact_edit_component__["a" /* ContactEditComponent */], { size: 'lg' }).result.then(function (_id) {
+        var modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_13__contact_edit_contact_edit_component__["a" /* ContactEditComponent */], { size: 'lg' });
+        modalRef.componentInstance.isModal = true;
+        modalRef.result.then(function (_id) {
             _this.pouchdbservice.get(_id).subscribe(function (data) {
                 _this.contacts.push(data);
                 _this.contacts.sort(function (x, y) { return x.nom.localeCompare(y.nom); });
@@ -4119,7 +4121,6 @@ var NoteComponent = /** @class */ (function () {
                 console.log(err);
             });
         }, function (reason) {
-            console.log(reason);
         });
     };
     NoteComponent = __decorate([
@@ -6235,7 +6236,9 @@ var ProspectionComponent = /** @class */ (function () {
     ProspectionComponent.prototype.addContact = function (event) {
         var _this = this;
         event.preventDefault();
-        this.modalService.open(__WEBPACK_IMPORTED_MODULE_13__contact_edit_contact_edit_component__["a" /* ContactEditComponent */], { size: 'lg' }).result.then(function (_id) {
+        var modalRef = this.modalService.open(__WEBPACK_IMPORTED_MODULE_13__contact_edit_contact_edit_component__["a" /* ContactEditComponent */], { size: 'lg' });
+        modalRef.componentInstance.isModal = true;
+        modalRef.result.then(function (_id) {
             _this.pouchdbservice.get(_id).subscribe(function (data) {
                 _this.contacts.push(data);
                 _this.contacts.sort(function (x, y) { return x.nom.localeCompare(y.nom); });
@@ -6244,7 +6247,6 @@ var ProspectionComponent = /** @class */ (function () {
                 console.log(err);
             });
         }, function (reason) {
-            console.log(reason);
         });
     };
     ProspectionComponent.prototype.openPdf = function () {
@@ -6543,7 +6545,7 @@ var AuthService = /** @class */ (function () {
         if (!!_login && !!_password) {
             this.loggedIn.next(true);
             this._user = new __WEBPACK_IMPORTED_MODULE_3__user__["a" /* User */](_login, _password);
-            this.pouchdbService.initConnexion(_login, _password);
+            this.pouchdbService.initConnexion(_login, window.atob(_password));
         }
     }
     Object.defineProperty(AuthService.prototype, "isLoggedIn", {
@@ -6577,7 +6579,7 @@ var AuthService = /** @class */ (function () {
     AuthService.prototype.login = function (user) {
         if (user.login !== '' && user.password != '') {
             localStorage.setItem('login', user.login);
-            localStorage.setItem('password', user.password);
+            localStorage.setItem('password', window.btoa(user.password));
             this._user = user;
             this.pouchdbService.initConnexion(user.login, user.password);
         }
