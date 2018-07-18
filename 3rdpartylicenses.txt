@@ -1136,7 +1136,7 @@ SOFTWARE.
 MIT
 MIT
 
-@angular/service-worker@6.0.7
+@angular/service-worker@6.0.9
 MIT
 MIT
 
